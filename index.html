@@ -5,30 +5,134 @@
     <title>Pergamon’un İzinde, Yapay Zekâ ile Bergama 2050: İklim Zaman Tüneli</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        :root { --temp: #FF0000; --rain: #3498db; --btn: #2980b9; --dark: #2c3e50; }
-        body { font-family: 'Segoe UI', sans-serif; background: #f8fafc; padding: 20px; text-align: center; }
-        .container { max-width: 1000px; margin: auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
-        .nav-bar { display: flex; justify-content: center; gap: 15px; margin: 20px 0; border-bottom: 2px solid #eee; padding-bottom: 20px; }
-        .nav-btn { padding: 10px 20px; border-radius: 50px; background: var(--btn); color: white; text-decoration: none; font-weight: bold; }
-        .accordion { margin-bottom: 10px; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; text-align: left; }
-        .accordion-header { padding: 18px; cursor: pointer; font-weight: bold; background: #fff; display: flex; justify-content: space-between; }
-        .accordion-content { max-height: 0; overflow: hidden; transition: 0.4s; }
-        .accordion.active .accordion-content { max-height: 2000px; padding: 20px; border-top: 1px solid #eee; }
-        .chart-box { height: 320px; width: 100%; margin-bottom: 20px; }
+        :root { 
+            --temp: #FF0000; 
+            --rain: #3498db; 
+            --btn: #2980b9; 
+            --dark: #2c3e50; 
+            --past-b: #3498db;
+            --past-tr: #e74c3c;
+            --fut-b: #8e44ad;
+            --fut-tr: #f39c12;
+        }
+
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            background: #f8fafc; 
+            padding: 20px; 
+            color: var(--dark);
+        }
+
+        .container { 
+            max-width: 1000px; 
+            margin: auto; 
+            background: white; 
+            padding: 30px; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1); 
+        }
+
+        h1 { text-align: center; margin-bottom: 10px; line-height: 1.3; }
+
+        /* Navigasyon Çubuğu */
+        .nav-bar { 
+            display: flex; 
+            justify-content: center; 
+            gap: 15px; 
+            margin-bottom: 30px; 
+            border-bottom: 2px solid #eee; 
+            padding-bottom: 20px; 
+        }
+        .nav-btn { 
+            padding: 10px 25px; 
+            border-radius: 50px; 
+            background: var(--btn); 
+            color: white; 
+            text-decoration: none; 
+            font-weight: bold; 
+            transition: 0.3s; 
+            border: none;
+        }
+        .nav-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+
+        /* Akordiyon Tasarımı */
+        .accordion { 
+            margin-bottom: 15px; 
+            border: 1px solid #e2e8f0; 
+            border-radius: 15px; 
+            overflow: hidden; 
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .accordion:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transform: translateY(-2px);
+        }
+
+        .accordion-header { 
+            padding: 20px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            background: #fff; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            font-size: 1.1em;
+            user-select: none;
+        }
+
+        .accordion-header::after {
+            content: '▼';
+            font-size: 0.8em;
+            color: #cbd5e1;
+            transition: transform 0.4s ease;
+        }
+
+        /* Aktif Durum Vurguları */
+        .accordion.active { border-width: 2px; }
+        .accordion.active .accordion-header { background: rgba(0,0,0,0.02); color: var(--btn); }
+        .accordion.active .accordion-header::after { content: '▲'; transform: rotate(180deg); color: var(--btn); }
+
+        /* Bölüm Renk Şeritleri */
+        .accordion:nth-child(3) { border-left: 8px solid var(--past-b); }
+        .accordion:nth-child(4) { border-left: 8px solid var(--past-tr); }
+        .accordion:nth-child(5) { border-left: 8px solid var(--fut-b); }
+        .accordion:nth-child(6) { border-left: 8px solid var(--fut-tr); }
+
+        /* İçerik Alanı */
+        .accordion-content { 
+            display: none; 
+            padding: 20px; 
+            border-top: 1px solid #eee; 
+            background: #fafafa;
+        }
+        .accordion.active .accordion-content { display: block; }
+
+        .chart-box { 
+            height: 350px; 
+            margin-bottom: 30px; 
+            background: white; 
+            padding: 15px; 
+            border-radius: 12px; 
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.02);
+        }
     </style>
 </head>
 <body>
+
 <div class="container">
-    <h1>🏛️Pergamon’un İzinde, Yapay Zekâ ile Bergama 2050:<br> İklim Zaman Tüneli</br></h1>
+    <h1>🏛️ Pergamon’un İzinde, Yapay Zekâ ile Bergama 2050:<br>İklim Zaman Tüneli</h1>
+    
     <div class="nav-bar">
-    <a href="index.html" class="nav-btn">🏠 Anasayfa</a>
-    <a href="simulator.html" class="nav-btn">🎮 Simülasyon</a>
-    <a href="karne.html" class="nav-btn">📋 İklim Karnesi</a>
-    <a href="nasil-yaptik.html" class="nav-btn" style="background: #8e44ad;">🛠️ Nasıl Yaptık?</a>
-</div>
+        <a href="index.html" class="nav-btn">🏠 Anasayfa</a>
+        <a href="simulator.html" class="nav-btn">🎮 Simülasyon</a>
+        <a href="karne.html" class="nav-btn">📋 İklim Karnesi</a>
+        <a href="nasil-yaptik.html" class="nav-btn" style="background: #8e44ad;">🛠️ Nasıl Yaptık?</a>
+    </div>
 
     <div class="accordion active">
-        <div class="accordion-header" onclick="this.parentElement.classList.toggle('active')">📊 1. Bölüm: Bergama Geçmiş Verileri (1980-2025)</div>
+        <div class="accordion-header" onclick="toggleAccordion(this)">📊 1. Bölüm: Bergama Geçmiş Verileri (1980-2025)</div>
         <div class="accordion-content">
             <div class="chart-box"><canvas id="bTempHist"></canvas></div>
             <div class="chart-box"><canvas id="bRainHist"></canvas></div>
@@ -36,7 +140,7 @@
     </div>
 
     <div class="accordion">
-        <div class="accordion-header" onclick="this.parentElement.classList.toggle('active')">🇹🇷 2. Bölüm: Türkiye Geneli Analiz (1980-2025)</div>
+        <div class="accordion-header" onclick="toggleAccordion(this)">🇹🇷 2. Bölüm: Türkiye Geneli Analiz (1980-2025)</div>
         <div class="accordion-content">
             <div class="chart-box"><canvas id="trTempHist"></canvas></div>
             <div class="chart-box"><canvas id="trRainHist"></canvas></div>
@@ -44,7 +148,7 @@
     </div>
 
     <div class="accordion">
-        <div class="accordion-header" onclick="this.parentElement.classList.toggle('active')">🔮 3. Bölüm: Bergama Gelecek Projeksiyonu (2025-2050)</div>
+        <div class="accordion-header" onclick="toggleAccordion(this)">🔮 3. Bölüm: Bergama Gelecek Projeksiyonu (2025-2050)</div>
         <div class="accordion-content">
             <div class="chart-box"><canvas id="bTempProj"></canvas></div>
             <div class="chart-box"><canvas id="bRainProj"></canvas></div>
@@ -52,7 +156,7 @@
     </div>
 
     <div class="accordion">
-        <div class="accordion-header" onclick="this.parentElement.classList.toggle('active')">📈 4. Bölüm: Türkiye Gelecek Vizyonu (2025-2050)</div>
+        <div class="accordion-header" onclick="toggleAccordion(this)">📈 4. Bölüm: Türkiye Gelecek Vizyonu (2025-2050)</div>
         <div class="accordion-content">
             <div class="chart-box"><canvas id="trTempProj"></canvas></div>
             <div class="chart-box"><canvas id="trRainProj"></canvas></div>
@@ -61,6 +165,10 @@
 </div>
 
 <script>
+    function toggleAccordion(element) {
+        element.parentElement.classList.toggle('active');
+    }
+
     async function init() {
         const res = await fetch('data/bergama_iklim.json');
         const d = await res.json();
@@ -68,26 +176,41 @@
         const make = (id, label, x, y, type, color) => {
             new Chart(document.getElementById(id), {
                 type: type,
-                data: { labels: x, datasets: [{ label: label, data: y, borderColor: color, backgroundColor: color+'33', fill: type==='line', borderWidth: 4 }] },
-                options: { responsive: true, maintainAspectRatio: false }
+                data: { 
+                    labels: x, 
+                    datasets: [{ 
+                        label: label, 
+                        data: y, 
+                        borderColor: color, 
+                        backgroundColor: color + '33', 
+                        fill: type === 'line', 
+                        borderWidth: 4,
+                        tension: 0.3
+                    }] 
+                },
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'top' } }
+                }
             });
         };
 
-        // Bergama Geçmiş
-        make('bTempHist', 'Sıcaklık (°C)', d.bergama_gecmis.map(v=>v.Yil), d.bergama_gecmis.map(v=>v.Sicaklik), 'line', '#FF0000');
-        make('bRainHist', 'Yağış (mm)', d.bergama_gecmis.map(v=>v.Yil), d.bergama_gecmis.map(v=>v.Yagis), 'bar', '#3498db');
+        // Bergama Geçmiş Analizi
+        make('bTempHist', 'Bergama Sıcaklık (°C)', d.bergama_gecmis.map(v=>v.Yil), d.bergama_gecmis.map(v=>v.Sicaklik), 'line', '#FF0000');
+        make('bRainHist', 'Bergama Yağış (mm)', d.bergama_gecmis.map(v=>v.Yil), d.bergama_gecmis.map(v=>v.Yagis), 'bar', '#3498db');
 
-        // Türkiye Geçmiş
+        // Türkiye Geçmiş Analizi
         make('trTempHist', 'Türkiye Sıcaklık (°C)', d.turkiye_gecmis.map(v=>v.Yil), d.turkiye_gecmis.map(v=>v.Sicaklik), 'line', '#FF0000');
         make('trRainHist', 'Türkiye Yağış (mm)', d.turkiye_gecmis.map(v=>v.Yil), d.turkiye_gecmis.map(v=>v.Yagis), 'bar', '#3498db');
 
-        // Bergama Gelecek
-        make('bTempProj', '2050 Tahmini (°C)', d.projeksiyonlar.bergama.map(v=>v.Yil), d.projeksiyonlar.bergama.map(v=>v.Sicaklik), 'line', '#FF0000');
-        make('bRainProj', '2050 Yağış (mm)', d.projeksiyonlar.bergama.map(v=>v.Yil), d.projeksiyonlar.bergama.map(v=>v.Yagis), 'bar', '#3498db');
+        // Bergama 2050 Projeksiyonu
+        make('bTempProj', '2050 Bergama Tahmini (°C)', d.projeksiyonlar.bergama.map(v=>v.Yil), d.projeksiyonlar.bergama.map(v=>v.Sicaklik), 'line', '#8e44ad');
+        make('bRainProj', '2050 Bergama Yağış (mm)', d.projeksiyonlar.bergama.map(v=>v.Yil), d.projeksiyonlar.bergama.map(v=>v.Yagis), 'bar', '#27ae60');
 
-        // Türkiye Gelecek
-        make('trTempProj', '2050 Ulusal Tahmin (°C)', d.projeksiyonlar.turkiye.map(v=>v.Yil), d.projeksiyonlar.turkiye.map(v=>v.Sicaklik), 'line', '#FF0000');
-        make('trRainProj', '2050 Ulusal Yağış (mm)', d.projeksiyonlar.turkiye.map(v=>v.Yil), d.projeksiyonlar.turkiye.map(v=>v.Yagis), 'bar', '#3498db');
+        // Türkiye 2050 Vizyonu
+        make('trTempProj', '2050 Türkiye Tahmini (°C)', d.projeksiyonlar.turkiye.map(v=>v.Yil), d.projeksiyonlar.turkiye.map(v=>v.Sicaklik), 'line', '#f39c12');
+        make('trRainProj', '2050 Türkiye Yağış (mm)', d.projeksiyonlar.turkiye.map(v=>v.Yil), d.projeksiyonlar.turkiye.map(v=>v.Yagis), 'bar', '#2c3e50');
     }
     init();
 </script>
