@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Proje Hikayesi - Bergama İklim Zaman Tüneli</title>
+    <style>
+        :root { --dark: #2c3e50; --btn: #2980b9; --accent: #8e44ad; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin: 0; padding: 20px; color: var(--dark); line-height: 1.6; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 40px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .nav-btn { padding: 10px 20px; background: var(--btn); color: white; text-decoration: none; border-radius: 50px; font-weight: bold; }
+        .section { margin-bottom: 30px; border-left: 5px solid var(--accent); padding-left: 20px; }
+        h1, h2 { color: var(--dark); }
+        .tech-stack { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+        .tag { background: #eee; padding: 5px 12px; border-radius: 5px; font-size: 0.85em; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div style="text-align:center; margin-bottom:20px;">
+    <a href="index.html" class="nav-btn">🏠 Anasayfa</a>
+</div>
+
+<div class="container">
+    <h1>🛠️ Bergama İklim Zaman Tüneli: Nasıl Yapıldı?</h1>
+    <p>Bu proje, coğrafi veriler ile bilişim teknolojilerini birleştiren, TÜBİTAK 4007 şenliği için tasarlanmış bir "Vatandaş Bilimi" çalışmasıdır.</p>
+
+    <div class="section">
+        <h2>1. Veri Kaynağı ve Analiz</h2>
+        <p>Projenin temeli, NASA POWER API ve Meteoroloji Genel Müdürlüğü (MGM) kayıtlarına dayanmaktadır. 1980-2024 yılları arasındaki Bergama ve Türkiye geneli sıcaklık-yağış verileri aylık bazda çekilerek yıllık ortalamalar hesaplanmıştır.</p>
+    </div>
+
+    <div class="section">
+        <h2>2. Yazılım Mimarisi (Serverless)</h2>
+        <p>Erişilebilirliği artırmak adına projenin Python/Flask (app.py) tabanlı yapısı, tamamen statik (HTML/JS/JSON) bir mimariye dönüştürülmüştür. Bu sayede proje, sunucu ihtiyacı olmadan doğrudan GitHub Pages üzerinden yayınlanabilir hale getirilmiştir.</p>
+        <div class="tech-stack">
+            <span class="tag">HTML5/CSS3</span>
+            <span class="tag">JavaScript (ES6+)</span>
+            <span class="tag">Chart.js</span>
+            <span class="tag">JSON</span>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>3. İnteraktif Simülasyon Modellemesi</h2>
+        <p>Simülasyon sayfasında, IPCC RCP 8.5 senaryoları baz alınarak matematiksel bir model kurulmuştur. Kullanıcıların enerji, ağaçlandırma ve sulama tercihlerine göre 2050 yılındaki Bergama sıcaklığını anlık olarak hesaplayan bir "What-If" algoritması yazılmıştır.</p>
+    </div>
+
+    <div class="section">
+        <h2>4. Veri Kaydı ve Bulut Entegrasyonu</h2>
+        <p>Statik web sitelerinin veri kaydedememe sorununu aşmak için Google Apps Script kullanılmıştır. Ziyaretçilerin karbon ayak izi verileri, JavaScript üzerinden bir köprü yardımıyla doğrudan Google Sheets dosyasına aktarılmakta ve şenlik istatistiği olarak saklanmaktadır.</p>
+    </div>
+
+    <div class="section">
+        <h2>5. Görselleştirme ve Tasarım</h2>
+        <p>Verilerdeki yıllık dalgalanmaları (gürültüyü) sadeleştirmek için 5 yıllık hareketli ortalama tekniği kullanılmıştır. Simülasyon ekranında kullanılan dinamik filtreler ile kullanıcının tercihlerine göre doğanın "yeşermesi" veya "kuraklaşması" görselleştirilmiştir.</p>
+    </div>
+
+    <p style="text-align:center; margin-top:50px; font-style:italic; color:#7f8c8d;">
+        Geliştiren: Hasbi Erdoğmuş - Coğrafya ve Bilişim Teknolojileri Uzmanı
+    </p>
+</div>
+
+</body>
+</html>
