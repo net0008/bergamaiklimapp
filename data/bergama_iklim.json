@@ -1,0 +1,21 @@
+{
+  "gecmis": [
+    {"Yil": 1980, "Sicaklik": 17.2, "Yagis": 650},
+    {"Yil": 1985, "Sicaklik": 17.4, "Yagis": 640},
+    {"Yil": 1990, "Sicaklik": 17.8, "Yagis": 610},
+    {"Yil": 1995, "Sicaklik": 18.1, "Yagis": 600},
+    {"Yil": 2000, "Sicaklik": 18.5, "Yagis": 580},
+    {"Yil": 2005, "Sicaklik": 19.0, "Yagis": 550},
+    {"Yil": 2010, "Sicaklik": 19.4, "Yagis": 420},
+    {"Yil": 2015, "Sicaklik": 19.9, "Yagis": 450},
+    {"Yil": 2024, "Sicaklik": 20.8, "Yagis": 400}
+  ],
+  "projeksiyon": [
+    {"Yil": 2025, "Sicaklik": 20.8, "Yagis": 400},
+    {"Yil": 2030, "Sicaklik": 21.2, "Yagis": 380},
+    {"Yil": 2035, "Sicaklik": 21.6, "Yagis": 370},
+    {"Yil": 2040, "Sicaklik": 22.1, "Yagis": 360},
+    {"Yil": 2045, "Sicaklik": 22.6, "Yagis": 350},
+    {"Yil": 2050, "Sicaklik": 23.1, "Yagis": 340}
+  ]
+}
