@@ -2,19 +2,22 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Bergama İklim Karnesi - Kayıt</title>
+    <title>Bergama Çocuk İklim Karnesi</title>
     <style>
-        :root { --btn: #2980b9; --safe: #2ecc71; --dark: #2c3e50; }
-        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; text-align: center; padding: 20px; }
-        .container { max-width: 600px; margin: auto; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        .nav-bar { margin-bottom: 30px; }
-        .nav-btn { padding: 10px 20px; background: var(--btn); color: white; text-decoration: none; border-radius: 50px; font-weight: bold; }
+        :root { --primary: #2980b9; --success: #27ae60; --warning: #f39c12; --danger: #e74c3c; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f4f8; margin: 0; padding: 20px; text-align: center; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 30px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .nav-bar { margin-bottom: 20px; }
+        .nav-btn { padding: 10px 20px; background: var(--primary); color: white; text-decoration: none; border-radius: 50px; font-weight: bold; }
         
-        .calc-group { margin: 20px 0; text-align: left; }
-        input, select { width: 100%; padding: 12px; margin-top: 8px; border-radius: 8px; border: 1px solid #ddd; box-sizing: border-box; }
-        .res-box { margin-top: 25px; padding: 20px; background: #f8fafc; border-radius: 15px; border: 2px dashed #eee; }
-        #res-val { font-size: 3em; font-weight: bold; color: var(--safe); }
-        .save-btn { width: 100%; padding: 15px; background: var(--safe); color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 20px; font-size: 1.1em; }
+        .question-box { text-align: left; margin-bottom: 25px; padding: 15px; background: #f8fafc; border-radius: 15px; border-left: 5px solid var(--primary); }
+        .question-box label { display: block; font-weight: bold; margin-bottom: 10px; font-size: 1.1em; color: #2c3e50; }
+        select { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ddd; font-size: 1em; background: white; }
+        
+        .result-area { margin-top: 30px; padding: 25px; border-radius: 20px; background: #fff; border: 3px dashed #eee; }
+        #score { font-size: 3.5em; font-weight: bold; color: var(--success); margin: 10px 0; }
+        .save-btn { width: 100%; padding: 18px; background: var(--success); color: white; border: none; border-radius: 15px; font-size: 1.2em; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .save-btn:hover { transform: scale(1.02); filter: brightness(1.1); }
     </style>
 </head>
 <body>
@@ -22,37 +25,83 @@
 <div class="nav-bar"><a href="index.html" class="nav-btn">🏠 Anasayfa</a></div>
 
 <div class="container">
-    <h1>👣 Karbon Ayak İzi Hesaplayıcı</h1>
-    <p style="color: #7f8c8d;">Verilerin anonim olarak şenlik istatistiklerine eklenecektir.</p>
+    <h1 style="color: var(--primary);">🕵️‍♂️ İklim Dedektifi Ol!</h1>
+    <p>Günlük tercihlerini seç, doğaya etkini hemen öğren.</p>
 
-    <div class="calc-group">
-        <label>Aylık Elektrik Tüketimi (kWh):</label>
-        <input type="number" id="elec" placeholder="Örn: 200" oninput="hesapla()">
-    </div>
-    <div class="calc-group">
-        <label>Haftalık Araç Kullanımı (km):</label>
-        <input type="number" id="car" placeholder="Örn: 50" oninput="hesapla()">
+    <div class="question-box">
+        <label>🏫 Okula nasıl gidiyorsun?</label>
+        <select id="q1" onchange="hesapla()">
+            <option value="0">Yürüyerek veya Bisikletle (En Temiz!)</option>
+            <option value="500">Okul Servisi veya Otobüsle</option>
+            <option value="1500">Ailemin Özel Arabasıyla</option>
+        </select>
     </div>
 
-    <div class="res-box">
-        <h3>Yıllık Karbon Yükün</h3>
-        <div id="res-val">0</div>
+    <div class="question-box">
+        <label>🥩 Ne sıklıkla et yiyorsun?</label>
+        <select id="q2" onchange="hesapla()">
+            <option value="800">Nadiren (Daha çok sebze/meyve)</option>
+            <option value="1500">Haftada birkaç gün</option>
+            <option value="2500">Neredeyse her gün (Et çok severim!)</option>
+        </select>
+    </div>
+
+    <div class="question-box">
+        <label>💡 Odadan çıkarken ışıkları kapatır mısın?</label>
+        <select id="q3" onchange="hesapla()">
+            <option value="-200">Her zaman kapatırım</option>
+            <option value="0">Bazen unutuyorum</option>
+            <option value="200">Genelde açık bırakıyorum</option>
+        </select>
+    </div>
+
+    <div class="question-box">
+        <label>🚿 Dişlerini fırçalarken musluğu kapatıyor musun?</label>
+        <select id="q4" onchange="hesapla()">
+            <option value="-150">Evet, hiç boşa akıtmam</option>
+            <option value="100">Hayır, hep açık kalır</option>
+        </select>
+    </div>
+
+    <div class="result-area">
+        <h3>Senin Yıllık Karbon Yükün:</h3>
+        <div id="score">0</div>
         <p>kg CO2 / Yıl</p>
+        <p id="feedback" style="font-weight: bold;"></p>
     </div>
 
-    <button class="save-btn" onclick="veriyiGonder()">ŞENLİK LİSTESİNE KAYDET</button>
+    <button class="save-btn" onclick="veriyiGonder()">📊 ŞENLİK LİSTESİNE EKLE</button>
     <p id="status" style="margin-top:15px; font-weight:bold;"></p>
 </div>
 
 <script>
-    // BURAYA KENDİ GOOGLE WEB APP URL'Nİ YAPIŞTIR
+    
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxX9n8s1m2l3v5t6u7w8y9z0a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6/exec";
 
     function hesapla() {
-        const elec = document.getElementById('elec').value || 0;
-        const car = document.getElementById('car').value || 0;
-        const total = Math.round((elec * 12 * 0.5) + (car * 52 * 0.2) + 2000); // Baz değer 2 ton
-        document.getElementById('res-val').innerText = total;
+        const q1 = parseInt(document.getElementById('q1').value);
+        const q2 = parseInt(document.getElementById('q2').value);
+        const q3 = parseInt(document.getElementById('q3').value);
+        const q4 = parseInt(document.getElementById('q4').value);
+        
+        // Temel Yaşam Payı (Sabit 1000kg) + Seçimler
+        let total = 1000 + q1 + q2 + q3 + q4;
+        
+        const scoreDiv = document.getElementById('score');
+        const feedback = document.getElementById('feedback');
+        
+        scoreDiv.innerText = total;
+
+        if(total < 2500) {
+            scoreDiv.style.color = "var(--success)";
+            feedback.innerText = "🌟 Harika bir doğa dostusun!";
+        } else if(total < 4000) {
+            scoreDiv.style.color = "var(--warning)";
+            feedback.innerText = "🙂 İyi gidiyorsun ama biraz daha dikkat edebilirsin.";
+        } else {
+            scoreDiv.style.color = "var(--danger)";
+            feedback.innerText = "⚠️ Doğaya biraz fazla yük oluyorsun, alışkanlıklarını gözden geçirmelisin.";
+        }
         return total;
     }
 
@@ -61,28 +110,29 @@
         const status = document.getElementById('status');
         
         if (SCRIPT_URL.includes("YAPISTIR")) {
-            alert("Lütfen önce Google Script URL'nizi koda ekleyin!");
+            alert("Üstad, önce Google Script URL'ni yapıştırmalısın!");
             return;
         }
 
-        status.innerText = "⏳ Gönderiliyor...";
-        status.style.color = "orange";
-
+        status.innerText = "⏳ Şenlik listesine kaydediliyor...";
+        
         try {
-            // GitHub Pages statik olduğu için 'no-cors' kullanıyoruz
             await fetch(SCRIPT_URL, {
                 method: 'POST',
                 mode: 'no-cors',
-                cache: 'no-cache',
                 body: JSON.stringify({deger: deger})
             });
-            status.innerText = "✅ Başarıyla kaydedildi! Teşekkürler.";
-            status.style.color = "green";
+            status.innerText = "✅ Başarıyla eklendi! Şenlik toplamına katkıda bulundun.";
+            status.style.color = "var(--success)";
         } catch (e) {
-            status.innerText = "❌ Hata oluştu, tekrar deneyin.";
-            status.style.color = "red";
+            status.innerText = "❌ Bir hata oldu, interneti kontrol et.";
+            status.style.color = "var(--danger)";
         }
     }
+
+    window.onload = hesapla;
 </script>
 </body>
 </html>
+
+
