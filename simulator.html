@@ -138,21 +138,16 @@
 
     function updateChart(bt, trt, br, trr) {
         const ctx = document.getElementById('simChart').getContext('2d');
-        const chartData = [bt, trt, br/20, trr/20];
-        if(!simChart) {
-            simChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['B. Sıcaklık', 'TR Sıcaklık', 'B. Yağış (Ölçekli)', 'TR Yağış (Ölçekli)'],
-                    datasets: [{ label: '2050 Senaryo Sonucu', data: chartData, backgroundColor: ['#e74c3c', '#ff7675', '#3498db', '#74b9ff'] }]
-                },
-                options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 30 } } }
-            });
-        } else { simChart.data.datasets[0].data = chartData; simChart.update(); }
-    }
+        updateChart(bt, trt, br, trr);
+updateBackground(energy, green, water); // Bu satırı ekle!
+}
 
-    sliders.forEach(id => document.getElementById(id).oninput = update);
-    window.onload = update;
+// Olay dinleyicilerini düzelt:
+sliders.forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.oninput = update;
+});
+window.onload = update;
 </script>
 </body>
 </html>
