@@ -4,11 +4,13 @@
     <meta charset="UTF-8">
     <title>Proje Hikayesi - Bergama İklim Zaman Tüneli</title>
     <style>
-        :root { --dark: #2c3e50; --btn: #2980b9; --accent: #8e44ad; }
+        :root { --dark: #2c3e50; --btn: #2980b9; --accent: #8e44ad; --ai: #1a73e8; }
         body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin: 0; padding: 20px; color: var(--dark); line-height: 1.6; }
         .container { max-width: 900px; margin: auto; background: white; padding: 40px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .nav-bar { text-align:center; margin-bottom:30px; }
         .nav-btn { padding: 10px 20px; background: var(--btn); color: white; text-decoration: none; border-radius: 50px; font-weight: bold; }
         .section { margin-bottom: 30px; border-left: 5px solid var(--accent); padding-left: 20px; }
+        .ai-section { border-left-color: var(--ai); background: #f1f8ff; padding: 20px; border-radius: 0 15px 15px 0; }
         h1, h2 { color: var(--dark); }
         .tech-stack { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
         .tag { background: #eee; padding: 5px 12px; border-radius: 5px; font-size: 0.85em; font-weight: bold; }
@@ -16,22 +18,27 @@
 </head>
 <body>
 
-<div style="text-align:center; margin-bottom:20px;">
+<div class="nav-bar">
     <a href="index.html" class="nav-btn">🏠 Anasayfa</a>
 </div>
 
 <div class="container">
     <h1>🛠️ Bergama İklim Zaman Tüneli: Nasıl Yapıldı?</h1>
-    <p>Bu proje, coğrafi veriler ile bilişim teknolojilerini birleştiren, TÜBİTAK 4007 şenliği için tasarlanmış bir "Vatandaş Bilimi" çalışmasıdır.</p>
+    <p>Bu proje, coğrafya biliminin verileri ile modern bilişim mimarisini birleştiren bir "Vatandaş Bilimi" çalışmasıdır.</p>
 
     <div class="section">
         <h2>1. Veri Kaynağı ve Analiz</h2>
-        <p>Projenin temeli, NASA POWER API ve Meteoroloji Genel Müdürlüğü (MGM) kayıtlarına dayanmaktadır. 1980-2024 yılları arasındaki Bergama ve Türkiye geneli sıcaklık-yağış verileri aylık bazda çekilerek yıllık ortalamalar hesaplanmıştır.</p>
+        <p>Projenin bilimsel temeli, NASA POWER API ve Meteoroloji Genel Müdürlüğü (MGM) kayıtlarına dayanır. 1980'den bugüne uzanan veriler ham halinden arındırılarak yıllık ortalamalara dönüştürülmüştür.</p>
+    </div>
+
+    <div class="section ai-section">
+        <h2>🤖 2. Yapay Zeka (AI) Destekli Geliştirme</h2>
+        <p>Projenin tüm yazılım ve tasarım süreci, <b>Google Gemini (Yapay Zeka Asistanı)</b> ile iş birliği içinde yürütülmüştür. Gemini; karmaşık Python algoritmalarının JavaScript'e dönüştürülmesinde, matematiksel modellemelerin pürüzsüzleştirilmesinde ve kullanıcı etkileşim tasarımlarının optimize edilmesinde aktif rol almıştır.</p>
     </div>
 
     <div class="section">
-        <h2>2. Yazılım Mimarisi (Serverless)</h2>
-        <p>Erişilebilirliği artırmak adına projenin Python/Flask (app.py) tabanlı yapısı, tamamen statik (HTML/JS/JSON) bir mimariye dönüştürülmüştür. Bu sayede proje, sunucu ihtiyacı olmadan doğrudan GitHub Pages üzerinden yayınlanabilir hale getirilmiştir.</p>
+        <h2>3. Serverless (Sunucusuz) Mimari</h2>
+        <p>Proje, her ortamda (akıllı tahta, tablet, telefon) sorunsuz çalışabilmesi için GitHub Pages üzerinden "sunucusuz" olarak yayınlanmıştır. Veriler statik JSON dosyaları üzerinden yönetilerek yüksek hız ve erişilebilirlik sağlanmıştır.</p>
         <div class="tech-stack">
             <span class="tag">HTML5/CSS3</span>
             <span class="tag">JavaScript (ES6+)</span>
@@ -41,22 +48,22 @@
     </div>
 
     <div class="section">
-        <h2>3. İnteraktif Simülasyon Modellemesi</h2>
-        <p>Simülasyon sayfasında, IPCC RCP 8.5 senaryoları baz alınarak matematiksel bir model kurulmuştur. Kullanıcıların enerji, ağaçlandırma ve sulama tercihlerine göre 2050 yılındaki Bergama sıcaklığını anlık olarak hesaplayan bir "What-If" algoritması yazılmıştır.</p>
+        <h2>4. Dinamik Simülasyon Algoritması</h2>
+        <p>Simülasyon sayfasında, IPCC RCP 8.5 senaryoları baz alınarak özgün bir algoritma kurulmuştur. Kullanıcının sürgü hareketlerine göre arka plan renginin sararıp yeşermesi (CSS filtreleri ve DOM manipülasyonu), AI yardımıyla anlık hesaplanan bir "Sağlık Puanı" üzerinden gerçekleştirilmektedir.</p>
     </div>
 
     <div class="section">
-        <h2>4. Veri Kaydı ve Bulut Entegrasyonu</h2>
-        <p>Statik web sitelerinin veri kaydedememe sorununu aşmak için Google Apps Script kullanılmıştır. Ziyaretçilerin karbon ayak izi verileri, JavaScript üzerinden bir köprü yardımıyla doğrudan Google Sheets dosyasına aktarılmakta ve şenlik istatistiği olarak saklanmaktadır.</p>
+        <h2>5. Bulut Entegrasyonu (Google Sheets)</h2>
+        <p>Statik bir yapıda veri saklayabilmek için Google Apps Script kullanılarak bir "API Köprüsü" oluşturulmuştur. Ziyaretçilerin girdiği veriler, sunucusuz bir ortamdan doğrudan Google Sheets tablosuna bulut üzerinde aktarılmaktadır.</p>
     </div>
 
     <div class="section">
-        <h2>5. Görselleştirme ve Tasarım</h2>
-        <p>Verilerdeki yıllık dalgalanmaları (gürültüyü) sadeleştirmek için 5 yıllık hareketli ortalama tekniği kullanılmıştır. Simülasyon ekranında kullanılan dinamik filtreler ile kullanıcının tercihlerine göre doğanın "yeşermesi" veya "kuraklaşması" görselleştirilmiştir.</p>
+        <h2>6. Gelecek Vizyonu</h2>
+        <p>Bu çalışma, bir eğitimcinin alan uzmanlığı ile yapay zekanın teknik hızının birleştiğinde ne kadar güçlü öğrenme materyalleri üretilebileceğinin bir kanıtıdır.</p>
     </div>
 
     <p style="text-align:center; margin-top:50px; font-style:italic; color:#7f8c8d;">
-        Geliştiren: Hasbi Erdoğmuş - Coğrafya ve Bilişim Teknolojileri Uzmanı
+        Geliştiren: Hasbi Erdoğmuş (Fatih Projesi Eğitmeni) & Gemini (AI Asistanı)
     </p>
 </div>
 
