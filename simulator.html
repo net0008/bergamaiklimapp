@@ -51,30 +51,7 @@
 
 <div class="main-wrapper">
     <div class="container">
-        <div class="header">
-            <h1>🕹️ İklim Senaryo Simülatörü</h1>
-            <div style="margin-top:10px;"><a href="index.html" class="nav-btn">🏠 Anasayfa</a></div>
-        </div>
-
-        <div class="controls">
-            <h3>🌱 Gelecek Kararları</h3>
-            <div class="slider-group"><label>⚡ Yenilenebilir Enerji: <span id="v1">20</span>%</label><input type="range" min="0" max="100" value="20" class="slider" id="s1"></div>
-            <div class="slider-group"><label>🌳 Ağaçlandırma: <span id="v2">500</span> Ha</label><input type="range" min="0" max="5000" value="500" class="slider" id="s2"></div>
-            <div class="slider-group"><label>💧 Akıllı Sulama: <span id="v3">30</span>%</label><input type="range" min="0" max="100" value="30" class="slider" id="s3"></div>
-        </div>
-
-        <div class="results">
-            <div class="chart-container"><canvas id="simChart" style="height:250px;"></canvas></div>
-            <div class="output-grid">
-                <div class="stat-card" style="border-bottom: 4px solid var(--temp-red);"><span>Bergama Isı</span><div id="bt">23.1°C</div></div>
-                <div class="stat-card" style="border-bottom: 4px solid var(--rain-blue);"><span>Bergama Yağış</span><div id="br">340mm</div></div>
-                <div class="stat-card" style="border-bottom: 4px solid var(--temp-red);"><span>TR Isı</span><div id="trt">16.8°C</div></div>
-                <div class="stat-card" style="border-bottom: 4px solid var(--rain-blue);"><span>TR Yağış</span><div id="trr">475mm</div></div>
-            </div>
-        </div>
-    </div>
-</div>
-<div style="margin-top:10px;">
+        <div style="margin-top:10px;">
     <a href="index.html" class="nav-btn">🏠 Anasayfa</a>
     <button onclick="toggleModal()" class="nav-btn" style="background: #f39c12; border:none; cursor:pointer;">ℹ️ Nasıl Kullanılır?</button>
 </div>
@@ -117,6 +94,26 @@
     // Sayfa ilk açıldığında otomatik göster (İsteğe bağlı)
     // window.onload = () => { update(); setTimeout(toggleModal, 1000); };
 </script>
+
+        <div class="controls">
+            <h3>🌱 Gelecek Kararları</h3>
+            <div class="slider-group"><label>⚡ Yenilenebilir Enerji: <span id="v1">20</span>%</label><input type="range" min="0" max="100" value="20" class="slider" id="s1"></div>
+            <div class="slider-group"><label>🌳 Ağaçlandırma: <span id="v2">500</span> Ha</label><input type="range" min="0" max="5000" value="500" class="slider" id="s2"></div>
+            <div class="slider-group"><label>💧 Akıllı Sulama: <span id="v3">30</span>%</label><input type="range" min="0" max="100" value="30" class="slider" id="s3"></div>
+        </div>
+
+        <div class="results">
+            <div class="chart-container"><canvas id="simChart" style="height:250px;"></canvas></div>
+            <div class="output-grid">
+                <div class="stat-card" style="border-bottom: 4px solid var(--temp-red);"><span>Bergama Isı</span><div id="bt">23.1°C</div></div>
+                <div class="stat-card" style="border-bottom: 4px solid var(--rain-blue);"><span>Bergama Yağış</span><div id="br">340mm</div></div>
+                <div class="stat-card" style="border-bottom: 4px solid var(--temp-red);"><span>TR Isı</span><div id="trt">16.8°C</div></div>
+                <div class="stat-card" style="border-bottom: 4px solid var(--rain-blue);"><span>TR Yağış</span><div id="trr">475mm</div></div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     let simChart;
     const overlay = document.getElementById('bg-overlay');
