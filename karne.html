@@ -1,12 +1,88 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Bergama İklim Karnesi - Kayıt</title>
+    <style>
+        :root { --btn: #2980b9; --safe: #2ecc71; --dark: #2c3e50; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; text-align: center; padding: 20px; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .nav-bar { margin-bottom: 30px; }
+        .nav-btn { padding: 10px 20px; background: var(--btn); color: white; text-decoration: none; border-radius: 50px; font-weight: bold; }
+        
+        .calc-group { margin: 20px 0; text-align: left; }
+        input, select { width: 100%; padding: 12px; margin-top: 8px; border-radius: 8px; border: 1px solid #ddd; box-sizing: border-box; }
+        .res-box { margin-top: 25px; padding: 20px; background: #f8fafc; border-radius: 15px; border: 2px dashed #eee; }
+        #res-val { font-size: 3em; font-weight: bold; color: var(--safe); }
+        .save-btn { width: 100%; padding: 15px; background: var(--safe); color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 20px; font-size: 1.1em; }
+    </style>
+</head>
+<body>
+
+<div class="nav-bar"><a href="index.html" class="nav-btn">🏠 Anasayfa</a></div>
+
+<div class="container">
+    <h1>👣 Karbon Ayak İzi Hesaplayıcı</h1>
+    <p style="color: #7f8c8d;">Verilerin anonim olarak şenlik istatistiklerine eklenecektir.</p>
+
+    <div class="calc-group">
+        <label>Aylık Elektrik Tüketimi (kWh):</label>
+        <input type="number" id="elec" placeholder="Örn: 200" oninput="hesapla()">
+    </div>
+    <div class="calc-group">
+        <label>Haftalık Araç Kullanımı (km):</label>
+        <input type="number" id="car" placeholder="Örn: 50" oninput="hesapla()">
+    </div>
+
+    <div class="res-box">
+        <h3>Yıllık Karbon Yükün</h3>
+        <div id="res-val">0</div>
+        <p>kg CO2 / Yıl</p>
+    </div>
+
+    <button class="save-btn" onclick="veriyiGonder()">ŞENLİK LİSTESİNE KAYDET</button>
+    <p id="status" style="margin-top:15px; font-weight:bold;"></p>
+</div>
 
 <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxX9n8s1m2l3v5t6u7w8y9z0a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6/exec';
-    async function kaydet(deger) {
-        await fetch(SCRIPT_URL, {
-            method: 'POST',
-            mode: 'no-cors', // GitHub Pages için zorunlu
-            body: JSON.stringify({deger: deger})
-        });
-        alert("Veri Google Sheets'e gönderildi!");
+    // BURAYA KENDİ GOOGLE WEB APP URL'Nİ YAPIŞTIR
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxX9n8s1m2l3v5t6u7w8y9z0a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6/exec";
+
+    function hesapla() {
+        const elec = document.getElementById('elec').value || 0;
+        const car = document.getElementById('car').value || 0;
+        const total = Math.round((elec * 12 * 0.5) + (car * 52 * 0.2) + 2000); // Baz değer 2 ton
+        document.getElementById('res-val').innerText = total;
+        return total;
+    }
+
+    async function veriyiGonder() {
+        const deger = hesapla();
+        const status = document.getElementById('status');
+        
+        if (SCRIPT_URL.includes("YAPISTIR")) {
+            alert("Lütfen önce Google Script URL'nizi koda ekleyin!");
+            return;
+        }
+
+        status.innerText = "⏳ Gönderiliyor...";
+        status.style.color = "orange";
+
+        try {
+            // GitHub Pages statik olduğu için 'no-cors' kullanıyoruz
+            await fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                cache: 'no-cache',
+                body: JSON.stringify({deger: deger})
+            });
+            status.innerText = "✅ Başarıyla kaydedildi! Teşekkürler.";
+            status.style.color = "green";
+        } catch (e) {
+            status.innerText = "❌ Hata oluştu, tekrar deneyin.";
+            status.style.color = "red";
+        }
     }
 </script>
+</body>
+</html>
