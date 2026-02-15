@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Hakkında - Bergama İklim Zaman Tüneli</title>
+    <style>
+        :root { --btn: #2980b9; --dark: #2c3e50; --about: #16a085; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f8fafc; padding: 20px; color: var(--dark); line-height: 1.6; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+        .nav-bar { text-align: center; margin-bottom: 30px; }
+        .nav-btn { padding: 10px 25px; border-radius: 50px; background: var(--btn); color: white; text-decoration: none; font-weight: bold; }
+        h1 { color: var(--about); border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .vision-box { background: #f1f8f6; padding: 25px; border-radius: 15px; border-left: 6px solid var(--about); margin-top: 20px; }
+        
+        /* Yeni Görsel Alanı Stilleri */
+        .image-section {
+            display: flex;
+            flex-wrap: wrap; /* Mobilde alt alta geçsin */
+            gap: 30px;
+            justify-content: center;
+            align-items: center;
+            margin: 40px 0;
+            padding: 30px;
+            background: #f9f9f9;
+            border-radius: 15px;
+            border: 1px solid #eee;
+        }
+        .logo-box img {
+            max-height: 100px; /* TÜBİTAK logosu çok büyümesin */
+            width: auto;
+            transition: transform 0.3s;
+        }
+        .logo-box img:hover { transform: scale(1.05); }
+
+        .fair-image-box img {
+            width: 100%;
+            max-width: 500px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            transition: transform 0.3s;
+        }
+        .fair-image-box img:hover { transform: scale(1.02); }
+
+        .caption {
+            text-align: center;
+            font-size: 0.9em;
+            color: #7f8c8d;
+            margin-top: 15px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+<div class="nav-bar">
+    <a href="index.html" class="nav-btn">🏠 Anasayfa</a>
+</div>
+
+<div class="container">
+    <h1>ℹ️ Proje Hakkında</h1>
+    <div class="vision-box">
+        <p>Bu uygulama; NASA veri setlerini yapay zekâ ile işleyerek, Türkiye ve yerelde Bergama'nın 2050 yılına kadar karşılaşabileceği olası iklim senaryolarını bilimsel bir zaman tüneliyle modellemektedir.</p>
+    </div>
+    
+    <p><b>Vizyonumuz:</b> "Geçmişten Geleceğe Bilim" anlayışıyla, coğrafi verileri bilişim teknolojileriyle harmanlayarak iklim değişikliği farkındalığını yerel ölçekte somutlaştırmak.</p>
+    
+    <p><b>Kapsam:</b> 1980'den 2050'ye kadar olan 70 yıllık süreçte; sıcaklık artışları, yağış rejimindeki değişimler ve bunların sürdürülebilir yaşam üzerindeki etkileri interaktif araçlarla sunulmaktadır.</p>
+
+    <div class="image-section">
+        <div class="logo-box">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/T%C3%9CB%C4%B0TAK_logo.svg/1200px-T%C3%9CB%C4%B0TAK_logo.svg.png" alt="TÜBİTAK Logosu">
+            <p class="caption">TÜBİTAK 4007 Destekli Proje</p>
+        </div>
+
+        <div class="fair-image-box">
+            <img src="https://images.unsplash.com/photo-1564053489984-317bbd824340?auto=format&fit=crop&w=800&q=80" alt="Geçmişten Geleceğe Bilim Bergama">
+            <p class="caption">"Geçmişten Geleceğe Bilim" Şenliği - Bergama</p>
+        </div>
+    </div>
+
+    <p style="text-align: center; margin-top: 40px; color: #7f8c8d;"><i>"Geçmişin verisiyle, geleceğin Bergama'sını bugün keşfedin."</i></p>
+</div>
+
+</body>
+</html>
