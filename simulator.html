@@ -7,52 +7,49 @@
     <style>
         :root { --dark: #2c3e50; --temp-red: #e74c3c; --rain-blue: #3498db; --btn: #2980b9; }
         
-        /* --- ARKA PLAN VE OVERLAY --- */
         body { 
             font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; color: var(--dark); min-height: 100vh;
-            /* NOT: Aşağıdaki URL'yi kendi görselinle değiştir Üstad */
+            /* Resim yolunu imagery olarak korudum */
             background-image: url('imagery/bergama-bg.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
             position: relative;
         }
-        /* Renk değiştiren katman */
+
+        /* Renk değiştiren katman - Resmi tamamen kaplaması için ayarlandı */
         #bg-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
-            background-color: rgba(200, 150, 50, 0.6); /* Başlangıç: Sarımtırak */
-            transition: background-color 0.8s ease; /* Pürüzsüz geçiş efekti */
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0;
+            background-color: rgba(220, 100, 0, 0.4); /* Başlangıçta daha turuncu/kurak */
+            transition: background-color 1.2s ease;
+            pointer-events: none; /* Tıklamaları engellememesi için */
         }
-        /* İçerik kutusunu şeffaflaştırıp öne çıkarma */
+
+        /* MAKSİMUM ŞEFFAFLIK: Background 0.92'den 0.1'e çekildi */
         .main-wrapper {
-            background: rgba(255, 255, 255, 0.92); /* Yarı şeffaf beyaz */
-            backdrop-filter: blur(5px); /* Arkadaki resmi hafif bulanıklaştır */
+            position: relative; z-index: 1;
+            background: rgba(255, 255, 255, 0.15); /* Çok şeffaf beyaz */
+            backdrop-filter: blur(8px); /* Arkadaki resmin seçilmesi için bulanıklık */
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 25px;
             padding: 30px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
             max-width: 1100px; margin: auto;
         }
 
         .container { display: grid; grid-template-columns: 1fr 1.5fr; gap: 30px; }
         .header { grid-column: span 2; text-align: center; margin-bottom: 20px; }
-        .nav-btn { padding: 10px 20px; background: var(--btn); color: white; text-decoration: none; border-radius: 50px; font-weight: bold; transition:0.3s; }
-        .nav-btn:hover { background: var(--dark); transform: scale(1.05); }
+        .nav-btn { padding: 10px 25px; background: var(--btn); color: white; text-decoration: none; border-radius: 50px; font-weight: bold; }
         
-        .controls, .results { background: transparent; /* Kapsayıcıdan alacak */ }
+        /* Grafik kutusu okunurluk için beyaz kalsın */
+        .chart-container { background: white; border-radius: 15px; padding: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
         
-        .slider-group { margin-bottom: 25px; }
-        .slider-group label { display: block; font-weight: bold; margin-bottom: 10px; }
-        .slider { width: 100%; height: 10px; border-radius: 5px; background: #d3d3d3; outline: none; cursor: pointer; }
-        .slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 20px; height: 20px; border-radius: 50%; background: var(--btn); cursor: pointer; transition: .2s; }
-        .slider:hover::-webkit-slider-thumb { background: var(--dark); }
-
+        .slider-group { margin-bottom: 25px; background: rgba(0,0,0,0.05); padding: 15px; border-radius: 12px; }
+        .slider { width: 100%; cursor: pointer; }
         
         .output-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
-        .stat-card { background: #fff; padding: 15px; border-radius: 12px; text-align: center; border-left: 5px solid #ccc; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-        .stat-card.temp { border-color: var(--temp-red); }
-        .stat-card.rain { border-color: var(--rain-blue); }
-        .stat-card div { font-size: 1.8em; font-weight: bold; }
-        .stat-card span { font-size: 0.85em; color: #7f8c8d; }
+        .stat-card { background: rgba(255,255,255,0.8); padding: 15px; border-radius: 12px; text-align: center; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -62,27 +59,24 @@
 <div class="main-wrapper">
     <div class="container">
         <div class="header">
-            <h1 style="margin-bottom:10px;">🕹️ İklim Senaryo Simülatörü (8 Analiz)</h1>
-            <a href="index.html" class="nav-btn">🏠 Anasayfa</a>
+            <h1>🕹️ İklim Senaryo Simülatörü</h1>
+            <div style="margin-top:10px;"><a href="index.html" class="nav-btn">🏠 Anasayfa</a></div>
         </div>
 
         <div class="controls">
-            <h3>🌱 Gelecek Parametreleri</h3>
-            <p style="font-size: 0.9em; color: #7f8c8d;">Sürgüleri kaydır, Bergama'nın rengini değiştir.</p>
-            <hr>
+            <h3>🌱 Gelecek Kararları</h3>
             <div class="slider-group"><label>⚡ Yenilenebilir Enerji: <span id="v1">20</span>%</label><input type="range" min="0" max="100" value="20" class="slider" id="s1"></div>
-            <div class="slider-group"><label>🌳 Ağaçlandırma: <span id="v2">500</span> Hektar</label><input type="range" min="0" max="5000" value="500" class="slider" id="s2"></div>
+            <div class="slider-group"><label>🌳 Ağaçlandırma: <span id="v2">500</span> Ha</label><input type="range" min="0" max="5000" value="500" class="slider" id="s2"></div>
             <div class="slider-group"><label>💧 Akıllı Sulama: <span id="v3">30</span>%</label><input type="range" min="0" max="100" value="30" class="slider" id="s3"></div>
         </div>
 
         <div class="results">
-            <h3>📊 2050 Tahmini Çıktıları</h3>
-            <div style="height: 300px; background:white; border-radius:15px; padding:10px;"><canvas id="simChart"></canvas></div>
+            <div class="chart-container"><canvas id="simChart" style="height:250px;"></canvas></div>
             <div class="output-grid">
-                <div class="stat-card temp"><span>Bergama Sıcaklık</span><div id="bt">23.1°C</div></div>
-                <div class="stat-card temp"><span>Türkiye Sıcaklık</span><div id="trt">16.8°C</div></div>
-                <div class="stat-card rain"><span>Bergama Yağış</span><div id="br">340mm</div></div>
-                <div class="stat-card rain"><span>Türkiye Yağış</span><div id="trr">475mm</div></div>
+                <div class="stat-card" style="border-bottom: 4px solid var(--temp-red);"><span>Bergama Isı</span><div id="bt">23.1°C</div></div>
+                <div class="stat-card" style="border-bottom: 4px solid var(--rain-blue);"><span>Bergama Yağış</span><div id="br">340mm</div></div>
+                <div class="stat-card" style="border-bottom: 4px solid var(--temp-red);"><span>TR Isı</span><div id="trt">16.8°C</div></div>
+                <div class="stat-card" style="border-bottom: 4px solid var(--rain-blue);"><span>TR Yağış</span><div id="trr">475mm</div></div>
             </div>
         </div>
     </div>
@@ -90,64 +84,53 @@
 
 <script>
     let simChart;
-    const sliders = ['s1', 's2', 's3'];
     const overlay = document.getElementById('bg-overlay');
-    
+
     function update() {
-        const energy = parseInt(document.getElementById('s1').value);
-        const green = parseInt(document.getElementById('s2').value);
-        const water = parseInt(document.getElementById('s3').value);
+        const e = parseInt(document.getElementById('s1').value);
+        const g = parseInt(document.getElementById('s2').value);
+        const w = parseInt(document.getElementById('s3').value);
 
-        document.getElementById('v1').innerText = energy;
-        document.getElementById('v2').innerText = green;
-        document.getElementById('v3').innerText = water;
+        document.getElementById('v1').innerText = e;
+        document.getElementById('v2').innerText = g;
+        document.getElementById('v3').innerText = w;
 
-        // 8 ANALİZLİ MODEL HESABI
-        let bt = 23.1 - (energy * 0.02) - (green * 0.0002);
-        let trt = 16.8 - (energy * 0.015) - (green * 0.0001);
-        let br = 340 + (water * 1.5) + (green * 0.02);
-        let trr = 475 + (water * 1.2) + (green * 0.015);
+        // Hesaplama Modeli
+        let bt = 23.1 - (e * 0.02) - (g * 0.0002);
+        let trt = 16.8 - (e * 0.015) - (g * 0.0001);
+        let br = 340 + (w * 1.5) + (g * 0.02);
+        let trr = 475 + (w * 1.2) + (g * 0.015);
 
         document.getElementById('bt').innerText = bt.toFixed(1) + "°C";
         document.getElementById('trt').innerText = trt.toFixed(1) + "°C";
         document.getElementById('br').innerText = Math.round(br) + "mm";
         document.getElementById('trr').innerText = Math.round(trr) + "mm";
 
-        updateChart(bt, trt, br, trr);
-        updateBackground(energy, green, water); // Arka planı güncelle
+        // Grafik Güncelleme
+        const chartData = [bt, trt, br/20, trr/20];
+        if(!simChart) {
+            const ctx = document.getElementById('simChart').getContext('2d');
+            simChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['B. Isı', 'TR Isı', 'B. Yağış*', 'TR Yağış*'],
+                    datasets: [{ data: chartData, backgroundColor: ['#e74c3c','#ff7675','#3498db','#74b9ff'] }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: {display: false} } }
+            });
+        } else { simChart.data.datasets[0].data = chartData; simChart.update(); }
+
+        // RENK GEÇİŞİ MANTIĞI: Daha Belirgin Tonlar
+        let score = (e + w + (g / 50)) / 3; 
+        let r = Math.round(255 - (score * 2.1)); // İyiye gittikçe kırmızı azalır
+        let green = Math.round(150 + (score * 1.05)); // Yeşil artar
+        let b = Math.round(0 + (score * 0.5));
+        
+        overlay.style.backgroundColor = `rgba(${r}, ${green}, ${b}, 0.5)`;
     }
 
-    // --- DİNAMİK ARKA PLAN RENGİ ---
-    function updateBackground(e, g, w) {
-        // 0 ile 100 arasında bir "İyileşme Puanı" hesapla
-        // Enerji ve Su tam puan, Ağaçlandırma 5000 üzerinden oranlanır.
-        let healthScore = (e + w + (g / 50)) / 3; 
-        let ratio = healthScore / 100; // 0.0 (Kötü) ile 1.0 (İyi) arası
-
-        // Renkler arasında geçiş yap (Sarı/Turuncu -> Yeşil/Mavi)
-        // Kötü (Kurak): rgba(220, 160, 60, 0.7)
-        // İyi (Verimli): rgba(40, 180, 100, 0.5)
-
-        let r = Math.round(220 + (40 - 220) * ratio);
-        let g_col = Math.round(160 + (180 - 160) * ratio);
-        let b = Math.round(60 + (100 - 60) * ratio);
-        let a = 0.7 + (0.5 - 0.7) * ratio; // Yeşil oldukça şeffaflık artsın
-
-        overlay.style.backgroundColor = `rgba(${r}, ${g_col}, ${b}, ${a})`;
-    }
-
-    function updateChart(bt, trt, br, trr) {
-        const ctx = document.getElementById('simChart').getContext('2d');
-        updateChart(bt, trt, br, trr);
-updateBackground(energy, green, water); // Bu satırı ekle!
-}
-
-// Olay dinleyicilerini düzelt:
-sliders.forEach(id => {
-    const el = document.getElementById(id);
-    if(el) el.oninput = update;
-});
-window.onload = update;
+    ['s1', 's2', 's3'].forEach(id => document.getElementById(id).oninput = update);
+    window.onload = update;
 </script>
 </body>
 </html>
