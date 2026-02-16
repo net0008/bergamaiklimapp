@@ -2,129 +2,305 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Bergama 2050: Simülasyon</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bergama & TR 2050: İklim Karar Masası</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        :root { --dark: #2c3e50; --temp-red: #e74c3c; --btn: #2980b9; --green: #27ae60; }
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; transition: 0.5s; background: #eee; }
-        body.child-mode { background: #1a1a1a; color: #55FF55; }
-        .main-wrapper { max-width: 1000px; margin: auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        body.child-mode .main-wrapper { background: #000; border: 2px solid #55FF55; color: #fff; }
+        :root { --dark: #2c3e50; --temp-red: #e74c3c; --rain-blue: #3498db; --btn: #2980b9; --green: #27ae60; }
         
-        .nav-bar { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
-        .nav-btn { padding: 12px 25px; border-radius: 50px; border:none; color:white; font-weight:bold; cursor:pointer; text-decoration:none; display:inline-block; }
-        .locked { background: #7f8c8d !important; opacity: 0.5; cursor: not-allowed; }
+        body { 
+            font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; transition: 0.5s; background-size: cover; background-attachment: fixed; min-height: 100vh;
+        }
+        
+        /* MOD ÖZELLİKLERİ */
+        body.adult-mode { background-color: #f1f2f6; background-image: none; color: var(--dark); }
+        body.child-mode { background-image: url('imagery/bergama-bg.jpg'); color: #fff; }
 
-        #mission-status { margin-bottom: 20px; padding: 20px; border-radius: 12px; border-left: 6px solid var(--temp-red); background: #f9f9f9; font-weight: bold; line-height: 1.5; }
-        body.child-mode #mission-status { background: #222; color: #55FF55; }
+        #bg-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0;
+            background-color: rgba(220, 100, 0, 0.4); transition: background-color 1.5s ease; pointer-events: none;
+        }
+
+        .main-wrapper {
+            position: relative; z-index: 1; border-radius: 25px; padding: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.3); max-width: 1100px; margin: auto; transition: 0.5s;
+        }
+        body.adult-mode .main-wrapper { background: rgba(255, 255, 255, 0.95); }
+        body.child-mode .main-wrapper { background: rgba(0, 0, 0, 0.8); border: 2px solid #55FF55; }
+
+        .container { display: grid; grid-template-columns: 1fr 1.5fr; gap: 30px; }
         
-        .slider-group { margin-bottom: 15px; padding: 15px; background: rgba(0,0,0,0.03); border-radius: 10px; }
-        body.child-mode .slider-group { background: #222; border: 1px solid #333; }
-        .slider { width: 100%; cursor: pointer; }
+        .nav-bar { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; grid-column: span 2;}
+        .nav-btn { padding: 12px 25px; background: var(--btn); color: white; text-decoration: none; border-radius: 50px; font-weight: bold; border:none; cursor:pointer; transition: 0.3s; display:inline-block; }
         
-        /* Kayıp Metinler İçin CSS */
-        .slider-desc { margin: 8px 0 0; font-size: 0.8em; color: #7f8c8d; font-weight: normal; }
+        .locked { background: #7f8c8d !important; cursor: not-allowed; opacity: 0.6; }
+
+        #mission-status { 
+            margin-bottom: 25px; padding: 15px; border-radius: 12px; text-align: left; font-size: 0.95em; 
+            line-height: 1.5; border-left: 8px solid var(--temp-red); transition: 0.3s;
+        }
+        body.adult-mode #mission-status { background: white; color: var(--dark); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        body.child-mode #mission-status { background: #222; color: #55FF55; border-color: var(--temp-red); }
+
+        .slider-group { margin-bottom: 20px; padding: 15px; border-radius: 15px; transition: 0.3s; }
+        body.adult-mode .slider-group { background: rgba(255, 255, 255, 0.9); box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid #eee; }
+        body.child-mode .slider-group { background: #222; border: 1px solid #444; }
+
+        .slider { width: 100%; cursor: pointer; -webkit-appearance: none; appearance: none; height: 10px; background: #dfe6e9; border-radius: 5px; outline: none;}
+        .slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 25px; height: 25px; background: var(--btn); border-radius: 50%; border: 3px solid white; }
+
+        .slider-desc { margin: 8px 0 0; font-size: 0.8em; font-weight: normal; transition: 0.3s;}
+        body.adult-mode .slider-desc { color: #7f8c8d; }
         body.child-mode .slider-desc { color: #aaa; }
+
+        .output-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .stat-card { padding: 15px; border-radius: 15px; text-align: center; font-weight: bold; transition: 0.3s;}
+        body.adult-mode .stat-card { background: rgba(255,255,255,0.9); box-shadow: 0 4px 10px rgba(0,0,0,0.1); color: var(--dark);}
+        body.child-mode .stat-card { background: #333; color: white; border: 1px solid #555;}
+        
+        /* Modal */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; backdrop-filter: blur(5px); }
+        .modal-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px; border-radius: 20px; max-width: 500px; width: 90%; color: black; }
+
     </style>
 </head>
 <body id="mainBody">
 
-    <div class="main-wrapper">
-        <h2 id="modeTitle" style="text-align:center; margin-top:0;"></h2>
-        <div id="top-slogan" style="font-style:italic; text-align:center; margin-bottom:20px; font-weight:bold;"></div>
-        
-        <div class="nav-bar">
-            <a href="secim.html" class="nav-btn" style="background:var(--dark)">🔙 Mod Değiştir</a>
+<div id="bg-overlay"></div>
+
+<div class="main-wrapper">
+    
+    <div style="text-align: center; margin-bottom: 20px;">
+        <h1 id="modeTitle" style="margin-top:0;">Bergama 2050: Karar Masası</h1>
+        <div id="top-slogan" style="font-style:italic; font-weight:bold; font-size: 1.1em;"></div>
+    </div>
+
+    <div class="nav-bar">
+        <a href="secim.html" class="nav-btn" style="background:var(--dark)">🔙 Mod Değiştir</a>
+        <button onclick="toggleModal()" class="nav-btn" style="background:#f39c12">ℹ️ Nasıl Kullanılır?</button>
+    </div>
+
+    <div class="container">
+        <div class="controls">
+            <h3 style="margin-top:0;" id="panelTitle">🛑 Gelecek Neslin Kaderini Belirle</h3>
+            
+            <div id="mission-status">Lütfen sürgüleri hareket ettirerek kararlarınızı verin...</div>
+            
+            <div class="slider-group">
+                <label style="font-weight:bold;">⚡ Temiz Enerji: <span id="v1">20</span>%</label>
+                <input type="range" min="0" max="100" value="20" class="slider" id="s1">
+                <p class="slider-desc">Fosil yakıtları bırakıp güneş ve rüzgara geçiş oranımız.</p>
+                <p id="eFeedback" style="margin: 8px 0 0; font-size: 0.85em; font-weight: bold; min-height: 15px;"></p>
+            </div>
+            
+            <div class="slider-group">
+                <label style="font-weight:bold;">🌳 Dikilecek Ağaç: <span id="v2">100.000</span> Adet</label>
+                <input type="range" min="0" max="1000000" value="100000" step="10000" class="slider" id="s2">
+                <p class="slider-desc">Bergama ve Kozak Yaylası'na kazandırılacak yeni ormanlar.</p>
+                <p id="tFeedback" style="margin: 8px 0 0; font-size: 0.85em; font-weight: bold; min-height: 15px;"></p>
+            </div>
+            
+            <div class="slider-group">
+                <label style="font-weight:bold;">🚜 Akıllı Tarım & Su: <span id="v3">30</span>%</label>
+                <input type="range" min="0" max="100" value="30" class="slider" id="s3">
+                <p class="slider-desc">Damla sulama teknolojisi ile su tasarrufu oranımız.</p>
+                <p id="wFeedback" style="margin: 8px 0 0; font-size: 0.85em; font-weight: bold; min-height: 15px;"></p>
+            </div>
+
+            <div style="text-align:center; margin-top:20px;">
+                <a href="ayak-izi.html" id="karne-btn" class="nav-btn locked">🔒 Önce Görevi Başar</a>
+            </div>
         </div>
 
-        <div id="mission-status">Yükleniyor...</div>
-        
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
-            <div class="controls">
-                <div class="slider-group">
-                    <label style="font-weight:bold;">⚡ Temiz Enerji: <span id="v1">20</span>%</label>
-                    <input type="range" min="0" max="100" value="20" class="slider" id="s1">
-                    <p class="slider-desc">Fosil yakıtları bırakıp güneş ve rüzgara geçiş oranımız.</p>
+        <div class="results">
+            <div style="background:white; border-radius:15px; padding:10px;"><canvas id="simChart" style="height:280px;"></canvas></div>
+            
+            <div class="output-grid">
+                <div class="stat-card" style="border-bottom:5px solid var(--temp-red);">
+                    <span style="font-size:0.85em; display:block; margin-bottom:5px;">Bergama Sıcaklık</span>
+                    <div id="bt" style="font-size:1.4em;">23.1°C</div>
                 </div>
-                <div class="slider-group">
-                    <label style="font-weight:bold;">🌳 Dikilecek Ağaç: <span id="v2">100.000</span> Adet</label>
-                    <input type="range" min="0" max="1000000" value="100000" step="10000" class="slider" id="s2">
-                    <p class="slider-desc">Bergama ve Kozak Yaylası'na kazandırılacak yeni ormanlar.</p>
+                <div class="stat-card" style="border-bottom:5px solid var(--rain-blue);">
+                    <span style="font-size:0.85em; display:block; margin-bottom:5px;">Bergama Yağış</span>
+                    <div id="br" style="font-size:1.4em;">340 mm</div>
                 </div>
-                <div class="slider-group">
-                    <label style="font-weight:bold;">🚜 Akıllı Tarım & Su: <span id="v3">30</span>%</label>
-                    <input type="range" min="0" max="100" value="30" class="slider" id="s3">
-                    <p class="slider-desc">Damla sulama teknolojisi ile su tasarrufu oranımız.</p>
+                <div class="stat-card" style="border-bottom:5px solid var(--temp-red);">
+                    <span style="font-size:0.85em; display:block; margin-bottom:5px;">Türkiye Sıcaklık</span>
+                    <div id="trt" style="font-size:1.4em;">16.8°C</div>
                 </div>
-                
-                <div style="text-align:center; margin-top:20px;">
-                    <a href="ayak-izi.html" id="karne-btn" class="nav-btn locked">🔒 Önce Görevi Başar</a>
-                </div>
-            </div>
-            <div class="results">
-                <canvas id="simChart" style="max-height: 250px; background:white; border-radius:10px; padding:10px;"></canvas>
-                <div style="display:flex; justify-content:space-between; margin-top:10px; font-weight:bold; background:rgba(255,255,255,0.8); color:black; padding:10px; border-radius:10px;">
-                    <span>B. Isı: <span id="bt">23.1</span>°C</span>
-                    <span>TR Isı: <span id="trt">16.8</span>°C</span>
+                <div class="stat-card" style="border-bottom:5px solid var(--rain-blue);">
+                    <span style="font-size:0.85em; display:block; margin-bottom:5px;">Türkiye Yağış</span>
+                    <div id="trr" style="font-size:1.4em;">475 mm</div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <script>
-        let simChart;
-        const mode = localStorage.getItem('user_mode') || 'child';
-        document.body.className = mode + '-mode';
-        
-        document.getElementById('modeTitle').innerText = mode === 'adult' ? 'STRATEJİ MODU' : 'KAHRAMAN MODU';
-        document.getElementById('top-slogan').innerText = mode === 'adult' ? "Çevre için fedakarlık yapmazsanız, çocuklarınız için fedakarlık yapmaya gerek yok." : "Yaşamak ya da yaşamamak; tüm mesele senin kararın!";
+<div id="helpModal" class="modal-overlay">
+    <div class="modal-content">
+        <h2 id="modalTitle" style="margin-top:0;">🎮 Nasıl Kullanılır?</h2>
+        <hr>
+        <div id="modalBody" style="text-align: left; padding: 10px; line-height: 1.6; font-size: 1.1em;"></div>
+        <button onclick="toggleModal()" class="nav-btn" style="width:100%; margin-top:15px; background:var(--green); font-size:1.1em;">Anladım!</button>
+    </div>
+</div>
 
-        function update() {
-            const e = parseInt(document.getElementById('s1').value);
-            const t = parseInt(document.getElementById('s2').value);
-            const w = parseInt(document.getElementById('s3').value);
+<script>
+    let simChart;
+    const overlay = document.getElementById('bg-overlay');
+    const mode = localStorage.getItem('user_mode') || 'child';
+    
+    document.body.className = mode + '-mode';
+    
+    // Modlara Göre Metinlerin Ayarlanması
+    if (mode === 'adult') {
+        document.getElementById('modeTitle').innerText = 'STRATEJİ MODU';
+        document.getElementById('top-slogan').innerText = "Çevre için fedakarlık yapmazsanız, çocuklarınız için fedakarlık yapmaya gerek yok.";
+        document.getElementById('top-slogan').style.color = "var(--temp-red)";
+        document.getElementById('panelTitle').innerText = "📊 Stratejik Karar Paneli";
+        document.getElementById('modalTitle').innerText = "📊 Strateji Modu Nedir?";
+        document.getElementById('modalBody').innerHTML = "<p>• <b>Karar Al:</b> Sürgülerle 2050 projeksiyonunu belirleyin.</p><p>• <b>Etkiyi Gör:</b> Yanlış kararların yaşamsal ve ekonomik maliyetini okuyun.</p><p>• <b>Hedef:</b> Sıcaklığı düşürüp yağışı artırarak çocuklarınıza yaşanabilir bir miras bırakın.</p>";
+    } else {
+        document.getElementById('modeTitle').innerText = 'KAHRAMAN MODU';
+        document.getElementById('top-slogan').innerText = "Dışarıya gaz maskesi olmadan çıkmak için geleceğine sahip çık!";
+        document.getElementById('top-slogan').style.color = "#55FF55";
+        document.getElementById('panelTitle').innerText = "🛑 Geleceği Kurtar";
+        document.getElementById('modalTitle').innerText = "🎮 Görevin: Dünyayı Kurtar!";
+        document.getElementById('modalBody').innerHTML = "<p>• <b>Karar Al:</b> Sürgülerle doğa dostu kararlar ver.</p><p>• <b>Etkiyi Gör:</b> Sıcaklığı düşürüp yağışı artırmaya çalış.</p><p>• <b>Hedef:</b> 2050'de Bergama'yı 22.2°C'nin altına indirip gaz maskelerinden kurtul!</p>";
+    }
 
-            let bt = 23.1 - (e * 0.025) - (t * 0.00000035);
-            let trt = 16.8 - (e * 0.015) - (t * 0.0000001);
+    function toggleModal() {
+        const m = document.getElementById('helpModal');
+        m.style.display = (m.style.display === 'block') ? 'none' : 'block';
+    }
+
+    function update() {
+        const energy = parseInt(document.getElementById('s1').value);
+        const trees = parseInt(document.getElementById('s2').value);
+        const water = parseInt(document.getElementById('s3').value);
+
+        // Bilimsel Hesaplama
+        let bt = 23.1 - (energy * 0.025) - (trees * 0.00000035);
+        let trt = 16.8 - (energy * 0.015) - (trees * 0.0000001);
+        let br = 340 + (water * 2.2) + (trees * 0.00003);
+        let trr = 475 + (water * 1.5) + (trees * 0.000015);
+
+        // Arayüz Değerlerini Güncelle
+        document.getElementById('v1').innerText = energy;
+        document.getElementById('v2').innerText = trees.toLocaleString('tr-TR');
+        document.getElementById('v3').innerText = water;
+        document.getElementById('bt').innerText = bt.toFixed(1) + "°C";
+        document.getElementById('br').innerText = Math.round(br) + " mm";
+        document.getElementById('trt').innerText = trt.toFixed(1) + "°C";
+        document.getElementById('trr').innerText = Math.round(trr) + " mm";
+
+        // --- SÜRGÜ ANLIK GERİ BİLDİRİMLERİ ---
+        const ef = document.getElementById('eFeedback');
+        const tf = document.getElementById('tFeedback');
+        const wf = document.getElementById('wFeedback');
+
+        if(mode === 'adult') {
+            ef.innerText = energy > 50 ? "✅ Temiz hava yatırımı başarılı." : "❌ Uyarı: Fosil yakıt sağlık maliyetlerini artırıyor.";
+            ef.style.color = energy > 50 ? "var(--green)" : "var(--temp-red)";
             
-            document.getElementById('v1').innerText = e;
-            document.getElementById('v2').innerText = t.toLocaleString('tr-TR');
-            document.getElementById('v3').innerText = w;
-            document.getElementById('bt').innerText = bt.toFixed(1);
-            document.getElementById('trt').innerText = trt.toFixed(1);
-
-            const msgBox = document.getElementById('mission-status');
-            const btn = document.getElementById('karne-btn');
-
-            if (mode === 'adult') {
-                msgBox.innerHTML = bt > 22.2 ? "❌ Dikkat: Bu konfor tercihi, 2050'de çocuğunuzun soluduğu havadan çalıyor!" : "✅ Tebrikler: Bugünün fedakarlığı, çocuğunuzun 2050'deki huzuru olacak.";
-            } else {
-                msgBox.innerHTML = bt > 22.2 ? "⚠️ Eyvah! Bu gidişle 2050'de evden çıkarken gaz maskeni unutmamalısın!" : "🛡️ Harika! Geleceğini maskelerden kurtardın Kahraman!";
-            }
-
-            if (bt <= 22.2) {
-                btn.className = "nav-btn"; btn.style.background = "#27ae60"; btn.innerText = "➡️ Kişisel Teste Geç";
-                msgBox.style.borderColor = "#27ae60";
-            } else {
-                btn.className = "nav-btn locked"; btn.innerText = "🔒 Gelecek Tehlikede";
-                msgBox.style.borderColor = "var(--temp-red)";
-            }
-
-            const data = [bt, trt];
-            if(!simChart) {
-                simChart = new Chart(document.getElementById('simChart'), {
-                    type: 'bar', data: { labels: ['Bergama Isı', 'Türkiye Isı'], datasets: [{ data: data, backgroundColor: ['#e74c3c','#3498db'] }] },
-                    options: { plugins: { legend: {display: false} }, scales: { y: { max: 25 } } }
-                });
-            } else { simChart.data.datasets[0].data = data; simChart.update('none'); }
-
-            localStorage.setItem('sim_energy', e);
-            localStorage.setItem('sim_trees', t);
-            localStorage.setItem('sim_water', w);
-            localStorage.setItem('sim_temp', bt.toFixed(1));
+            tf.innerText = trees > 500000 ? "✅ Yeni ormanlar ısı adalarını kırıyor." : "❌ Uyarı: Çölleşme tehlikesi sınırında.";
+            tf.style.color = trees > 500000 ? "var(--green)" : "var(--temp-red)";
+            
+            wf.innerText = water > 50 ? "✅ Tarımsal sürdürülebilirlik sağlandı." : "❌ Uyarı: Yeraltı suları tükeniyor.";
+            wf.style.color = water > 50 ? "var(--green)" : "var(--temp-red)";
+        } else {
+            ef.innerText = energy > 50 ? "🌟 Harika! Gökyüzü temizleniyor." : "⚠️ Gaz bulutları artıyor!";
+            ef.style.color = energy > 50 ? "#55FF55" : "#ff5555";
+            
+            tf.innerText = trees > 500000 ? "🌟 Ormanlar büyüyor, gölge çoğalıyor." : "⚠️ Her yer betonlaşıyor!";
+            tf.style.color = trees > 500000 ? "#55FF55" : "#ff5555";
+            
+            wf.innerText = water > 50 ? "🌟 Göller doluyor, yaşam canlanıyor." : "⚠️ Sular çekiliyor, kuraklık kapıda!";
+            wf.style.color = water > 50 ? "#55FF55" : "#ff5555";
         }
-        ['s1', 's2', 's3'].forEach(id => document.getElementById(id).oninput = update);
-        window.onload = update;
-    </script>
+
+        // --- ANA MESAJ VE KİLİT SİSTEMİ ---
+        const msgBox = document.getElementById('mission-status');
+        const btn = document.getElementById('karne-btn');
+
+        if (mode === 'adult') {
+            msgBox.innerHTML = bt > 22.2 
+                ? "<b>Analiz:</b> ❌ Bu konfor tercihi, 2050'de çocuğunuzun soluduğu havadan çalıyor! Sıcaklık hala çok yüksek." 
+                : "<b>Analiz:</b> ✅ Tebrikler! Bugünün fedakarlığı, çocuğunuzun 2050'deki huzuru olacak.";
+        } else {
+            msgBox.innerHTML = bt > 22.2 
+                ? "<b>Durum:</b> ⚠️ Eyvah! Bu gidişle 2050'de evden çıkarken gaz maskeni unutmamalısın!" 
+                : "<b>Durum:</b> 🛡️ Harika! Geleceğini maskelerden kurtardın Kahraman!";
+        }
+
+        if (bt <= 22.2) {
+            btn.className = "nav-btn"; btn.style.background = "var(--green)"; btn.innerText = "➡️ Kişisel Teste Geç";
+            msgBox.style.borderColor = "var(--green)";
+        } else {
+            btn.className = "nav-btn locked"; btn.innerText = "🔒 Geleceği Kurtarmadan Geçemezsin";
+            msgBox.style.borderColor = "var(--temp-red)";
+        }
+
+        // --- 4 VERİLİ GRAFİK GÜNCELLEME ---
+        // Yağış değerini grafikte sıcaklık ile yan yana görebilmek için 20'ye bölüyoruz (Görsel ölçekleme).
+        // Tooltip (üzerine gelince çıkan kutu) içinde gerçek mm değerini göstereceğiz.
+        const chartData = [bt.toFixed(1), trt.toFixed(1), (br/20).toFixed(1), (trr/20).toFixed(1)];
+        const realData = [bt.toFixed(1) + "°C", trt.toFixed(1) + "°C", Math.round(br) + " mm", Math.round(trr) + " mm"];
+
+        if(!simChart) {
+            const ctx = document.getElementById('simChart').getContext('2d');
+            simChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Bergama Sıcaklık', 'Türkiye Sıcaklık', 'Bergama Yağış', 'Türkiye Yağış'],
+                    datasets: [{ 
+                        data: chartData, 
+                        backgroundColor: ['#e74c3c','#ff7675','#3498db','#74b9ff'],
+                        borderRadius: 8
+                    }]
+                },
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    plugins: { 
+                        legend: {display: false},
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return realData[context.dataIndex]; // Üzerine gelince gerçek değeri yazdır
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, max: 35, display: false } // Y ekseni rakamlarını gizliyoruz
+                    }
+                }
+            });
+        } else { 
+            simChart.data.datasets[0].data = chartData; 
+            simChart.options.plugins.tooltip.callbacks.label = function(context) { return realData[context.dataIndex]; };
+            simChart.update('none'); 
+        }
+
+        // Arkaplan Rengi (Sadece Çocuk Modunda Renk Değişir)
+        if(mode !== 'adult') {
+            let score = (energy/100 + water/100 + trees/1000000) / 3;
+            overlay.style.backgroundColor = `hsla(${20 + (score * 100)}, 70%, 45%, 0.45)`;
+        } else {
+            overlay.style.backgroundColor = "transparent";
+        }
+
+        // Verileri Sakla
+        localStorage.setItem('sim_energy', energy);
+        localStorage.setItem('sim_trees', trees);
+        localStorage.setItem('sim_water', water);
+        localStorage.setItem('sim_temp', bt.toFixed(1));
+    }
+
+    // Sürgüler hareket ettikçe update fonksiyonunu çalıştır
+    ['s1', 's2', 's3'].forEach(id => document.getElementById(id).oninput = update);
+    window.onload = update;
+</script>
 </body>
 </html>
