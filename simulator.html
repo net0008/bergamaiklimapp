@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bergama 2050: İklim Simülatörü</title>
+    <title>Bergama & TR 2050: İklim Kahramanı</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root { --dark: #2c3e50; --temp-red: #e74c3c; --rain-blue: #3498db; --btn: #2980b9; --green: #27ae60; }
@@ -56,8 +56,10 @@
         .fullscreen-btn { background: var(--dark) !important; }
         .help-btn { background: #f39c12 !important; }
 
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; backdrop-filter: blur(5px); }
-        .modal-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px; border-radius: 20px; max-width: 500px; width: 90%; text-align: center; }
+        /* Modal Styles */
+        .modal-overlay { display: block; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; backdrop-filter: blur(8px); }
+        .modal-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 35px; border-radius: 25px; max-width: 550px; width: 90%; text-align: center; border: 4px solid var(--green); }
+        .modal-content h2 { color: var(--green); margin-top: 0; }
         
         @media (max-width: 768px) { .container { grid-template-columns: 1fr; } .header { grid-column: span 1; } }
     </style>
@@ -69,7 +71,7 @@
 <div class="main-wrapper">
     <div class="container">
         <div class="header">
-            <h1>🏛️ Bergama 2050: İklim Karar Simülatörü</h1>
+            <h1>🏛️ Bergama & TR 2050: İklim Karar Simülatörü</h1>
             <div class="nav-bar">
                 <a href="index.html" class="nav-btn">🏠 Anasayfa</a>
                 <button onclick="toggleFullScreen()" class="nav-btn fullscreen-btn">📺 Tam Ekran</button>
@@ -83,19 +85,19 @@
             <div class="slider-group">
                 <label>⚡ Temiz Enerji Yatırımı: <span id="v1">20</span>%</label>
                 <input type="range" min="0" max="100" value="20" class="slider" id="s1">
-                <p style="margin:5px 0 0; font-size:0.75em; color:#636e72;">Fosil yakıtlardan vazgeçme oranı.</p>
+                <p style="margin:5px 0 0; font-size:0.75em; color:#636e72;">Fosil yakıtları bırakıp güneş ve rüzgara geçiş oranımız.</p>
             </div>
 
             <div class="slider-group">
                 <label>🌳 Dikilecek Ağaç Sayısı: <span id="v2">100.000</span> Adet</label>
                 <input type="range" min="0" max="1000000" value="100000" step="10000" class="slider" id="s2">
-                <p style="margin:5px 0 0; font-size:0.75em; color:#636e72;">Bergama ve Kozak Yaylası'na dikilecek ağaçlar.</p>
+                <p style="margin:5px 0 0; font-size:0.75em; color:#636e72;">Bergama ve Kozak Yaylası'na kazandırılacak yeni ağaçlar.</p>
             </div>
 
             <div class="slider-group">
                 <label>🚜 Akıllı Tarım & Su: <span id="v3">30</span>%</label>
                 <input type="range" min="0" max="100" value="30" class="slider" id="s3">
-                <p style="margin:5px 0 0; font-size:0.75em; color:#636e72;">Damla sulama ve su tasarrufu oranı.</p>
+                <p style="margin:5px 0 0; font-size:0.75em; color:#636e72;">Damla sulama teknolojisi ile su tasarrufu oranımız.</p>
             </div>
         </div>
 
@@ -113,14 +115,15 @@
 
 <div id="helpModal" class="modal-overlay">
     <div class="modal-content">
-        <h2>🎮 Görevin: Bergama'yı Kurtar!</h2>
+        <h2>🚀 Kahramanlık Görevi: Bergama ve Türkiye'yi Kurtar!</h2>
         <hr>
-        <div style="text-align: left; padding: 10px; line-height: 1.6;">
-            <p>• <b>Karar Al:</b> Sürgüleri sağa çekerek doğa dostu kararlar al.</p>
-            <p>• <b>Gözlemle:</b> Arka plan <b>turuncudan yeşile</b> dönerse doğru yoldasın!</p>
-            <p>• <b>Hedef:</b> 2050'de Bergama sıcaklığını <b>21.5°C</b> altına düşür.</p>
+        <div style="text-align: left; padding: 10px; line-height: 1.6; font-size: 1.1em;">
+            <p>• <b>Karar Al:</b> Sol taraftaki sürgüleri sağa çekerek enerji, ağaç ve su kararlarını ver.</p>
+            <p>• <b>Gözlemle:</b> Sağdaki verileri takip et; <b>Sıcaklık</b> düşüyor mu? <b>Yağışlar</b> artıyor mu? Arka planın nasıl <b>yeşerdiğine</b> dikkat et!</p>
+            <p style="color:var(--btn); font-weight:bold; border-left: 4px solid var(--btn); padding-left:10px;">• HEDEF 1: 2050'de Bergama sıcaklığını <span style="color:var(--temp-red)">21.5°C</span> altına düşür!</p>
+            <p style="color:var(--green); font-weight:bold; border-left: 4px solid var(--green); padding-left:10px;">• HEDEF 2: 2050'de ülkemizin sıcaklığını <span style="color:var(--temp-red)">15.5°C</span> altına düşür!</p>
         </div>
-        <button onclick="toggleModal()" class="nav-btn" style="width:100%; margin-top:10px; background:var(--green);">Başlayalım!</button>
+        <button onclick="toggleModal()" class="nav-btn" style="width:100%; margin-top:15px; background:var(--green); font-size:1.2em; height:50px;">Anladım, Dünyayı Kurtarmaya Başlıyorum!</button>
     </div>
 </div>
 
@@ -142,12 +145,10 @@
     }
 
     function update() {
-        // Girdileri Al
         const energy = parseInt(document.getElementById('s1').value);
         const treeCount = parseInt(document.getElementById('s2').value);
         const water = parseInt(document.getElementById('s3').value);
 
-        // Arayüzü Güncelle
         document.getElementById('v1').innerText = energy;
         document.getElementById('v2').innerText = treeCount.toLocaleString('tr-TR');
         document.getElementById('v3').innerText = water;
@@ -158,13 +159,11 @@
         let br = 340 + (water * 2.2) + (treeCount * 0.00003);
         let trr = 475 + (water * 1.5) + (treeCount * 0.000015);
 
-        // Kartları Güncelle
         document.getElementById('bt').innerText = bt.toFixed(1) + "°C";
         document.getElementById('trt').innerText = trt.toFixed(1) + "°C";
         document.getElementById('br').innerText = Math.round(br) + " mm";
         document.getElementById('trr').innerText = Math.round(trr) + " mm";
 
-        // Grafik Verisi (Yağış ölçeklendirildi)
         const chartData = [bt.toFixed(1), trt.toFixed(1), (br/20).toFixed(1), (trr/20).toFixed(1)];
         
         if(!simChart) {
@@ -172,7 +171,7 @@
             simChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: ['B. Sıcaklık', 'TR Sıcaklık', 'B. Yağış (x20)', 'TR Yağış (x20)'],
+                    labels: ['B. Sıcaklık', 'TR Sıcaklık', 'B. Yağış (Ölçekli)', 'TR Yağış (Ölçekli)'],
                     datasets: [{
                         data: chartData,
                         backgroundColor: ['#e74c3c','#ff7675','#3498db','#74b9ff'],
@@ -190,13 +189,11 @@
             simChart.update('none');
         }
 
-        // Dinamik Renk Geçişi (Skor Bazlı: 0-100 arası normalize)
         let score = (energy/100 + water/100 + treeCount/1000000) / 3;
-        let hue = 20 + (score * 100); // 20 (Turuncu) -> 120 (Yeşil)
+        let hue = 20 + (score * 100); 
         overlay.style.backgroundColor = `hsla(${hue}, 70%, 45%, 0.45)`;
     }
 
-    // Event Listener'lar
     ['s1', 's2', 's3'].forEach(id => document.getElementById(id).oninput = update);
     window.onload = update;
 </script>
