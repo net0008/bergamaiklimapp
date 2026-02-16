@@ -106,27 +106,31 @@
 </div>
 
 <script>
-    window.onload = function() {
-        // Simülatörden gelen verileri çek (LocalStorage)
-        const energy = parseInt(localStorage.getItem('sim_energy')) || 0;
-        const trees = parseInt(localStorage.getItem('sim_trees')) || 0;
-        const water = parseInt(localStorage.getItem('sim_water')) || 0;
-        const temp = parseFloat(localStorage.getItem('sim_temp')) || 23.1;
+    // karne.html içindeki window.onload kısmını şununla değiştir:
+window.onload = function() {
+    const energy = parseInt(localStorage.getItem('sim_energy')) || 0;
+    const trees = parseInt(localStorage.getItem('sim_trees')) || 0;
+    const water = parseInt(localStorage.getItem('sim_water')) || 0;
+    const temp = parseFloat(localStorage.getItem('sim_temp')) || 23.1;
+    const quizXP = parseInt(localStorage.getItem('quiz_xp')) || 0; // Testten gelen puan
 
-        // Eko-XP Hesaplama Mantığı (0-1000 arası)
-        let ekoXP = Math.round((energy * 3) + (trees / 2000) + (water * 2));
-        if(ekoXP > 1000) ekoXP = 1000;
+    // Yeni Hesaplama: Simülatör (Max 600) + Ayak İzi Testi (Max 400) = 1000 Eko-XP
+    let simXP = Math.round((energy * 2) + (trees / 5000) + (water * 1.5));
+    let totalEkoXP = simXP + quizXP;
 
-        // Seviye Hesaplama (Her 200 XP bir seviye)
-        let level = Math.floor(ekoXP / 200);
+    if(totalEkoXP > 1000) totalEkoXP = 1000;
 
-        // Arayüz Güncelleme
-        document.getElementById('levelDisplay').innerText = level;
-        document.getElementById('xpStatus').innerText = ekoXP + " / 1000 Eko-XP";
-        document.getElementById('xpBar').style.width = (ekoXP / 10) + "%";
+    let level = Math.floor(totalEkoXP / 200);
 
-        if(ekoXP > 0) {
-            document.getElementById('summaryMsg').innerHTML = `Tebrikler Kahraman! Bergama için <b>${ekoXP} Eko-XP</b> topladın. Kararların sayesinde gelecek daha yeşil!`;
+    document.getElementById('levelDisplay').innerText = level;
+    document.getElementById('xpStatus').innerText = totalEkoXP + " / 1000 Eko-XP";
+    document.getElementById('xpBar').style.width = (totalEkoXP / 10) + "%";
+    
+    // ... geri kalan başarı kontrol kodları aynı kalabilir ...
+};
+{
+        if(totalEkoXP > 0) {
+            document.getElementById('summaryMsg').innerHTML = `Tebrikler Kahraman! Bergama için <b>${totalEkoXP} Eko-XP</b> topladın. Kararların sayesinde gelecek daha yeşil!`;
         }
 
         // Başarımları Kontrol Et

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Karbon Ayak İzi Testi</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #1a1a1a; color: white; padding: 20px; text-align: center; }
+        .quiz-container { max-width: 600px; margin: auto; background: rgba(255,255,255,0.1); padding: 30px; border-radius: 20px; border: 2px solid #55FF55; }
+        .question { font-size: 1.2em; margin-bottom: 20px; display: none; }
+        .question.active { display: block; }
+        .option-btn { display: block; width: 100%; padding: 15px; margin: 10px 0; background: #2c3e50; color: white; border: none; border-radius: 10px; cursor: pointer; font-size: 1em; }
+        .option-btn:hover { background: #2980b9; }
+        .progress { color: #55FF55; font-weight: bold; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <div class="progress">Soru <span id="qNum">1</span> / 4</div>
+        <h2>👣 Karbon Ayak İzini Ölçelim</h2>
+        <hr style="border-color:#55FF55; margin-bottom:30px;">
+
+        <div class="question active" id="q1">
+            <p>Okula genellikle nasıl gidiyorsun?</p>
+            <button class="option-btn" onclick="nextQuestion(100)">🚶 Yürüyerek veya Bisikletle</button>
+            <button class="option-btn" onclick="nextQuestion(50)">🚌 Servis veya Otobüsle</button>
+            <button class="option-btn" onclick="nextQuestion(0)">🚗 Özel Arabayla</button>
+        </div>
+
+        <div class="question" id="q2">
+            <p>Odanın ışığını kullanmadığında kapatır mısın?</p>
+            <button class="option-btn" onclick="nextQuestion(100)">💡 Evet, her zaman!</button>
+            <button class="option-btn" onclick="nextQuestion(50)">⌛ Bazen unutuyorum.</button>
+            <button class="option-btn" onclick="nextQuestion(0)">🌑 Hayır, açık kalır.</button>
+        </div>
+
+        <div class="question" id="q3">
+            <p>Atıkları geri dönüşüm kutusuna atıyor musun?</p>
+            <button class="option-btn" onclick="nextQuestion(100)">♻️ Evet, kağıt/plastik ayırırım.</button>
+            <button class="option-btn" onclick="nextQuestion(50)">🧴 Sadece plastikleri atarım.</button>
+            <button class="option-btn" onclick="nextQuestion(0)">🗑️ Hepsini çöpe atarım.</button>
+        </div>
+
+        <div class="question" id="q4">
+            <p>Yemeklerinde neye dikkat edersin?</p>
+            <button class="option-btn" onclick="nextQuestion(100)">🍎 Yerli malı ve mevsim sebzeleri.</button>
+            <button class="option-btn" onclick="nextQuestion(50)">🍔 Paketli hazır gıdalar.</button>
+            <button class="option-btn" onclick="nextQuestion(0)">🥩 Çok fazla et tüketirim.</button>
+        </div>
+    </div>
+
+    <script>
+        let currentQ = 1;
+        let totalQuizXP = 0;
+
+        function nextQuestion(points) {
+            totalQuizXP += points;
+            document.getElementById('q' + currentQ).classList.remove('active');
+            currentQ++;
+            
+            if (currentQ <= 4) {
+                document.getElementById('q' + currentQ).classList.add('active');
+                document.getElementById('qNum').innerText = currentQ;
+            } else {
+                localStorage.setItem('quiz_xp', totalQuizXP);
+                window.location.href = 'karne.html'; // Karneye yönlendir
+            }
+        }
+    </script>
+</body>
+</html>

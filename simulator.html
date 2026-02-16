@@ -45,7 +45,31 @@
         }
         
         .slider-group label { display: block; color: var(--dark); font-weight: 700; margin-bottom: 10px; font-size: 1.05em; }
-        .slider { width: 100%; height: 10px; border-radius: 5px; background: #dfe6e9; outline: none; transition: 0.2s; -webkit-appearance: none; cursor: pointer;}
+        /* Slider'ın kendisi için */
+.slider {
+    width: 100%;
+    height: 10px;
+    border-radius: 5px;
+    background: #dfe6e9;
+    outline: none;
+    transition: 0.2s;
+    /* --- Düzeltme Burası --- */
+    -webkit-appearance: none; /* Eski tarayıcılar için */
+    appearance: none;         /* Standart özellik - Eklenen satır */
+    cursor: pointer;
+}
+
+/* Slider'ın hareket eden yuvarlağı (thumb) için */
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none; /* Webkit (Chrome/Safari/Edge) */
+    appearance: none;         /* Standart özellik - Eklenen satır */
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: var(--btn);
+    cursor: pointer;
+    border: 3px solid white;
+}
         .slider::-webkit-slider-thumb { -webkit-appearance: none; width: 25px; height: 25px; border-radius: 50%; background: var(--btn); cursor: pointer; border: 3px solid white; }
 
         .output-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
@@ -74,6 +98,13 @@
                 <a href="index.html" class="nav-btn">🏠 Anasayfa</a>
                 <button onclick="toggleFullScreen()" class="nav-btn fullscreen-btn">📺 Tam Ekran</button>
                 <button onclick="toggleModal()" class="nav-btn help-btn">ℹ️ Nasıl Kullanılır?</button>
+                <div class="nav-bar">
+                <a href="index.html" class="nav-btn">🏠 Anasayfa</a>
+                <button onclick="toggleFullScreen()" class="nav-btn fullscreen-btn">📺 Tam Ekran</button>
+                
+                <a href="ayak-izi.html" class="nav-btn" style="background: #8e44ad;">🏆 İklim Karneni Al</a>
+                <button onclick="toggleModal()" class="nav-btn help-btn">ℹ️ Nasıl Kullanılır?</button>
+            </div>
             </div>
         </div>
 
