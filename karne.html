@@ -4,48 +4,154 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nihai Sonuç</title>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
-        body { margin: 0; padding: 40px; text-align: center; transition: 0.5s; min-height: 100vh; background-size: cover; background-attachment: fixed; background-position: center; }
+        /* ORTAK DEĞİŞKENLER (Simülatör ile uyumlu) */
+        :root { 
+            --dark: #2c3e50; 
+            --btn: #2980b9; 
+            --green: #27ae60; 
+            --orange: #f39c12;
+            --danger: #e74c3c;
+        }
 
-        /* ÇOCUK MODU (Minecraft Teması) */
-        body.child-mode { font-family: 'Press Start 2P', cursive; background-image: url('imagery/bergama-bg.jpg'); color: #fff; }
-        body.child-mode .card { max-width: 700px; margin: auto; background: rgba(0,0,0,0.85); padding: 40px; border-radius: 0; border: 6px solid #55FF55; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
-        body.child-mode h1 { color: #55FF55; font-size: 1.5em; line-height: 1.5; }
-        body.child-mode .level-box { color: #55FF55; font-size: 3em; margin: 10px 0; text-shadow: 4px 4px #000; }
-        body.child-mode .xp-bar { background: #333; border: 4px solid #000; }
+        body { 
+            margin: 0; 
+            padding: 20px; 
+            text-align: center; 
+            transition: 0.5s; 
+            min-height: 100vh; 
+            background-size: cover; 
+            background-attachment: fixed; 
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* =========================================
+           ÇOCUK MODU (Minecraft Teması - KORUNDU)
+        ========================================= */
+        body.child-mode { 
+            font-family: 'Press Start 2P', cursive; 
+            background-image: url('imagery/bergama-bg.jpg'); 
+            color: #fff; 
+        }
+        body.child-mode .card { 
+            max-width: 700px; 
+            width: 90%;
+            background: rgba(0,0,0,0.85); 
+            padding: 30px; 
+            border: 6px solid #55FF55; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8); 
+        }
+        body.child-mode h1 { color: #55FF55; font-size: 1.2em; line-height: 1.5; margin-bottom: 20px;}
+        body.child-mode .level-box { color: #55FF55; font-size: 2.5em; margin: 15px 0; text-shadow: 4px 4px #000; }
+        body.child-mode .xp-bar { background: #333; border: 4px solid #000; height: 25px;}
         body.child-mode .fill { background: #55FF55; }
-        body.child-mode .msg-box { background: #222; border: 4px solid #55FF55; color: white; }
-        body.child-mode .btn { background: #55FF55; color: #000; border: 4px solid #000; font-family: inherit; }
-        body.child-mode .ach { background: #333; border: 4px solid #000; }
+        body.child-mode .msg-box { background: #222; border: 4px solid #55FF55; color: white; font-size: 0.8em;}
+        body.child-mode .btn { background: #55FF55; color: #000; border: 4px solid #000; font-family: inherit; font-size: 0.8em;}
+        body.child-mode .ach { background: #333; border: 4px solid #000; font-size: 0.7em;}
         body.child-mode .ach.unlocked { border-color: #55FF55; background: #1a4a1a; }
         body.child-mode .danger-btn { background: #ff5555; color: #fff; border: 4px solid #000; }
+        body.child-mode .info-label { font-size: 0.7em; }
+        body.child-mode .xp-text-val { font-size: 1em; }
 
-        /* YETİŞKİN MODU (Strateji Teması) */
-        body.adult-mode { font-family: 'Poppins', sans-serif; background-color: #2c3e50; color: white; }
-        body.adult-mode .card { max-width: 750px; margin: auto; background: rgba(255,255,255,0.05); padding: 40px; border-radius: 20px; border: 1px solid #bdc3c7; box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
-        body.adult-mode h1 { color: #f39c12; font-size: 2.2em; font-weight: 700; margin-bottom: 5px; }
-        body.adult-mode .level-box { color: #fff; font-size: 4em; font-weight: bold; margin: 5px 0; }
-        body.adult-mode .xp-bar { background: #34495e; border-radius: 20px; border: 1px solid #7f8c8d; }
-        body.adult-mode .fill { background: #f39c12; border-radius: 20px; }
-        body.adult-mode .msg-box { background: rgba(0,0,0,0.3); border-left: 6px solid #f39c12; color: #ecf0f1; border-radius: 10px; font-size: 1.1em; }
-        body.adult-mode .btn { background: #f39c12; color: white; border-radius: 10px; font-family: inherit; border: none; font-size: 1.1em; }
-        body.adult-mode .ach { background: #34495e; border-radius: 12px; border: 1px solid #7f8c8d; color: #bdc3c7; }
-        body.adult-mode .ach.unlocked { border-color: #f39c12; color: white; background: rgba(243, 156, 18, 0.1); }
-        body.adult-mode .danger-btn { background: #e74c3c; color: white; border-radius: 10px; border: none; }
+
+        /* =========================================
+           YETİŞKİN MODU (Simülatör Tarzı - AYDINLIK)
+        ========================================= */
+        body.adult-mode { 
+            font-family: 'Segoe UI', sans-serif; /* Simülatör fontu */
+            background-image: url('imagery/bergama-bg.jpg'); 
+            color: var(--dark); /* Koyu renk metin */
+        }
+        body.adult-mode .card { 
+            max-width: 800px; 
+            width: 90%;
+            /* Simülatördeki gibi aydınlık, şeffaf beyaz kutu */
+            background: rgba(255, 255, 255, 0.92); 
+            padding: 40px; 
+            border-radius: 25px; /* Yuvarlak hatlar */
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
+            border: none;
+        }
+        body.adult-mode h1 { 
+            color: var(--dark); 
+            font-size: 2.5em; 
+            font-weight: 700; 
+            margin-bottom: 10px; 
+        }
+        body.adult-mode .level-box { 
+            color: var(--btn); /* Mavi vurgu */
+            font-size: 4em; 
+            font-weight: bold; 
+            margin: 10px 0; 
+            text-shadow: none;
+        }
+        body.adult-mode .xp-bar { 
+            background: #dfe6e9; 
+            border-radius: 20px; 
+            height: 30px;
+            border: none;
+        }
+        body.adult-mode .fill { 
+            background: var(--btn); /* Mavi dolgu */
+            border-radius: 20px; 
+        }
+        body.adult-mode .msg-box { 
+            background: white; 
+            border-left: 6px solid var(--orange); 
+            color: var(--dark); 
+            border-radius: 15px; 
+            font-size: 1.1em; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        body.adult-mode .btn { 
+            background: var(--btn); 
+            color: white; 
+            border-radius: 50px; 
+            font-family: inherit; 
+            border: none; 
+            font-size: 1em; 
+            font-weight: bold;
+        }
+        body.adult-mode .ach { 
+            background: white; 
+            border-radius: 15px; 
+            border: 1px solid #eee; 
+            color: #95a5a6; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+        }
+        body.adult-mode .ach.unlocked { 
+            border-color: var(--green); 
+            color: var(--dark); 
+            background: rgba(39, 174, 96, 0.1); 
+        }
+        body.adult-mode .danger-btn { 
+            background: var(--danger); 
+            color: white; 
+            border-radius: 50px; 
+            border: none; 
+        }
+        body.adult-mode .info-label { color: #7f8c8d; font-weight: bold;}
+        body.adult-mode .xp-text-val { font-size: 1.3em; color: var(--dark);}
+
 
         /* ORTAK KODLAR */
-        .xp-bar { width: 100%; height: 30px; margin: 20px 0; overflow: hidden; position: relative; }
+        .card { margin: auto; transition: 0.5s; }
+        .xp-bar { width: 100%; margin: 20px 0; overflow: hidden; position: relative; }
         .fill { height: 100%; width: 0%; transition: width 2s cubic-bezier(0.1, 0.5, 0.1, 1); }
         .msg-box { margin: 30px 0; line-height: 1.8; padding: 25px; text-align: left; }
-        .btn { padding: 15px 30px; font-weight: bold; cursor: pointer; transition: 0.3s; text-decoration: none; display: inline-block; margin: 10px; }
-        .btn:hover { transform: scale(1.05); filter: brightness(1.1); }
+        .btn-group { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 30px;}
+        .btn { padding: 15px 30px; cursor: pointer; transition: 0.3s; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; }
+        .btn:hover { transform: translateY(-3px); filter: brightness(1.1); }
         .achievements { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 30px 0; }
-        .ach { padding: 20px; opacity: 0.4; filter: grayscale(1); transition: 0.5s; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px;}
+        .ach { padding: 20px; opacity: 0.5; filter: grayscale(1); transition: 0.5s; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px;}
         .ach.unlocked { opacity: 1; filter: grayscale(0); }
-        .info-label { font-size: 0.8em; letter-spacing: 2px; opacity: 0.8; text-transform: uppercase; }
+        .info-label { letter-spacing: 1px; text-transform: uppercase; display: block; margin-bottom: 5px;}
 
-        @media print { .btn, .danger-btn, .achievements { display: none; } body { background: white !important; color: black !important; } .card { border: none !important; box-shadow: none !important; } }
+        @media print { .btn-group, .achievements { display: none; } body { background: white !important; color: black !important; } .card { border: none !important; box-shadow: none !important; background: none !important; color: black !important; } }
     </style>
 </head>
 <body id="karneBody">
@@ -53,15 +159,16 @@
     <div class="card">
         <h1 id="title">SONUÇ BELGESİ</h1>
         
-        <div style="margin-top: 20px;">
-            <div class="info-label">UYUM SEVİYESİ</div>
-            <div class="level-box"><span id="level">0</span><span style="font-size: 0.4em; opacity: 0.7;"> / 5</span></div>
+        <div style="margin-top: 30px;">
+            <span class="info-label">UYUM SEVİYESİ</span>
+            <div class="level-box"><span id="level">0</span><span style="font-size: 0.5em; opacity: 0.6;"> / 5</span></div>
         </div>
         
         <div class="xp-bar"><div id="bar" class="fill"></div></div>
         
-        <div class="info-label" style="font-size: 1em;">
-            TOPLAM PUAN: <span id="xpText" style="font-weight: bold; font-size: 1.2em;">0</span> <span style="opacity: 0.7;">/ 1000</span>
+        <div style="font-size: 1em; margin-bottom: 30px;">
+            <span class="info-label">TOPLAM PUAN</span>
+            <span id="xpText" class="xp-text-val" style="font-weight: bold;">0</span> <span style="opacity: 0.6;">/ 1000</span>
         </div>
         
         <div id="msg" class="msg-box"></div>
@@ -73,11 +180,11 @@
             <div class="ach" id="a4">🏆 2050 Lideri</div>
         </div>
 
-        <div>
-            <button class="btn" onclick="window.print()">🖨️ BELGEYİ YAZDIR</button>
-            <button class="btn danger-btn" onclick="resetAndGoHome()">🗑️ KAYITLARI SİL & ANASAYFAYA DÖN</button>
+        <div class="btn-group">
+            <button class="btn" onclick="window.print()" style="flex: 2;">🖨️ BELGEYİ YAZDIR</button>
+            <button class="btn danger-btn" onclick="resetAndGoHome()" style="flex: 1;">🗑️ ÇIKIŞ & SİL</button>
         </div>
-        <p style="font-size: 0.7em; opacity: 0.6; margin-top: 20px;">*Tüm veriler cihazınızda anonim olarak hesaplanmıştır.</p>
+        <p style="font-size: 0.8em; opacity: 0.6; margin-top: 25px;">*Verileriniz cihazda anonim olarak işlenmiştir.</p>
     </div>
 
     <script>
@@ -98,20 +205,20 @@
             if(mode === 'child') {
                 title.innerHTML = "KAHRAMANLIK KARNESİ";
                 if (total >= 800) {
-                    msg.innerHTML = "<b>🌟 EFSANEVİ KAHRAMAN!</b><br><br>Mükemmel kararlar aldın! Bergama'nın 2050 geleceğini gaz maskelerinden ve kuraklıktan tamamen kurtardın.";
+                    msg.innerHTML = "<b>🌟 EFSANEVİ KAHRAMAN!</b><br><br>Mükemmel kararlar aldın! Bergama'nın 2050 geleceğini kurtardın.";
                 } else if (total >= 500) {
-                    msg.innerHTML = "<b>🛡️ CESUR SAVAŞÇI!</b><br><br>İyi bir iş çıkardın ama bazı konularda daha dikkatli olmalısın. Mücadeleye devam et!";
+                    msg.innerHTML = "<b>🛡️ CESUR SAVAŞÇI!</b><br><br>İyi bir iş çıkardın ama bazı konularda daha dikkatli olmalısın.";
                 } else {
-                    msg.innerHTML = "<b>⚠️ TEHLİKE ÇANLARI!</b><br><br>Kararların Bergama'yı zor duruma soktu. Bu gidişle ormanlar yok olacak. Günlük alışkanlıklarını acilen değiştirmelisin.";
+                    msg.innerHTML = "<b>⚠️ TEHLİKE ÇANLARI!</b><br><br>Kararların Bergama'yı zor duruma soktu. Alışkanlıklarını değiştirmelisin.";
                 }
             } else {
                 title.innerText = "STRATEJİK GELECEK RAPORU";
                 if (total >= 800) {
-                    msg.innerHTML = "<b>✅ SÜRDÜRÜLEBİLİR GELECEK VİZYONU</b><br><br>Onlara sadece sağlam evler değil, aynı zamanda nefes alacakları yemyeşil bir gökyüzü bıraktınız. Tebrikler.";
+                    msg.innerHTML = "<b>✅ SÜRDÜRÜLEBİLİR GELECEK VİZYONU</b><br><br>Onlara nefes alacakları yemyeşil bir gökyüzü bıraktınız. Tebrikler.";
                 } else if (total >= 500) {
-                    msg.innerHTML = "<b>⚠️ RİSKLİ YATIRIM TABLOSU</b><br><br>Ekolojik yatırımlarınız yetersiz. Bu tablo, 2050'de çocuklarınızın iklim kaynaklı ekonomik krizlerle mücadele edeceğini gösteriyor.";
+                    msg.innerHTML = "<b>⚠️ RİSKLİ YATIRIM TABLOSU</b><br><br>Ekolojik yatırımlarınız yetersiz. Çocuklarınız ekonomik krizlerle mücadele edebilir.";
                 } else {
-                    msg.innerHTML = "<b>❌ KRİTİK İFLAS SENARYOSU</b><br><br>Bu rapor, bıraktığınız mirasın 2050'nin kurak Bergama'sında hiçbir işe yaramayacağını kanıtlıyor. Gelecek nesle büyük bir borç bırakıyorsunuz.";
+                    msg.innerHTML = "<b>❌ KRİTİK İFLAS SENARYOSU</b><br><br>Bu rapor, bıraktığınız mirasın 2050'nin kurak Bergama'sında işe yaramayacağını gösteriyor.";
                 }
             }
 
@@ -128,11 +235,10 @@
             if(total >= 800) document.getElementById('a4').classList.add('unlocked');
         };
 
-        // Verileri silip Anasayfaya dönme fonksiyonu
         function resetAndGoHome() {
-            if(confirm("Tüm kişisel kararlarınız silinecek ve uygulamaya baştan başlanacaktır. Onaylıyor musunuz?")) {
-                localStorage.clear(); // Tarayıcıdaki (localStorage) tüm izleri siler
-                window.location.href = 'index.html'; // Şenlikteki sıradaki kişi için ana ekrana döner
+            if(confirm("Tüm kayıtlar silinecek ve ana ekrana dönülecek. Emin misiniz?")) {
+                localStorage.clear();
+                window.location.href = 'index.html';
             }
         }
     </script>
