@@ -125,6 +125,12 @@
                 <p style="margin:5px 0 0; font-size:0.75em; color:#636e72;">Damla sulama teknolojisi ile su tasarrufu oranımız.</p>
             </div>
         </div>
+        <div id="mission-status" style="margin-top:20px; padding:15px; border-radius:10px; background:rgba(255,255,255,0.8); text-align:center; font-weight:bold; border:2px solid var(--temp-red);">
+    ⚠️ DURUM: Bergama çölleşme tehlikesiyle karşı karşıya! <br>
+        <small>Karneni alabilmek için önce Bergama'yı biraz serinletmelisin.</small>
+        </div>
+
+<a href="ayak-izi.html" id="karne-btn" class="nav-btn" style="background: #ccc; pointer-events: none; opacity: 0.5;">🔒 Karneni Al (Önce Dünyayı Kurtar)</a>
 
         <div class="results">
             <div class="chart-container"><canvas id="simChart" style="height:280px;"></canvas></div>
@@ -170,9 +176,39 @@
     }
 
     function update() {
-        const energy = parseInt(document.getElementById('s1').value);
-        const treeCount = parseInt(document.getElementById('s2').value);
-        const water = parseInt(document.getElementById('s3').value);
+    // ... (mevcut hesaplama kodları burada kalacak) ...
+
+    const missionBox = document.getElementById('mission-status');
+    const karneBtn = document.getElementById('karne-btn');
+
+    // VAHAMET VE MESAJ MANTIĞI
+    if (bt > 22.5) {
+        missionBox.innerHTML = "🔴 KRİTİK: Bergama kavruluyor! <br> Acilen ağaç dikmeli ve fosil yakıtları bırakmalısın.";
+        missionBox.style.borderColor = "var(--temp-red)";
+        missionBox.style.color = "var(--temp-red)";
+        karneBtn.style.opacity = "0.5";
+        karneBtn.style.pointerEvents = "none";
+        karneBtn.innerText = "🔒 Durum Çok Kötü (Devam Edemezsin)";
+    } 
+    else if (bt <= 22.5 && bt > 21.5) {
+        missionBox.innerHTML = "🟡 UMUT VAR: İyileşme başladı! <br> Biraz daha gayret, Bergama nefes alıyor.";
+        missionBox.style.borderColor = "#f39c12";
+        missionBox.style.color = "#d35400";
+        karneBtn.style.opacity = "0.8";
+        karneBtn.style.pointerEvents = "auto";
+        karneBtn.style.background = "#f39c12";
+        karneBtn.innerText = "🔓 Yol Kat Ettin (Karneni Alabilirsin)";
+    } 
+    else {
+        missionBox.innerHTML = "🟢 BAŞARI: İklim Kahramanı Yolda! <br> Bergama'yı güvenli bölgeye taşıdın.";
+        missionBox.style.borderColor = "var(--green)";
+        missionBox.style.color = "var(--green)";
+        karneBtn.style.opacity = "1";
+        karneBtn.style.pointerEvents = "auto";
+        karneBtn.style.background = "#27ae60";
+        karneBtn.innerText = "🏆 MUHTEŞEM! Karneni Almaya Hazırsın";
+    }
+}
 
         // Arayüz Değerleri
         document.getElementById('v1').innerText = energy;
