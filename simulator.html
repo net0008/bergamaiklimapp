@@ -87,12 +87,11 @@
                 <p style="margin:5px 0 0; font-size:0.75em; color:#636e72;">Fosil yakıtlardan (kömür/petrol) vazgeçme oranımız.</p>
             </div>
 
-            <div class="slider-group">
-                <label>🌳 Ormanlaşma Hamlesi: <span id="v2">500</span> Ha</label>
-                <input type="range" min="0" max="5000" value="500" class="slider" id="s2">
-                <p style="margin:5px 0 0; font-size:0.75em; color:#636e72;">Kozak Yaylası ve çevresine dikilen yeni ağaç alanı.</p>
-            </div>
-
+           <div class="slider-group">
+    <label>🌳 Dikilecek Ağaç Sayısı: <span id="v2">100.000</span> Adet</label>
+    <input type="range" min="0" max="1000000" value="100000" step="10000" class="slider" id="s2">
+    <p style="margin:5px 0 0; font-size:0.75em; color:#636e72;">Bergama ve Kozak Yaylası'na kazandırılacak yeni ağaç miktarı.</p>
+</div>
             <div class="slider-group">
                 <label>🚜 Akıllı Tarım & Su: <span id="v3">30</span>%</label>
                 <input type="range" min="0" max="100" value="30" class="slider" id="s3">
@@ -143,26 +142,29 @@
     }
 
     function update() {
-        const energy = parseInt(document.getElementById('s1').value);
-        const forest = parseInt(document.getElementById('s2').value);
-        const water = parseInt(document.getElementById('s3').value);
+    const energy = parseInt(document.getElementById('s1').value);
+    const treeCount = parseInt(document.getElementById('s2').value); // Artık adet bazlı
+    const water = parseInt(document.getElementById('s3').value);
 
-        document.getElementById('v1').innerText = energy;
-        document.getElementById('v2').innerText = forest;
-        document.getElementById('v3').innerText = water;
+    // Binlik ayraçlı gösterim (Örn: 1.000.000)
+    document.getElementById('v1').innerText = energy;
+    document.getElementById('v2').innerText = treeCount.toLocaleString('tr-TR');
+    document.getElementById('v3').innerText = water;
 
-        // Bilimsel Hesaplama Modeli (Dramatik Katsayılar)
-        // Formül: $$bt = 23.1 - (e \times 0.025) - (g \times 0.0003)$$
-        let bt = 23.1 - (energy * 0.025) - (forest * 0.00035);
-        let trt = 16.8 - (energy * 0.015) - (forest * 0.0001);
-        let br = 340 + (water * 2.2) + (forest * 0.03);
-        let trr = 475 + (water * 1.5) + (forest * 0.015);
+    // Hesaplama Modeli - Katsayılar ağaç sayısına göre uyarlandı
+    let bt = 23.1 - (energy * 0.025) - (treeCount * 0.00000035);
+    let trt = 16.8 - (energy * 0.015) - (treeCount * 0.0000001);
+    let br = 340 + (water * 2.2) + (treeCount * 0.00003);
+    let trr = 475 + (water * 1.5) + (treeCount * 0.000015);
 
-        document.getElementById('bt').innerText = bt.toFixed(1) + "°C";
-        document.getElementById('trt').innerText = trt.toFixed(1) + "°C";
-        document.getElementById('br').innerText = Math.round(br) + " mm";
-        document.getElementById('trr').innerText = Math.round(trr) + " mm";
+    // Kartları Güncelle
+    document.getElementById('bt').innerText = bt.toFixed(1) + "°C";
+    document.getElementById('trt').innerText = trt.toFixed(1) + "°C";
+    document.getElementById('br').innerText = Math.round(br) + " mm";
+    document.getElementById('trr').innerText = Math.round(trr) + " mm";
 
+}
+{
         // Grafik Verisi (Yağış normalize edildi)
         const chartData = [bt.toFixed(1), trt.toFixed(1), (br/20).toFixed(1), (trr/20).toFixed(1)];
         
