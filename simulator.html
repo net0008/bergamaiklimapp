@@ -152,6 +152,10 @@
         document.getElementById('v1').innerText = energy;
         document.getElementById('v2').innerText = treeCount.toLocaleString('tr-TR');
         document.getElementById('v3').innerText = water;
+        localStorage.setItem('sim_energy', energy);
+        localStorage.setItem('sim_trees', treeCount);
+        localStorage.setItem('sim_water', water);
+        localStorage.setItem('sim_temp', bt.toFixed(1));
 
         // Hesaplama Modeli (Bilimsel Katsayılar)
         let bt = 23.1 - (energy * 0.025) - (treeCount * 0.00000035);
