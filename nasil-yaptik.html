@@ -14,6 +14,21 @@
         h1, h2 { color: var(--dark); margin-top: 0; }
         .tech-stack { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
         .tag { background: #eee; padding: 5px 12px; border-radius: 5px; font-size: 0.85em; font-weight: bold; color: var(--dark); }
+
+        /* AKORDİYON (MERAKLISINA) STİLLERİ */
+        .faq-section { margin-top: 50px; border-top: 2px dashed #bdc3c7; padding-top: 30px; }
+        .faq-title { display: flex; align-items: center; gap: 10px; color: var(--dark); font-size: 1.5em; margin-bottom: 20px; }
+        .accordion { margin-bottom: 15px; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; background: #fff; }
+        .accordion-header { padding: 18px 20px; cursor: pointer; font-weight: bold; background: #f8fafc; display: flex; justify-content: space-between; align-items: center; color: var(--dark); transition: background 0.3s; }
+        .accordion-header:hover { background: #e2e8f0; }
+        .accordion-header::after { content: '▼'; font-size: 0.8em; color: #7f8c8d; transition: transform 0.4s; }
+        .accordion.active { border-color: var(--btn); }
+        .accordion.active .accordion-header { background: rgba(41, 128, 185, 0.1); color: var(--btn); }
+        .accordion.active .accordion-header::after { transform: rotate(180deg); color: var(--btn); }
+        .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; padding: 0 20px; font-size: 0.95em; }
+        .accordion.active .accordion-content { padding: 20px; max-height: 1500px; border-top: 1px solid #eee; }
+        
+        .math-box { background: #fdf6e3; padding: 15px; border-left: 4px solid #f39c12; font-family: 'Courier New', Courier, monospace; font-weight: bold; margin: 15px 0; border-radius: 0 8px 8px 0; }
     </style>
 </head>
 <body>
@@ -57,10 +72,72 @@
         <p>Bilim Şenliği için gerekli olan istatistiksel verilerin toplanması amacıyla <b>Google Apps Script</b> üzerinden bir Web API köprüsü kurulmuştur. Kullanıcıların demografik profili (çocuk/yetişkin) ve elde ettikleri çevre puanları, KVKK uyumlu olarak (isim veya kişisel veri alınmadan) tamamen <b>anonim bir şekilde</b> arka plandaki Google E-Tablolar'a kaydedilir.</p>
     </div>
 
+    <div class="faq-section">
+        <div class="faq-title">🔬 Meraklısına: Akademik ve Teknik Detaylar</div>
+        <p style="font-size: 0.9em; color: #7f8c8d; margin-bottom: 20px;">TÜBİTAK 4007 değerlendirmeleri ve akademik incelemeler için projenin matematiksel ve istatistiksel modeli aşağıda sunulmuştur:</p>
+        
+        <div class="accordion">
+            <div class="accordion-header" onclick="toggleAccordion(this)">Geleceğe Dair (2050) Projeksiyon Verileri Nereden Alındı?</div>
+            <div class="accordion-content">
+                <p>Uygulamada kullanılan 2050 yılı taban verileri, Hükümetlerarası İklim Değişikliği Paneli'nin (IPCC) 6. Değerlendirme Raporu'nda (AR6) yer alan <b>SSP5-8.5 (Fosil Yakıt Odaklı Kalkınma / En Kötü Senaryo)</b> baz alınarak oluşturulmuştur.</p>
+                <p>Bu küresel projeksiyonlar, <b>NASA POWER (Prediction of Worldwide Energy Resources)</b> platformunun Agroclimatology (T2M ve PRECTOTCORR) veri setleri kullanılarak <b>Bergama koordinatlarına (Enlem: 39.1207, Boylam: 27.1775)</b> indirgenmiş (downscaling) ve yerel bir projeksiyon elde edilmiştir. Taban senaryoda hiçbir önlem alınmazsa Bergama'nın 2050 yılı yıllık ortalama sıcaklığının 23.1°C'ye ulaşacağı öngörülmüştür.</p>
+            </div>
+        </div>
+
+        <div class="accordion">
+            <div class="accordion-header" onclick="toggleAccordion(this)">Grafikler Hangi Mimariyle Oluşturuldu?</div>
+            <div class="accordion-content">
+                <p>Veri görselleştirme süreçlerinde tamamen istemci taraflı (client-side) çalışan, açık kaynaklı <b>Chart.js</b> kütüphanesi kullanılmıştır. Geçmişe dönük (1980-2025) devasa iklim veri setleri Python (Pandas kütüphanesi) ile temizlenmiş, yıllık ortalamaları (mean) alınarak hafifletilmiş ve <code>JSON</code> formatında projeye dahil edilmiştir.</p>
+                <p>Tarayıcı, JSON dosyasını <code>Fetch API</code> ile asenkron olarak çeker ve HTML5 <code>&lt;canvas&gt;</code> elementi üzerine saniyede 60 kare hızında (60 FPS) vektörel olarak render eder. Bu yapı, projenin veritabanı sunucusuna ihtiyaç duymadan (Serverless) çok hızlı çalışmasını sağlar.</p>
+            </div>
+        </div>
+
+        <div class="accordion">
+            <div class="accordion-header" onclick="toggleAccordion(this)">Simülatör Sürgülerinde Hangi Matematiksel Formüller Kullanıldı?</div>
+            <div class="accordion-content">
+                <p>Eğitimsel STEM amaçlı tasarlanan simülatörde, karmaşık Kaos Teorisi ve Non-lineer iklim modelleri yerine, katılımcının anlık sebep-sonuç ilişkisi kurabilmesi için ağırlıklandırılmış <b>Negatif Doğrusal (Lineer) Formülizasyon</b> tercih edilmiştir.</p>
+                
+                <p><b>Bergama 2050 Tahmini Sıcaklık ($T_{2050}$) Denklemi:</b></p>
+                <div class="math-box">
+                    T_2050 = T_base - (E × C_e) - (A × C_a)
+                </div>
+                <ul>
+                    <li><b>$T_{base}$:</b> 23.1°C (IPCC SSP5-8.5 senaryosuna göre hiçbir önlem alınmadığında beklenen taban sıcaklık)</li>
+                    <li><b>$E$ (Enerji):</b> Kullanıcının belirlediği Temiz Enerji oranı (%).</li>
+                    <li><b>$C_e$:</b> Enerji katsayısı (0.025). Her %1'lik yenilenebilir enerji artışının yerel karbon bütçesine pozitif etkisi.</li>
+                    <li><b>$A$ (Ağaç):</b> Dikilmesi planlanan ağaç adedi.</li>
+                    <li><b>$C_a$:</b> Ağaç katsayısı (0.00000035). Kozak yaylası ve ova bölgesine dikilen her bir ağacın, evapotranspirasyon (terleme) ve albedo (yansıtıcılık) etkisiyle mikro klimada yarattığı tahmini soğutma oranı.</li>
+                </ul>
+
+                <p><b>Bergama 2050 Tahmini Yağış ($P_{2050}$) Denklemi:</b></p>
+                <div class="math-box">
+                    P_2050 = P_base + (W × C_w) + (A × C_aw)
+                </div>
+                <p>Bu pedagojik formül; katılımcıların değişkenler (bağımsız değişken) ile çevresel sonuçlar (bağımlı değişken) arasındaki etkiyi saniyeler içinde "yaşayarak" öğrenmesini sağlayan matematiksel bir STEM Köprüsü (Heuristic Model) görevi görmektedir.</p>
+            </div>
+        </div>
+    </div>
+
     <p style="text-align:center; margin-top:50px; font-style:italic; color:#7f8c8d;">
-        Geliştiren: Hasbi Erdoğmuş (Bilişim Koordinatörü / Eğitimci) & Gemini
+        Geliştiren: Hasbi Erdoğmuş (Bilişim Koordinatörü / Eğitimci) & Gemini (AI Asistanı)
     </p>
 </div>
+
+<script>
+    // Akordiyon Menü Aç/Kapat Fonksiyonu
+    function toggleAccordion(element) {
+        const parent = element.parentElement;
+        // Eğer tıklanan zaten açıksa kapat
+        if (parent.classList.contains('active')) {
+            parent.classList.remove('active');
+        } else {
+            // Açık olan diğerlerini kapat
+            document.querySelectorAll('.accordion').forEach(acc => acc.classList.remove('active'));
+            // Tıklananı aç
+            parent.classList.add('active');
+        }
+    }
+</script>
 
 </body>
 </html>
