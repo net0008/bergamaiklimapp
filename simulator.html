@@ -2,76 +2,65 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>İklim Senaryo Simülatörü</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bergama 2050: İklim Simülatörü</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        :root { --dark: #2c3e50; --temp-red: #e74c3c; --rain-blue: #3498db; --btn: #2980b9; }
+        :root { --dark: #2c3e50; --temp-red: #e74c3c; --rain-blue: #3498db; --btn: #2980b9; --green: #27ae60; }
         
         body { 
             font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; color: var(--dark); min-height: 100vh;
-            background-image: url('imagery/bergama-bg.jpg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            position: relative;
+            background-image: url('imagery/bergama-bg.jpg'); /* Göreli yol korundu */
+            background-size: cover; background-position: center; background-attachment: fixed;
+            overflow-x: hidden;
         }
 
         #bg-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0;
             background-color: rgba(220, 100, 0, 0.4);
-            transition: background-color 1.2s ease;
-            pointer-events: none;
+            transition: background-color 1.5s ease; pointer-events: none;
         }
 
         .main-wrapper {
             position: relative; z-index: 1;
-            background: rgba(255, 255, 255, 0.15); 
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 25px;
-            padding: 30px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px; padding: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.3);
             max-width: 1100px; margin: auto;
         }
 
         .container { display: grid; grid-template-columns: 1fr 1.5fr; gap: 30px; }
-        .header { grid-column: span 2; text-align: center; margin-bottom: 20px; }
-        .nav-bar { display: flex; justify-content: center; gap: 15px; margin-top: 15px; }
-        .nav-btn { padding: 10px 25px; background: var(--btn); color: white; text-decoration: none; border-radius: 50px; font-weight: bold; border:none; cursor:pointer; font-family: inherit; }
-        .nav-btn:hover { filter: brightness(1.1); }
+        .header { grid-column: span 2; text-align: center; margin-bottom: 10px; }
         
-        .chart-container { background: white; border-radius: 15px; padding: 15px; }
+        .nav-bar { display: flex; justify-content: center; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
+        .nav-btn { padding: 10px 20px; background: var(--btn); color: white; text-decoration: none; border-radius: 50px; font-weight: bold; border:none; cursor:pointer; transition: 0.3s; }
+        .nav-btn:hover { transform: scale(1.05); filter: brightness(1.1); }
+        
+        .chart-container { background: white; border-radius: 15px; padding: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        
         .slider-group {
-    margin-bottom: 25px;
-    /* %60 görünürlükte beyaz arka plan */
-    background: rgba(255, 255, 255, 0.6);
-    /* Hafif bir kenarlık ekleyerek daha da belirginleştirdik */
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    padding: 15px;
-    border-radius: 12px;
-    /* Hafif bir gölge ile derinlik katalım */
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-}
-/* Etiketlerin rengini de netleştirelim */
-.slider-group label { color: var(--dark); font-weight: 700; }
-        .slider { width: 100%; cursor: pointer; }
-        .output-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
-        .stat-card { background: rgba(255,255,255,0.8); padding: 15px; border-radius: 12px; text-align: center; font-weight: bold; }
+            margin-bottom: 20px; background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.5); padding: 15px; border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        
+        .slider-group label { display: block; color: var(--dark); font-weight: 700; margin-bottom: 10px; font-size: 1.05em; }
+        .slider { width: 100%; height: 10px; border-radius: 5px; background: #dfe6e9; outline: none; transition: 0.2s; -webkit-appearance: none; cursor: pointer;}
+        .slider::-webkit-slider-thumb { -webkit-appearance: none; width: 25px; height: 25px; border-radius: 50%; background: var(--btn); cursor: pointer; border: 3px solid white; }
 
-        /* Modal Styles */
-        .modal-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7); z-index: 1000; backdrop-filter: blur(5px);
-        }
-        .modal-content {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: white; padding: 30px; border-radius: 20px; max-width: 500px; width: 90%;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5); text-align: center;
-        }
-        .close-btn { position: absolute; right: 20px; top: 10px; font-size: 30px; cursor: pointer; color: #7f8c8d; }
-        .close-btn:hover { color: var(--temp-red); }
+        .output-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .stat-card { background: rgba(255,255,255,0.9); padding: 15px; border-radius: 15px; text-align: center; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .stat-card span { font-size: 0.85em; color: #636e72; display: block; margin-bottom: 5px; }
+        .stat-card div { font-size: 1.4em; }
+
+        .fullscreen-btn { background: var(--dark) !important; }
         .help-btn { background: #f39c12 !important; }
+
+        /* Modal */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; backdrop-filter: blur(5px); }
+        .modal-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px; border-radius: 20px; max-width: 500px; width: 90%; text-align: center; }
+        
+        @media (max-width: 768px) { .container { grid-template-columns: 1fr; } .header { grid-column: span 1; } }
     </style>
 </head>
 <body>
@@ -81,27 +70,43 @@
 <div class="main-wrapper">
     <div class="container">
         <div class="header">
-            <h1>🕹️ İklim Senaryo Simülatörü</h1>
+            <h1>🏛️ Bergama 2050: İklim Karar Simülatörü</h1>
             <div class="nav-bar">
                 <a href="index.html" class="nav-btn">🏠 Anasayfa</a>
+                <button onclick="toggleFullScreen()" class="nav-btn fullscreen-btn">📺 Tam Ekran</button>
                 <button onclick="toggleModal()" class="nav-btn help-btn">ℹ️ Nasıl Kullanılır?</button>
             </div>
         </div>
 
         <div class="controls">
-            <h3>🌱 Gelecek Kararları</h3>
-            <div class="slider-group"><label>⚡ Yenilenebilir Enerji: <span id="v1">20</span>%</label><input type="range" min="0" max="100" value="20" class="slider" id="s1"></div>
-            <div class="slider-group"><label>🌳 Ağaçlandırma: <span id="v2">500</span> Ha</label><input type="range" min="0" max="5000" value="500" class="slider" id="s2"></div>
-            <div class="slider-group"><label>💧 Akıllı Sulama: <span id="v3">30</span>%</label><input type="range" min="0" max="100" value="30" class="slider" id="s3"></div>
+            <h3 style="color:white; text-shadow: 1px 1px 5px rgba(0,0,0,0.5);">🌱 Gelecek Senin Elinde</h3>
+            
+            <div class="slider-group">
+                <label>⚡ Temiz Enerji Yatırımı: <span id="v1">20</span>%</label>
+                <input type="range" min="0" max="100" value="20" class="slider" id="s1">
+                <p style="margin:5px 0 0; font-size:0.75em; color:#636e72;">Fosil yakıtlardan (kömür/petrol) vazgeçme oranımız.</p>
+            </div>
+
+            <div class="slider-group">
+                <label>🌳 Ormanlaşma Hamlesi: <span id="v2">500</span> Ha</label>
+                <input type="range" min="0" max="5000" value="500" class="slider" id="s2">
+                <p style="margin:5px 0 0; font-size:0.75em; color:#636e72;">Kozak Yaylası ve çevresine dikilen yeni ağaç alanı.</p>
+            </div>
+
+            <div class="slider-group">
+                <label>🚜 Akıllı Tarım & Su: <span id="v3">30</span>%</label>
+                <input type="range" min="0" max="100" value="30" class="slider" id="s3">
+                <p style="margin:5px 0 0; font-size:0.75em; color:#636e72;">Vahşi sulama yerine damla sulamaya geçiş oranı.</p>
+            </div>
         </div>
 
         <div class="results">
-            <div class="chart-container"><canvas id="simChart" style="height:250px;"></canvas></div>
+            <div class="chart-container"><canvas id="simChart" style="height:280px;"></canvas></div>
             <div class="output-grid">
-                <div class="stat-card" style="border-bottom: 4px solid var(--temp-red);"><span>Bergama Isı</span><div id="bt">23.1°C</div></div>
-                <div class="stat-card" style="border-bottom: 4px solid var(--rain-blue);"><span>Bergama Yağış</span><div id="br">340mm</div></div>
-                <div class="stat-card" style="border-bottom: 4px solid var(--temp-red);"><span>TR Isı</span><div id="trt">16.8°C</div></div>
-                <div class="stat-card" style="border-bottom: 4px solid var(--rain-blue);"><span>TR Yağış</span><div id="trr">475mm</div></div>
+                <div class="stat-card" style="border-bottom: 5px solid var(--temp-red);"><span>Bergama Isı</span><div id="bt">23.1°C</div></div>
+                <div class="stat-card" style="border-bottom: 5px solid var(--rain-blue);"><span>Bergama Yağış</span><div id="br">340mm</div></div>
+                <div class="stat-card" style="border-bottom: 5px solid var(--temp-red);"><span>TR Genel Isı</span><div id="trt">16.8°C</div></div>
+                <div class="stat-card" style="border-bottom: 5px solid var(--rain-blue);"><span>TR Genel Yağış</span><div id="trr">475mm</div></div>
             </div>
         </div>
     </div>
@@ -109,16 +114,14 @@
 
 <div id="helpModal" class="modal-overlay">
     <div class="modal-content">
-        <span class="close-btn" onclick="toggleModal()">&times;</span>
-        <h2>🎮 Simülatör Nasıl Çalışır?</h2>
+        <h2>🎮 Görevin: Bergama'yı Kurtar!</h2>
         <hr>
-        <div style="text-align: left; padding: 10px;">
-            <p><b>1. Sürgüleri Kullan:</b> Sol taraftaki enerji, ağaçlandırma ve sulama sürgülerini hareket ettirerek Bergama'nın geleceğine dair kararlar al.</p>
-            <p><b>2. Görsel Değişimi İzle:</b> Kararların doğa dostu oldukça arka planın <b>yeşerdiğini</b>, aksi durumda <b>kuraklaştığını</b> göreceksin.</p>
-            <p><b>3. Verileri Kıyasla:</b> Sağdaki grafik ve kartlar, aldığın kararların 2050 yılındaki Bergama ve Türkiye değerlerini bilimsel olarak gösterir.</p>
-            <p><b>4. Hedef:</b> Bergama'nın sıcaklık artışını 21.5°C'nin altında tutmaya çalış!</p>
+        <div style="text-align: left; padding: 10px; line-height: 1.6;">
+            <p>• <b>Karar Al:</b> Sürgüleri sağa çekerek doğa dostu kararlar al.</p>
+            <p>• <b>Gözlemle:</b> Arka plan <b>turuncudan yeşile</b> dönerse doğru yoldasın!</p>
+            <p>• <b>Hedef:</b> 2050'de Bergama sıcaklığını <b>21.5°C</b> altına düşürebilir misin?</p>
         </div>
-        <button onclick="toggleModal()" class="nav-btn" style="width:100%; margin-top:10px;">Anladım, Başlayalım!</button>
+        <button onclick="toggleModal()" class="nav-btn" style="width:100%; margin-top:10px; background:var(--green);">Başlayalım!</button>
     </div>
 </div>
 
@@ -127,51 +130,69 @@
     const overlay = document.getElementById('bg-overlay');
 
     function toggleModal() {
-        const modal = document.getElementById('helpModal');
-        modal.style.display = (modal.style.display === 'block') ? 'none' : 'block';
+        const m = document.getElementById('helpModal');
+        m.style.display = (m.style.display === 'block') ? 'none' : 'block';
+    }
+
+    function toggleFullScreen() {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen();
+        } else {
+            if (document.exitFullscreen) document.exitFullscreen();
+        }
     }
 
     function update() {
-        const e = parseInt(document.getElementById('s1').value);
-        const g = parseInt(document.getElementById('s2').value);
-        const w = parseInt(document.getElementById('s3').value);
+        const energy = parseInt(document.getElementById('s1').value);
+        const forest = parseInt(document.getElementById('s2').value);
+        const water = parseInt(document.getElementById('s3').value);
 
-        document.getElementById('v1').innerText = e;
-        document.getElementById('v2').innerText = g;
-        document.getElementById('v3').innerText = w;
+        document.getElementById('v1').innerText = energy;
+        document.getElementById('v2').innerText = forest;
+        document.getElementById('v3').innerText = water;
 
-        // Hesaplama Modeli
-        let bt = 23.1 - (e * 0.02) - (g * 0.0002);
-        let trt = 16.8 - (e * 0.015) - (g * 0.0001);
-        let br = 340 + (w * 1.5) + (g * 0.02);
-        let trr = 475 + (w * 1.2) + (g * 0.015);
+        // Bilimsel Hesaplama Modeli (Dramatik Katsayılar)
+        // Formül: $$bt = 23.1 - (e \times 0.025) - (g \times 0.0003)$$
+        let bt = 23.1 - (energy * 0.025) - (forest * 0.00035);
+        let trt = 16.8 - (energy * 0.015) - (forest * 0.0001);
+        let br = 340 + (water * 2.2) + (forest * 0.03);
+        let trr = 475 + (water * 1.5) + (forest * 0.015);
 
         document.getElementById('bt').innerText = bt.toFixed(1) + "°C";
         document.getElementById('trt').innerText = trt.toFixed(1) + "°C";
-        document.getElementById('br').innerText = Math.round(br) + "mm";
-        document.getElementById('trr').innerText = Math.round(trr) + "mm";
+        document.getElementById('br').innerText = Math.round(br) + " mm";
+        document.getElementById('trr').innerText = Math.round(trr) + " mm";
 
-        // Grafik Güncelleme
-        const chartData = [bt, trt, br/20, trr/20];
+        // Grafik Verisi (Yağış normalize edildi)
+        const chartData = [bt.toFixed(1), trt.toFixed(1), (br/20).toFixed(1), (trr/20).toFixed(1)];
+        
         if(!simChart) {
             const ctx = document.getElementById('simChart').getContext('2d');
             simChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: ['B. Isı', 'TR Isı', 'B. Yağış*', 'TR Yağış*'],
-                    datasets: [{ data: chartData, backgroundColor: ['#e74c3c','#ff7675','#3498db','#74b9ff'] }]
+                    labels: ['B. Sıcaklık', 'TR Sıcaklık', 'B. Yağış (Ölçekli)', 'TR Yağış (Ölçekli)'],
+                    datasets: [{
+                        data: chartData,
+                        backgroundColor: ['#e74c3c','#ff7675','#3498db','#74b9ff'],
+                        borderRadius: 8
+                    }]
                 },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: {display: false} } }
+                options: { 
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: {display: false} },
+                    scales: { y: { beginAtZero: true, max: 30 } }
+                }
             });
-        } else { simChart.data.datasets[0].data = chartData; simChart.update(); }
+        } else {
+            simChart.data.datasets[0].data = chartData;
+            simChart.update('none'); // Animasyon titremesini önlemek için 'none'
+        }
 
-        // Arka Plan Renk Geçişi
-        let score = (e + w + (g / 50)) / 3; 
-        let r = Math.round(255 - (score * 2.1));
-        let green = Math.round(150 + (score * 1.05));
-        let b = Math.round(0 + (score * 0.5));
-        
-        overlay.style.backgroundColor = `rgba(${r}, ${green}, ${b}, 0.5)`;
+        // Dinamik Arka Plan Rengi (Skor bazlı)
+        let totalImpact = (energy + water + (forest / 50)) / 3; 
+        let hue = Math.round(20 + (totalImpact * 1)); // 20 (turuncu) -> 120 (yeşil)
+        overlay.style.backgroundColor = `hsla(${hue}, 70%, 40%, 0.4)`;
     }
 
     ['s1', 's2', 's3'].forEach(id => document.getElementById(id).oninput = update);
