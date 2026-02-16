@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Bergama 2050: Karar Masası</title>
+    <title>Bergama 2050: Simülasyon</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root { --dark: #2c3e50; --temp-red: #e74c3c; --btn: #2980b9; --green: #27ae60; }
@@ -18,12 +18,13 @@
         #mission-status { margin-bottom: 20px; padding: 20px; border-radius: 12px; border-left: 6px solid var(--temp-red); background: #f9f9f9; font-weight: bold; line-height: 1.5; }
         body.child-mode #mission-status { background: #222; color: #55FF55; }
         
-        .slider-group { margin-bottom: 15px; padding: 10px; background: rgba(0,0,0,0.03); border-radius: 10px; }
+        .slider-group { margin-bottom: 15px; padding: 15px; background: rgba(0,0,0,0.03); border-radius: 10px; }
+        body.child-mode .slider-group { background: #222; border: 1px solid #333; }
         .slider { width: 100%; cursor: pointer; }
         
-        /* Modal */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; backdrop-filter: blur(5px); }
-        .modal-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px; border-radius: 20px; max-width: 500px; width: 90%; color: black; }
+        /* Kayıp Metinler İçin CSS */
+        .slider-desc { margin: 8px 0 0; font-size: 0.8em; color: #7f8c8d; font-weight: normal; }
+        body.child-mode .slider-desc { color: #aaa; }
     </style>
 </head>
 <body id="mainBody">
@@ -34,36 +35,39 @@
         
         <div class="nav-bar">
             <a href="secim.html" class="nav-btn" style="background:var(--dark)">🔙 Mod Değiştir</a>
-            <button onclick="toggleModal()" class="nav-btn" style="background:#f39c12">ℹ️ Nasıl Kullanılır?</button>
         </div>
 
         <div id="mission-status">Yükleniyor...</div>
         
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
             <div class="controls">
-                <div class="slider-group"><label>⚡ Temiz Enerji: <span id="v1">20</span>%</label><input type="range" min="0" max="100" value="20" class="slider" id="s1"></div>
-                <div class="slider-group"><label>🌳 Ağaç: <span id="v2">100.000</span></label><input type="range" min="0" max="1000000" value="100000" step="10000" class="slider" id="s2"></div>
-                <div class="slider-group"><label>🚜 Akıllı Tarım: <span id="v3">30</span>%</label><input type="range" min="0" max="100" value="30" class="slider" id="s3"></div>
+                <div class="slider-group">
+                    <label style="font-weight:bold;">⚡ Temiz Enerji: <span id="v1">20</span>%</label>
+                    <input type="range" min="0" max="100" value="20" class="slider" id="s1">
+                    <p class="slider-desc">Fosil yakıtları bırakıp güneş ve rüzgara geçiş oranımız.</p>
+                </div>
+                <div class="slider-group">
+                    <label style="font-weight:bold;">🌳 Dikilecek Ağaç: <span id="v2">100.000</span> Adet</label>
+                    <input type="range" min="0" max="1000000" value="100000" step="10000" class="slider" id="s2">
+                    <p class="slider-desc">Bergama ve Kozak Yaylası'na kazandırılacak yeni ormanlar.</p>
+                </div>
+                <div class="slider-group">
+                    <label style="font-weight:bold;">🚜 Akıllı Tarım & Su: <span id="v3">30</span>%</label>
+                    <input type="range" min="0" max="100" value="30" class="slider" id="s3">
+                    <p class="slider-desc">Damla sulama teknolojisi ile su tasarrufu oranımız.</p>
+                </div>
+                
                 <div style="text-align:center; margin-top:20px;">
                     <a href="ayak-izi.html" id="karne-btn" class="nav-btn locked">🔒 Önce Görevi Başar</a>
                 </div>
             </div>
             <div class="results">
-                <canvas id="simChart" style="max-height: 230px; background:white; border-radius:10px; padding:10px;"></canvas>
+                <canvas id="simChart" style="max-height: 250px; background:white; border-radius:10px; padding:10px;"></canvas>
                 <div style="display:flex; justify-content:space-between; margin-top:10px; font-weight:bold; background:rgba(255,255,255,0.8); color:black; padding:10px; border-radius:10px;">
                     <span>B. Isı: <span id="bt">23.1</span>°C</span>
                     <span>TR Isı: <span id="trt">16.8</span>°C</span>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <div id="helpModal" class="modal-overlay">
-        <div class="modal-content">
-            <h2 id="modalTitle">🎮 Nasıl Kullanılır?</h2>
-            <hr>
-            <div id="modalBody" style="text-align: left; padding: 10px; line-height: 1.6;"></div>
-            <button onclick="toggleModal()" class="nav-btn" style="width:100%; background:var(--green);">Anladım!</button>
         </div>
     </div>
 
@@ -74,20 +78,6 @@
         
         document.getElementById('modeTitle').innerText = mode === 'adult' ? 'STRATEJİ MODU' : 'KAHRAMAN MODU';
         document.getElementById('top-slogan').innerText = mode === 'adult' ? "Çevre için fedakarlık yapmazsanız, çocuklarınız için fedakarlık yapmaya gerek yok." : "Yaşamak ya da yaşamamak; tüm mesele senin kararın!";
-
-        // Modal İçeriği Dinamik Olarak Ayarlandı
-        if (mode === 'adult') {
-            document.getElementById('modalTitle').innerText = "📊 Strateji Modu Nedir?";
-            document.getElementById('modalBody').innerHTML = "<p>• <b>Karar Al:</b> Sürgülerle 2050 projeksiyonunu belirleyin.</p><p>• <b>Etkiyi Gör:</b> Yanlış kararların ekonomik ve yaşamsal maliyetini okuyun.</p><p>• <b>Hedef:</b> Bergama'yı 22.2°C'nin altında tutarak çocuklarınıza yaşanabilir bir miras bırakın.</p>";
-        } else {
-            document.getElementById('modalTitle').innerText = "🎮 Görevin: Dünyayı Kurtar!";
-            document.getElementById('modalBody').innerHTML = "<p>• <b>Karar Al:</b> Sürgülerle doğa dostu kararlar ver.</p><p>• <b>Etkiyi Gör:</b> Isıyı düşürüp yağışı artırmaya çalış.</p><p>• <b>Hedef:</b> 2050'de Bergama'yı 22.2°C'nin altına indirip gaz maskelerinden kurtul!</p>";
-        }
-
-        function toggleModal() {
-            const m = document.getElementById('helpModal');
-            m.style.display = (m.style.display === 'block') ? 'none' : 'block';
-        }
 
         function update() {
             const e = parseInt(document.getElementById('s1').value);
