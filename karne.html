@@ -62,17 +62,16 @@
            YETİŞKİN MODU (Simülatör Tarzı - AYDINLIK)
         ========================================= */
         body.adult-mode { 
-            font-family: 'Segoe UI', sans-serif; /* Simülatör fontu */
+            font-family: 'Segoe UI', sans-serif; 
             background-image: url('imagery/bergama-bg.jpg'); 
-            color: var(--dark); /* Koyu renk metin */
+            color: var(--dark); 
         }
         body.adult-mode .card { 
             max-width: 800px; 
             width: 90%;
-            /* Simülatördeki gibi aydınlık, şeffaf beyaz kutu */
             background: rgba(255, 255, 255, 0.92); 
             padding: 40px; 
-            border-radius: 25px; /* Yuvarlak hatlar */
+            border-radius: 25px; 
             box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
             border: none;
         }
@@ -83,7 +82,7 @@
             margin-bottom: 10px; 
         }
         body.adult-mode .level-box { 
-            color: var(--btn); /* Mavi vurgu */
+            color: var(--btn); 
             font-size: 4em; 
             font-weight: bold; 
             margin: 10px 0; 
@@ -96,7 +95,7 @@
             border: none;
         }
         body.adult-mode .fill { 
-            background: var(--btn); /* Mavi dolgu */
+            background: var(--btn); 
             border-radius: 20px; 
         }
         body.adult-mode .msg-box { 
@@ -184,10 +183,13 @@
             <button class="btn" onclick="window.print()" style="flex: 2;">🖨️ BELGEYİ YAZDIR</button>
             <button class="btn danger-btn" onclick="resetAndGoHome()" style="flex: 1;">🗑️ ÇIKIŞ & SİL</button>
         </div>
-        <p style="font-size: 0.8em; opacity: 0.6; margin-top: 25px;">*Verileriniz cihazda anonim olarak işlenmiştir.</p>
+        <p style="font-size: 0.8em; opacity: 0.6; margin-top: 25px;">*Verileriniz araştırma amacıyla (TÜBİTAK 4007) anonim olarak kaydedilmiştir.</p>
     </div>
 
     <script>
+        // GOOGLE SCRIPT WEB APP LİNKİNİ BURAYA YAPIŞTIR
+        const SCRIPT_URL = "GOOGLE_SCRIPT_URL_BURAYA_GELECEK";
+
         window.onload = function() {
             const mode = localStorage.getItem('user_mode') || 'child';
             document.getElementById('karneBody').className = mode + '-mode';
@@ -233,11 +235,31 @@
             if(energy >= 70) document.getElementById('a2').classList.add('unlocked');
             if(quiz >= 300) document.getElementById('a3').classList.add('unlocked');
             if(total >= 800) document.getElementById('a4').classList.add('unlocked');
+
+            // --- GOOGLE SHEETS VERİ GÖNDERME İŞLEMİ ---
+            // Sadece bu cihazda, bu oturumda veri daha önce gönderilmediyse gönder
+            if(!localStorage.getItem('data_sent')) {
+                let payload = {
+                    mod: mode === 'adult' ? 'Yetişkin' : 'Çocuk',
+                    puan: total
+                };
+
+                fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                }).then(() => {
+                    // Başarıyla tetiklendiğinde bayrağı true yap ki sayfayı yenileyen tekrar veri yollamasın
+                    localStorage.setItem('data_sent', 'true');
+                    console.log("Anonim veri TÜBİTAK raporlaması için Sheets'e aktarıldı.");
+                }).catch(err => console.log("Veri gönderme hatası:", err));
+            }
         };
 
         function resetAndGoHome() {
             if(confirm("Tüm kayıtlar silinecek ve ana ekrana dönülecek. Emin misiniz?")) {
-                localStorage.clear();
+                localStorage.clear(); // Bu işlem 'data_sent' bayrağını da siler, sonraki kullanıcı tertemiz başlar.
                 window.location.href = 'index.html';
             }
         }
