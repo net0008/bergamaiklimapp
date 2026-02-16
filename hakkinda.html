@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Hakkında - Bergama İklim Zaman Tüneli</title>
+    <title>Hakkında - Bergama İklim Karar Masası</title>
     <style>
         :root { --btn: #2980b9; --dark: #2c3e50; --about: #16a085; }
         body { font-family: 'Segoe UI', sans-serif; background: #f8fafc; padding: 20px; color: var(--dark); line-height: 1.6; }
@@ -12,42 +12,15 @@
         h1 { color: var(--about); border-bottom: 2px solid #eee; padding-bottom: 10px; }
         .vision-box { background: #f1f8f6; padding: 25px; border-radius: 15px; border-left: 6px solid var(--about); margin-top: 20px; }
         
-        /* Yeni Görsel Alanı Stilleri */
-        .image-section {
-            display: flex;
-            flex-wrap: wrap; /* Mobilde alt alta geçsin */
-            gap: 30px;
-            justify-content: center;
-            align-items: center;
-            margin: 40px 0;
-            padding: 30px;
-            background: #f9f9f9;
-            border-radius: 15px;
-            border: 1px solid #eee;
-        }
-        .logo-box img {
-            max-height: 100px; /* TÜBİTAK logosu çok büyümesin */
-            width: auto;
-            transition: transform 0.3s;
-        }
+        .image-section { display: flex; flex-wrap: wrap; gap: 30px; justify-content: center; align-items: center; margin: 40px 0; padding: 30px; background: #f9f9f9; border-radius: 15px; border: 1px solid #eee; }
+        .logo-box img { max-height: 100px; width: auto; transition: transform 0.3s; }
         .logo-box img:hover { transform: scale(1.05); }
-
-        .fair-image-box img {
-            width: 100%;
-            max-width: 500px;
-            border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-            transition: transform 0.3s;
-        }
+        .fair-image-box img { width: 100%; max-width: 500px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.15); transition: transform 0.3s; }
         .fair-image-box img:hover { transform: scale(1.02); }
-
-        .caption {
-            text-align: center;
-            font-size: 0.9em;
-            color: #7f8c8d;
-            margin-top: 15px;
-            font-weight: 600;
-        }
+        .caption { text-align: center; font-size: 0.9em; color: #7f8c8d; margin-top: 15px; font-weight: 600; }
+        .feature-list { list-style-type: none; padding-left: 0; }
+        .feature-list li { margin-bottom: 10px; padding-left: 25px; position: relative; }
+        .feature-list li::before { content: '✔️'; position: absolute; left: 0; top: 0; }
     </style>
 </head>
 <body>
@@ -59,12 +32,18 @@
 <div class="container">
     <h1>ℹ️ Proje Hakkında</h1>
     <div class="vision-box">
-        <p>Bu uygulama; NASA veri setlerini yapay zekâ ile işleyerek, Türkiye ve yerelde Bergama'nın 2050 yılına kadar karşılaşabileceği olası iklim senaryolarını bilimsel bir zaman tüneliyle modellemektedir.</p>
+        <p>Bu atölye uygulaması; NASA veri setlerini kullanarak Bergama'nın 2050 yılına kadar karşılaşabileceği olası iklim senaryolarını modelleyen <b>etkileşimli bir STEM simülasyonudur.</b></p>
     </div>
     
-    <p><b>Vizyonumuz:</b> "Geçmişten Geleceğe Bilim" anlayışıyla, coğrafi verileri bilişim teknolojileriyle harmanlayarak iklim değişikliği farkındalığını yerel ölçekte somutlaştırmak.</p>
+    <p><b>Vizyonumuz:</b> "Geçmişten Geleceğe Bilim" anlayışıyla, katılımcıları sadece verileri okuyan değil, 2050 yılının kaderini belirleyen aktif karar vericilere dönüştürmek.</p>
     
-    <p><b>Kapsam:</b> 1980'den 2050'ye kadar olan 70 yıllık süreçte; sıcaklık artışları, yağış rejimindeki değişimler ve bunların sürdürülebilir yaşam üzerindeki etkileri interaktif araçlarla sunulmaktadır.</p>
+    <p><b>Kapsam ve Yenilikler:</b> Uygulamamız, her yaş grubuna hitap edebilmek için özel olarak tasarlanmıştır:</p>
+    <ul class="feature-list">
+        <li><b>Çift Modlu Deneyim:</b> Öğrenciler için oyunlaştırılmış "Kahraman Modu" ve yetişkinler için analitik "Strateji Modu".</li>
+        <li><b>İnteraktif Karar Masası:</b> Enerji türü, ağaçlandırma ve su tüketimi kararlarının 2050 yılındaki sıcaklık ve yağışa etkisini anlık görselleştiren altyapı.</li>
+        <li><b>Kişisel Karbon Ayak İzi:</b> Simülasyon sonrası, katılımcıların günlük yaşam tercihlerini test eden kişiselleştirilmiş değerlendirme sistemi.</li>
+        <li><b>Sıfır Atık Hedefi:</b> Basılı kağıt materyaller yerine tamamen dijital "İklim Karnesi" ve "Gelecek Raporu" oluşturma özelliği.</li>
+    </ul>
 
     <div class="image-section">
         <div class="logo-box">
@@ -74,11 +53,11 @@
 
         <div class="fair-image-box">
             <img src="https://images.unsplash.com/photo-1564053489984-317bbd824340?auto=format&fit=crop&w=800&q=80" alt="Geçmişten Geleceğe Bilim Bergama">
-            <p class="caption">"4007 Bilim Bilim" Şenliği - Bergama</p>
+            <p class="caption">"Geçmişten Geleceğe Bilim" Şenliği - Bergama</p>
         </div>
     </div>
 
-    <p style="text-align: center; margin-top: 40px; color: #7f8c8d;"><i>"Geçmişin verisiyle, geleceğin Bergama'sını bugün keşfedin."</i></p>
+    <p style="text-align: center; margin-top: 40px; color: #7f8c8d;"><i>"Çevre için fedakarlık yapmazsanız, çocuklarınız için fedakarlık yapmaya gerek yok."</i></p>
 </div>
 
 </body>
