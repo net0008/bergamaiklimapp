@@ -13,9 +13,11 @@
         }
         
         /* MOD ÖZELLİKLERİ */
-        body.adult-mode { background-color: #f1f2f6; background-image: none; color: var(--dark); }
+        /* Yetişkin modunda da arka plan resmi aktif edildi, sadece renk filtresi daha şeffaf olacak */
+        body.adult-mode { background-image: url('imagery/bergama-bg.jpg'); color: var(--dark); }
         body.child-mode { background-image: url('imagery/bergama-bg.jpg'); color: #fff; }
 
+        /* Sararıp Yeşillenme Efektinin Olduğu Katman */
         #bg-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0;
             background-color: rgba(220, 100, 0, 0.4); transition: background-color 1.5s ease; pointer-events: none;
@@ -24,7 +26,8 @@
         .main-wrapper {
             position: relative; z-index: 1; border-radius: 25px; padding: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.3); max-width: 1100px; margin: auto; transition: 0.5s;
         }
-        body.adult-mode .main-wrapper { background: rgba(255, 255, 255, 0.95); }
+        /* Yetişkin modunda panelin içi okunabilirlik için beyaz/şeffaf kalır */
+        body.adult-mode .main-wrapper { background: rgba(255, 255, 255, 0.92); }
         body.child-mode .main-wrapper { background: rgba(0, 0, 0, 0.8); border: 2px solid #55FF55; }
 
         .container { display: grid; grid-template-columns: 1fr 1.5fr; gap: 30px; }
@@ -159,7 +162,7 @@
         document.getElementById('top-slogan').style.color = "var(--temp-red)";
         document.getElementById('panelTitle').innerText = "📊 Stratejik Karar Paneli";
         document.getElementById('modalTitle').innerText = "📊 Strateji Modu Nedir?";
-        document.getElementById('modalBody').innerHTML = "<p>• <b>Karar Al:</b> Sürgülerle 2050 projeksiyonunu belirleyin.</p><p>• <b>Etkiyi Gör:</b> Yanlış kararların yaşamsal ve ekonomik maliyetini okuyun.</p><p>• <b>Hedef:</b> Sıcaklığı düşürüp yağışı artırarak çocuklarınıza yaşanabilir bir miras bırakın.</p>";
+        document.getElementById('modalBody').innerHTML = "<p>• <b>Karar Al:</b> Sürgülerle 2050 projeksiyonunu belirleyin.</p><p>• <b>Etkiyi Gör:</b> Yanlış kararların yaşamsal ve ekonomik maliyetini okuyun. Arka planın nasıl çölleştiğini izleyin.</p><p>• <b>Hedef:</b> Sıcaklığı düşürüp yağışı artırarak çocuklarınıza yeşil bir miras bırakın.</p>";
     } else {
         document.getElementById('modeTitle').innerText = 'KAHRAMAN MODU';
         document.getElementById('top-slogan').innerText = "Dışarıya gaz maskesi olmadan çıkmak için geleceğine sahip çık!";
@@ -242,8 +245,6 @@
         }
 
         // --- 4 VERİLİ GRAFİK GÜNCELLEME ---
-        // Yağış değerini grafikte sıcaklık ile yan yana görebilmek için 20'ye bölüyoruz (Görsel ölçekleme).
-        // Tooltip (üzerine gelince çıkan kutu) içinde gerçek mm değerini göstereceğiz.
         const chartData = [bt.toFixed(1), trt.toFixed(1), (br/20).toFixed(1), (trr/20).toFixed(1)];
         const realData = [bt.toFixed(1) + "°C", trt.toFixed(1) + "°C", Math.round(br) + " mm", Math.round(trr) + " mm"];
 
@@ -267,13 +268,13 @@
                         tooltip: {
                             callbacks: {
                                 label: function(context) {
-                                    return realData[context.dataIndex]; // Üzerine gelince gerçek değeri yazdır
+                                    return realData[context.dataIndex];
                                 }
                             }
                         }
                     },
                     scales: {
-                        y: { beginAtZero: true, max: 35, display: false } // Y ekseni rakamlarını gizliyoruz
+                        y: { beginAtZero: true, max: 35, display: false }
                     }
                 }
             });
@@ -283,13 +284,15 @@
             simChart.update('none'); 
         }
 
-        // Arkaplan Rengi (Sadece Çocuk Modunda Renk Değişir)
-        if(mode !== 'adult') {
-            let score = (energy/100 + water/100 + trees/1000000) / 3;
-            overlay.style.backgroundColor = `hsla(${20 + (score * 100)}, 70%, 45%, 0.45)`;
-        } else {
-            overlay.style.backgroundColor = "transparent";
-        }
+        // --- ORTAK ARKAPLAN EFEKTİ (Sararıp Yeşillenme) ---
+        // Artık hem çocuk hem de yetişkin modunda arka plan rengi sürgülere göre değişiyor.
+        // Puan 0'a yakınken kırmızı/turuncu (çölleşme), 1'e yakınken yeşil (canlanma) olur.
+        let score = (energy/100 + water/100 + trees/1000000) / 3;
+        
+        // Yetişkin modunda beyaz kutunun arkasında daha hafif bir etki olması için opacity ayarı yapıldı.
+        let opacity = mode === 'adult' ? 0.35 : 0.45; 
+        
+        overlay.style.backgroundColor = `hsla(${20 + (score * 100)}, 70%, 45%, ${opacity})`;
 
         // Verileri Sakla
         localStorage.setItem('sim_energy', energy);

@@ -5,43 +5,64 @@
     <title>Kişisel Sorumluluk Testi</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { margin: 0; padding: 40px; text-align: center; transition: 0.5s; min-height: 100vh; }
+        body { 
+            margin: 0; padding: 40px; text-align: center; transition: 0.5s; min-height: 100vh; 
+            /* ORTAK ARKA PLAN RESMİ */
+            background-image: url('imagery/bergama-bg.jpg'); background-size: cover; background-attachment: fixed; background-position: center;
+        }
         
-        /* Yetişkin Modu (Ciddi) */
-        body.adult-mode { font-family: 'Poppins', sans-serif; background: #2c3e50; color: white; }
-        body.adult-mode .box { max-width: 650px; margin: auto; background: rgba(255,255,255,0.1); padding: 30px; border-radius: 20px; border: 1px solid #bdc3c7; }
+        /* SARARIP YEŞİLLENME EFEKT KATMANI (Her iki moda da uygulanır) */
+        #bg-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0;
+            pointer-events: none; transition: background-color 1.5s ease;
+        }
+
+        .content-wrapper { position: relative; z-index: 1; }
+
+        /* YETİŞKİN MODU (Ciddi Tema ve Stiller Aynen Korundu) */
+        body.adult-mode { font-family: 'Poppins', sans-serif; color: white; }
+        body.adult-mode .box { max-width: 650px; margin: auto; background: rgba(44, 62, 80, 0.95); padding: 30px; border-radius: 20px; border: 1px solid #bdc3c7; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         body.adult-mode .option { width: 100%; padding: 18px; margin: 12px 0; background: #34495e; color: white; border: 1px solid #7f8c8d; border-radius: 12px; cursor: pointer; text-align: left; font-size: 1.05em; transition: 0.3s; }
         body.adult-mode .option:hover { background: #2980b9; border-color: white; }
-        body.adult-mode .feedback { display: none; padding: 20px; background: rgba(0,0,0,0.3); border-radius: 12px; margin-top: 20px; text-align: left; border-left: 6px solid #f39c12; font-size: 1.1em; line-height: 1.5; }
-        body.adult-mode .nav-btn { width: 100%; padding: 15px; background: #f39c12; color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 1.1em; margin-top:20px; }
+        body.adult-mode .feedback { display: none; padding: 20px; background: rgba(0,0,0,0.5); border-radius: 12px; margin-top: 20px; text-align: left; border-left: 6px solid #f39c12; font-size: 1.1em; line-height: 1.5; }
+        body.adult-mode .nav-btn { width: 100%; padding: 15px; background: #f39c12; color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 1.1em; margin-top:20px; transition: 0.3s;}
+        body.adult-mode .nav-btn:hover { background: #e67e22; }
+        body.adult-mode .progress { color: #f39c12; font-weight: bold; margin-bottom: 15px; letter-spacing: 1px;}
         
-        /* Çocuk Modu (Minecraft) - İSTENİLEN ÖZELLİK */
-        body.child-mode { font-family: 'Press Start 2P', cursive; background: #5a5a5a url('imagery/dirt-bg.png'); /* Opsiyonel Arka Plan */ color: #fff; }
-        body.child-mode .box { max-width: 700px; margin: auto; background: #8B8B8B; padding: 30px; border: 4px solid #000; box-shadow: inset -4px -4px 0px rgba(0,0,0,0.5), inset 4px 4px 0px rgba(255,255,255,0.5); }
+        /* ÇOCUK MODU (Minecraft Teması Aynen Korundu) */
+        body.child-mode { font-family: 'Press Start 2P', cursive; color: #fff; }
+        body.child-mode .box { max-width: 700px; margin: auto; background: rgba(139, 139, 139, 0.95); padding: 30px; border: 4px solid #000; box-shadow: inset -4px -4px 0px rgba(0,0,0,0.5), inset 4px 4px 0px rgba(255,255,255,0.5), 0 10px 30px rgba(0,0,0,0.5); }
         body.child-mode h2 { font-size: 1em; line-height: 1.6; color: #55FF55; text-shadow: 2px 2px #000; }
         body.child-mode .progress { color: #FFFF55; text-shadow: 2px 2px #000; margin-bottom: 20px; font-size: 0.8em; }
-        body.child-mode .option { width: 100%; padding: 20px; margin: 15px 0; background: #717171; color: white; border: 4px solid #000; cursor: pointer; text-align: left; font-family: inherit; font-size: 0.7em; box-shadow: inset -2px -2px 0px rgba(0,0,0,0.5), inset 2px 2px 0px rgba(255,255,255,0.5); }
+        body.child-mode .option { width: 100%; padding: 20px; margin: 15px 0; background: #717171; color: white; border: 4px solid #000; cursor: pointer; text-align: left; font-family: inherit; font-size: 0.7em; box-shadow: inset -2px -2px 0px rgba(0,0,0,0.5), inset 2px 2px 0px rgba(255,255,255,0.5); transition: 0.2s;}
         body.child-mode .option:hover { background: #55FF55; color: #000; }
         body.child-mode .feedback { display: none; padding: 20px; background: #000; color: #fff; border: 4px solid #55FF55; margin-top: 20px; text-align: left; font-size: 0.8em; line-height: 1.6; }
-        body.child-mode .nav-btn { width: 100%; padding: 20px; background: #55FF55; color: #000; border: 4px solid #000; cursor: pointer; font-family: inherit; margin-top: 20px; font-size: 0.8em; }
+        body.child-mode .nav-btn { width: 100%; padding: 20px; background: #55FF55; color: #000; border: 4px solid #000; cursor: pointer; font-family: inherit; margin-top: 20px; font-size: 0.8em; transition: 0.2s;}
         body.child-mode .nav-btn:hover { background: #FFFF55; }
     </style>
 </head>
 <body id="quizBody">
-    <div class="box">
-        <div class="progress">SORU <span id="qNum">1</span> / 4</div>
-        <h2 id="qText">Soru Yükleniyor...</h2>
-        <div id="options"></div>
-        <div id="feedback" class="feedback">
-            <span style="font-weight:bold; color:inherit;">💡 BİLGİ KUTUSU:</span><br><br>
-            <p id="fText" style="margin:0;"></p>
-            <button class="nav-btn" id="next-btn" onclick="nextQuestion()">DEVAM ET ➡️</button>
+
+    <div id="bg-overlay"></div>
+
+    <div class="content-wrapper">
+        <div class="box">
+            <div class="progress">SORU <span id="qNum">1</span> / 4</div>
+            <h2 id="qText">Soru Yükleniyor...</h2>
+            <div id="options"></div>
+            <div id="feedback" class="feedback">
+                <span style="font-weight:bold; color:inherit;">💡 BİLGİ KUTUSU:</span><br><br>
+                <p id="fText" style="margin:0;"></p>
+                <button class="nav-btn" id="next-btn" onclick="nextQuestion()">DEVAM ET ➡️</button>
+            </div>
         </div>
     </div>
+
     <script>
         const mode = localStorage.getItem('user_mode') || 'child';
         document.getElementById('quizBody').className = mode + '-mode';
         
+        // ÖZEL SORULAR (Asla Değiştirilmedi)
         const questions = mode === 'adult' ? [
             { q: "🚗 Yeni bir araç alırken veya ulaşımda tercihiniz nedir?", options: [
                 {t: "Elektrikli/Hibrit veya toplu taşıma", p:100, f:"Harika yatırım! 2050'de gelecek olan ağır karbon vergilerinden kurtuldunuz."},
@@ -87,6 +108,23 @@
         ];
 
         let cur = 0, total = 0;
+        
+        // SAYFA YÜKLENDİĞİNDE SİMÜLATÖRDEN RENGİ ALIR
+        window.onload = function() {
+            // Arkaplan rengini hesapla (Simülatörden gelen verilerle)
+            const energy = parseInt(localStorage.getItem('sim_energy')) || 20;
+            const trees = parseInt(localStorage.getItem('sim_trees')) || 100000;
+            const water = parseInt(localStorage.getItem('sim_water')) || 30;
+            
+            let score = (energy/100 + water/100 + trees/1000000) / 3;
+            // Yetişkin modunda kutu yarı şeffaf olduğu için arka plan rengi okunabilirliği bozmasın diye biraz koyulaştırıldı
+            let opacity = mode === 'adult' ? 0.6 : 0.45; 
+            
+            document.getElementById('bg-overlay').style.backgroundColor = `hsla(${20 + (score * 100)}, 70%, 45%, ${opacity})`;
+
+            show();
+        };
+
         function show() {
             document.getElementById('qNum').innerText = cur + 1;
             document.getElementById('qText').innerText = questions[cur].q;
@@ -117,7 +155,6 @@
                 window.location.href = 'karne.html';
             }
         }
-        window.onload = show;
     </script>
 </body>
 </html>
