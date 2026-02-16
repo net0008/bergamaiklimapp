@@ -2,49 +2,65 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Karbon Ayak İzi Testi</title>
+    <title>Karbon Ayak İzi: Kişisel Sorumluluk</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #1a1a1a; color: white; padding: 20px; text-align: center; }
-        .quiz-container { max-width: 600px; margin: auto; background: rgba(255,255,255,0.1); padding: 30px; border-radius: 20px; border: 2px solid #55FF55; }
-        .question { font-size: 1.2em; margin-bottom: 20px; display: none; }
-        .question.active { display: block; }
-        .option-btn { display: block; width: 100%; padding: 15px; margin: 10px 0; background: #2c3e50; color: white; border: none; border-radius: 10px; cursor: pointer; font-size: 1em; }
-        .option-btn:hover { background: #2980b9; }
-        .progress { color: #55FF55; font-weight: bold; margin-bottom: 10px; }
+        :root { --green: #55FF55; --dark: #1a1a1a; --btn: #2c3e50; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--dark); color: white; padding: 20px; text-align: center; }
+        .quiz-container { max-width: 650px; margin: 40px auto; background: rgba(255,255,255,0.05); padding: 35px; border-radius: 25px; border: 2px solid var(--green); box-shadow: 0 0 20px rgba(85,255,85,0.1); }
+        
+        .question-box { display: none; }
+        .question-box.active { display: block; }
+        
+        .option-btn { display: block; width: 100%; padding: 18px; margin: 12px 0; background: var(--btn); color: white; border: 1px solid #444; border-radius: 12px; cursor: pointer; font-size: 1.1em; transition: 0.3s; text-align: left; }
+        .option-btn:hover { background: #34495e; transform: scale(1.02); border-color: var(--green); }
+        
+        /* Geri Bildirim Kutusu */
+        #feedback-area { display: none; margin-top: 25px; padding: 20px; border-radius: 15px; line-height: 1.6; font-size: 1.05em; text-align: left; border-left: 6px solid var(--green); background: rgba(255,255,255,0.1); }
+        .feedback-title { font-weight: bold; margin-bottom: 10px; display: block; }
+        
+        .nav-btn { margin-top: 20px; padding: 15px 30px; background: var(--green); color: black; border: none; border-radius: 50px; font-weight: bold; cursor: pointer; font-size: 1.1em; width: 100%; }
+        .progress { color: var(--green); margin-bottom: 15px; font-weight: bold; letter-spacing: 1px; }
     </style>
 </head>
 <body>
+
     <div class="quiz-container">
-        <div class="progress">Soru <span id="qNum">1</span> / 4</div>
-        <h2>👣 Karbon Ayak İzini Ölçelim</h2>
-        <hr style="border-color:#55FF55; margin-bottom:30px;">
+        <div class="progress">SORU <span id="qNum">1</span> / 4</div>
+        
+        <div id="question-area">
+            <div class="question-box active" id="q1">
+                <h3>🚲 Okula veya işe genellikle nasıl gidersin?</h3>
+                <button class="option-btn" onclick="check(1, 100, 'Harika! Yürümek veya bisiklet kullanmak karbon salınımını sıfırlar. 2050\'de Bergama sokaklarının egzoz dumanı yerine temiz havayla dolması senin elinde.')">Yürüyerek veya Bisikletle</button>
+                <button class="option-btn" onclick="check(1, 50, 'Makul bir tercih. Toplu taşıma kullanmak, kişi başına düşen karbon miktarını 5 kat azaltır. Her servis aracı, yoldan 15 otomobili çeker!')">Servis veya Otobüsle</button>
+                <button class="option-btn" onclick="check(1, 0, 'Düşünmelisin... Özel araçlar en yüksek karbon salınımına neden olur. Eğer imkanın varsa 2050\'deki çocuklara daha temiz bir gökyüzü bırakmak için alternatifleri değerlendirmelisin.')">Özel Arabayla</button>
+            </div>
 
-        <div class="question active" id="q1">
-            <p>Okula genellikle nasıl gidiyorsun?</p>
-            <button class="option-btn" onclick="nextQuestion(100)">🚶 Yürüyerek veya Bisikletle</button>
-            <button class="option-btn" onclick="nextQuestion(50)">🚌 Servis veya Otobüsle</button>
-            <button class="option-btn" onclick="nextQuestion(0)">🚗 Özel Arabayla</button>
+            <div class="question-box" id="q2">
+                <h3>💡 Odanın ışığını veya kullanmadığın cihazları kapatır mısın?</h3>
+                <button class="option-btn" onclick="check(2, 100, 'Mükemmel! Tasarruf edilen her watt, termik santrallerden havaya salınan dumanın azalması demektir. Sen gerçek bir enerji koruyucususun.')">Evet, her zaman kapatırım.</button>
+                <button class="option-btn" onclick="check(2, 50, 'Güzel ama daha dikkatli olabilirsin. Unutulan her lamba, Bergama\'nın gelecekteki enerji kaynaklarını boş yere tüketiyor.')">Bazen unutuyorum.</button>
+                <button class="option-btn" onclick="check(2, 0, 'Dikkat! Enerji israfı, iklim krizini en çok tetikleyen unsurlardan biri. Küçük bir anahtar dokunuşu, büyük bir iklim değişikliği başlatabilir.')">Hayır, pek dikkat etmem.</button>
+            </div>
+
+            <div class="question-box" id="q3">
+                <h3>♻️ Atıklarını (plastik, kağıt, cam) ayırarak geri dönüşüme atar mısın?</h3>
+                <button class="option-btn" onclick="check(3, 100, 'Süper! Bir ton kağıdı geri dönüştürerek 17 ağacı kesilmekten kurtardın. Bu, Bergama\'nın 2050\'deki orman varlığı için dev bir adım.')">Evet, mutlaka ayırırım.</button>
+                <button class="option-btn" onclick="check(3, 50, 'Fena değil. Ancak cam ve metalin doğada binlerce yıl kaldığını düşünürsek, hepsini ayırmak geleceğe en büyük hediyen olur.')">Sadece bazılarını ayırırım.</button>
+                <button class="option-btn" onclick="check(3, 0, 'Eyvah! Doğaya bırakılan her plastik 2050 yılındaki çocukların toprağını ve suyunu kirletmeye devam edecek. Dönüşüm için asla geç değil.')">Hepsini genel çöpe atarım.</button>
+            </div>
+
+            <div class="question-box" id="q4">
+                <h3>🍎 Beslenmende yerel ürünleri mi yoksa paketli gıdaları mı tercih edersin?</h3>
+                <button class="option-btn" onclick="check(4, 100, 'Bilgece bir seçim! Bergama pazarından alınan yerel ürünlerin nakliye masrafı (ve karbonu) yoktur. Hem toprağı hem iklimi korudun.')">Yerel pazarı ve mevsim sebzelerini.</button>
+                <button class="option-btn" onclick="check(4, 50, 'Dikkatli olmalısın. Uzaklardan gelen her gıda, sofrana gelene kadar binlerce kilometre yol katedip karbon izi bırakıyor.')">Karışık, bazen paketli ürünler.</button>
+                <button class="option-btn" onclick="check(4, 0, 'Düşünmelisin! Paketli ve uzak şehirlerden gelen gıdalar, ambalaj atığı ve yüksek nakliye karbonu demektir. 2050\'de sağlıklı topraklar için yereli seçmelisin.')">Genellikle hazır ve paketli gıdalar.</button>
+            </div>
         </div>
 
-        <div class="question" id="q2">
-            <p>Odanın ışığını kullanmadığında kapatır mısın?</p>
-            <button class="option-btn" onclick="nextQuestion(100)">💡 Evet, her zaman!</button>
-            <button class="option-btn" onclick="nextQuestion(50)">⌛ Bazen unutuyorum.</button>
-            <button class="option-btn" onclick="nextQuestion(0)">🌑 Hayır, açık kalır.</button>
-        </div>
-
-        <div class="question" id="q3">
-            <p>Atıkları geri dönüşüm kutusuna atıyor musun?</p>
-            <button class="option-btn" onclick="nextQuestion(100)">♻️ Evet, kağıt/plastik ayırırım.</button>
-            <button class="option-btn" onclick="nextQuestion(50)">🧴 Sadece plastikleri atarım.</button>
-            <button class="option-btn" onclick="nextQuestion(0)">🗑️ Hepsini çöpe atarım.</button>
-        </div>
-
-        <div class="question" id="q4">
-            <p>Yemeklerinde neye dikkat edersin?</p>
-            <button class="option-btn" onclick="nextQuestion(100)">🍎 Yerli malı ve mevsim sebzeleri.</button>
-            <button class="option-btn" onclick="nextQuestion(50)">🍔 Paketli hazır gıdalar.</button>
-            <button class="option-btn" onclick="nextQuestion(0)">🥩 Çok fazla et tüketirim.</button>
+        <div id="feedback-area">
+            <span class="feedback-title">💡 Eğitici Not:</span>
+            <p id="feedback-text"></p>
+            <button class="nav-btn" id="next-btn" onclick="nextQuestion()">Sıradaki Soru ➡️</button>
         </div>
     </div>
 
@@ -52,17 +68,29 @@
         let currentQ = 1;
         let totalQuizXP = 0;
 
-        function nextQuestion(points) {
+        function check(qId, points, feedback) {
             totalQuizXP += points;
-            document.getElementById('q' + currentQ).classList.remove('active');
-            currentQ++;
+            document.getElementById('question-area').style.display = 'none';
+            document.getElementById('feedback-area').style.display = 'block';
+            document.getElementById('feedback-text').innerText = feedback;
             
+            if(currentQ === 4) {
+                document.getElementById('next-btn').innerText = "🏁 Sonucu Gör ve Karneye Git";
+            }
+        }
+
+        function nextQuestion() {
+            document.getElementById('feedback-area').style.display = 'none';
+            document.getElementById('question-area').style.display = 'block';
+            document.getElementById('q' + currentQ).classList.remove('active');
+            
+            currentQ++;
             if (currentQ <= 4) {
                 document.getElementById('q' + currentQ).classList.add('active');
                 document.getElementById('qNum').innerText = currentQ;
             } else {
                 localStorage.setItem('quiz_xp', totalQuizXP);
-                window.location.href = 'karne.html'; // Karneye yönlendir
+                window.location.href = 'karne.html'; // Final Sayfasına
             }
         }
     </script>
