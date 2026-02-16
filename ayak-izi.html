@@ -2,97 +2,107 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Karbon Ayak İzi: Kişisel Sorumluluk</title>
+    <title>Kişisel Sorumluluk Testi</title>
     <style>
-        :root { --green: #55FF55; --dark: #1a1a1a; --btn: #2c3e50; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--dark); color: white; padding: 20px; text-align: center; }
-        .quiz-container { max-width: 650px; margin: 40px auto; background: rgba(255,255,255,0.05); padding: 35px; border-radius: 25px; border: 2px solid var(--green); box-shadow: 0 0 20px rgba(85,255,85,0.1); }
-        
-        .question-box { display: none; }
-        .question-box.active { display: block; }
-        
-        .option-btn { display: block; width: 100%; padding: 18px; margin: 12px 0; background: var(--btn); color: white; border: 1px solid #444; border-radius: 12px; cursor: pointer; font-size: 1.1em; transition: 0.3s; text-align: left; }
-        .option-btn:hover { background: #34495e; transform: scale(1.02); border-color: var(--green); }
-        
-        /* Geri Bildirim Kutusu */
-        #feedback-area { display: none; margin-top: 25px; padding: 20px; border-radius: 15px; line-height: 1.6; font-size: 1.05em; text-align: left; border-left: 6px solid var(--green); background: rgba(255,255,255,0.1); }
-        .feedback-title { font-weight: bold; margin-bottom: 10px; display: block; }
-        
-        .nav-btn { margin-top: 20px; padding: 15px 30px; background: var(--green); color: black; border: none; border-radius: 50px; font-weight: bold; cursor: pointer; font-size: 1.1em; width: 100%; }
-        .progress { color: var(--green); margin-bottom: 15px; font-weight: bold; letter-spacing: 1px; }
+        body { font-family: 'Segoe UI', sans-serif; background: #1a1a1a; color: white; padding: 40px; text-align: center; }
+        .box { max-width: 650px; margin: auto; background: #222; padding: 30px; border-radius: 20px; border: 2px solid #55FF55; box-shadow: 0 0 20px rgba(85,255,85,0.1); }
+        .option { display: block; width: 100%; padding: 18px; margin: 12px 0; background: #333; color: white; border: 1px solid #444; border-radius: 12px; cursor: pointer; text-align: left; font-size: 1.05em; transition: 0.3s; }
+        .option:hover { background: #444; border-color: #55FF55; }
+        .feedback { display: none; padding: 20px; background: #2c3e50; border-radius: 12px; margin-top: 20px; text-align: left; border-left: 6px solid #55FF55; font-size: 1.1em; line-height: 1.5; }
+        .progress { color: #55FF55; font-weight: bold; margin-bottom: 15px; }
     </style>
 </head>
 <body>
-
-    <div class="quiz-container">
+    <div class="box">
         <div class="progress">SORU <span id="qNum">1</span> / 4</div>
-        
-        <div id="question-area">
-            <div class="question-box active" id="q1">
-                <h3>🚲 Okula veya işe genellikle nasıl gidersin?</h3>
-                <button class="option-btn" onclick="check(1, 100, 'Harika! Yürümek veya bisiklet kullanmak karbon salınımını sıfırlar. 2050\'de Bergama sokaklarının egzoz dumanı yerine temiz havayla dolması senin elinde.')">Yürüyerek veya Bisikletle</button>
-                <button class="option-btn" onclick="check(1, 50, 'Makul bir tercih. Toplu taşıma kullanmak, kişi başına düşen karbon miktarını 5 kat azaltır. Her servis aracı, yoldan 15 otomobili çeker!')">Servis veya Otobüsle</button>
-                <button class="option-btn" onclick="check(1, 0, 'Düşünmelisin... Özel araçlar en yüksek karbon salınımına neden olur. Eğer imkanın varsa 2050\'deki çocuklara daha temiz bir gökyüzü bırakmak için alternatifleri değerlendirmelisin.')">Özel Arabayla</button>
-            </div>
-
-            <div class="question-box" id="q2">
-                <h3>💡 Odanın ışığını veya kullanmadığın cihazları kapatır mısın?</h3>
-                <button class="option-btn" onclick="check(2, 100, 'Mükemmel! Tasarruf edilen her watt, termik santrallerden havaya salınan dumanın azalması demektir. Sen gerçek bir enerji koruyucususun.')">Evet, her zaman kapatırım.</button>
-                <button class="option-btn" onclick="check(2, 50, 'Güzel ama daha dikkatli olabilirsin. Unutulan her lamba, Bergama\'nın gelecekteki enerji kaynaklarını boş yere tüketiyor.')">Bazen unutuyorum.</button>
-                <button class="option-btn" onclick="check(2, 0, 'Dikkat! Enerji israfı, iklim krizini en çok tetikleyen unsurlardan biri. Küçük bir anahtar dokunuşu, büyük bir iklim değişikliği başlatabilir.')">Hayır, pek dikkat etmem.</button>
-            </div>
-
-            <div class="question-box" id="q3">
-                <h3>♻️ Atıklarını (plastik, kağıt, cam) ayırarak geri dönüşüme atar mısın?</h3>
-                <button class="option-btn" onclick="check(3, 100, 'Süper! Bir ton kağıdı geri dönüştürerek 17 ağacı kesilmekten kurtardın. Bu, Bergama\'nın 2050\'deki orman varlığı için dev bir adım.')">Evet, mutlaka ayırırım.</button>
-                <button class="option-btn" onclick="check(3, 50, 'Fena değil. Ancak cam ve metalin doğada binlerce yıl kaldığını düşünürsek, hepsini ayırmak geleceğe en büyük hediyen olur.')">Sadece bazılarını ayırırım.</button>
-                <button class="option-btn" onclick="check(3, 0, 'Eyvah! Doğaya bırakılan her plastik 2050 yılındaki çocukların toprağını ve suyunu kirletmeye devam edecek. Dönüşüm için asla geç değil.')">Hepsini genel çöpe atarım.</button>
-            </div>
-
-            <div class="question-box" id="q4">
-                <h3>🍎 Beslenmende yerel ürünleri mi yoksa paketli gıdaları mı tercih edersin?</h3>
-                <button class="option-btn" onclick="check(4, 100, 'Bilgece bir seçim! Bergama pazarından alınan yerel ürünlerin nakliye masrafı (ve karbonu) yoktur. Hem toprağı hem iklimi korudun.')">Yerel pazarı ve mevsim sebzelerini.</button>
-                <button class="option-btn" onclick="check(4, 50, 'Dikkatli olmalısın. Uzaklardan gelen her gıda, sofrana gelene kadar binlerce kilometre yol katedip karbon izi bırakıyor.')">Karışık, bazen paketli ürünler.</button>
-                <button class="option-btn" onclick="check(4, 0, 'Düşünmelisin! Paketli ve uzak şehirlerden gelen gıdalar, ambalaj atığı ve yüksek nakliye karbonu demektir. 2050\'de sağlıklı topraklar için yereli seçmelisin.')">Genellikle hazır ve paketli gıdalar.</button>
-            </div>
-        </div>
-
-        <div id="feedback-area">
-            <span class="feedback-title">💡 Ama Neden?:</span>
-            <p id="feedback-text"></p>
-            <button class="nav-btn" id="next-btn" onclick="nextQuestion()">Sıradaki Soru ➡️</button>
+        <h2 id="qText" style="line-height: 1.4;">Soru Yükleniyor...</h2>
+        <div id="options"></div>
+        <div id="feedback" class="feedback">
+            <span style="font-weight:bold; color:#55FF55;">💡 Biliyor Muydun?</span>
+            <p id="fText"></p>
+            <button onclick="next()" style="width:100%; padding:15px; background:#55FF55; color:black; border:none; border-radius:10px; font-weight:bold; cursor:pointer; font-size: 1.1em;">DEVAM ET ➡️</button>
         </div>
     </div>
-
     <script>
-        let currentQ = 1;
-        let totalQuizXP = 0;
+        const mode = localStorage.getItem('user_mode');
+        
+        // 8 TAM SORU VE EĞİTİCİ GERİ BİLDİRİM
+        const questions = mode === 'adult' ? [
+            { q: "🚗 Yeni bir araç alırken veya ulaşımda tercihiniz nedir?", options: [
+                {t: "Elektrikli/Hibrit veya toplu taşıma", p:100, f:"Harika yatırım! 2050'de gelecek olan ağır karbon vergilerinden kurtuldunuz."},
+                {t: "Düşük motorlu, ekonomik bir araç", p:50, f:"Ekonomik ama riskli. Fosil yakıtlı araçların kullanım maliyeti her geçen gün artacak."},
+                {t: "Güçlü bir SUV veya performans aracı", p:0, f:"Dikkat! Bugünün konforu, 2050'de çocuklarınıza yüksek bir karbon vergisi borcu bırakacak."}
+            ]},
+            { q: "🏠 Evinizde enerji verimliliği için ne yaptınız?", options: [
+                {t: "A sınıfı yalıtım ve güneş paneli var.", p:100, f:"Mükemmel! Artan yaz sıcaklıklarında hem bütçenizi hem de çocukların geleceğini korudunuz."},
+                {t: "Sadece dış cephe mantolaması var.", p:50, f:"İyi bir başlangıç. Ancak Bergama'da artan sıcaklıklar için çatı yalıtımı da şart olacak."},
+                {t: "Standart bina, ek önlem almadım.", p:0, f:"Riskli durum. Yalıtımsız bir ev, gelecekteki astronomik klima faturalarıyla bütçenizi sarsacak."}
+            ]},
+            { q: "🛒 Mutfak alışverişinizi nasıl yapıyorsunuz?", options: [
+                {t: "Bergama yerel pazarından, üreticiden.", p:100, f:"Harika! Yerel üreticiyi destekleyerek Bergama Ovası'nın tarım geleceğini garanti altına aldınız."},
+                {t: "Büyük zincir marketlerden.", p:50, f:"Zincir marketler karbon ayak izini artırır. Bergama'nın çiftçisi toprağını terk etme riskiyle karşı karşıya."},
+                {t: "Paketli hazır gıdalar ve online sipariş.", p:0, f:"Dikkat! Bu alışkanlık ambalaj çöpü üreterek 2050'de çocuklarınıza dev bir atık dağı bırakıyor."}
+            ]},
+            { q: "🗑️ Evdeki atık yönetiminiz ne durumda?", options: [
+                {t: "Kaynağında ayırıyor, plastik reddediyorum.", p:100, f:"Sıfır atık kahramanı! Bakırçay havzasını mikroplastiklerden korudunuz."},
+                {t: "Sadece kağıt ve şişeleri geri dönüşüme atıyorum.", p:50, f:"Plastikleri de eklemelisiniz. Doğaya karışan plastikler yeraltı sularımızı tehdit ediyor."},
+                {t: "Hepsi tek bir çöp poşetinde birleşiyor.", p:0, f:"Büyük tehlike! Çöpe attığınız her plastik, 2050'de çocuklarınızın tüketeceği tarım ürünlerine karışacak."}
+            ]}
+        ] : [
+            { q: "🚲 Okula veya işe genellikle nasıl gidersin?", options: [
+                {t: "Yürüyerek veya Bisikletle", p:100, f:"Harika! Karbon salınımını sıfırladın. 2050'de Bergama sokakları senin sayende temiz kalacak."},
+                {t: "Servis veya Otobüsle", p:50, f:"Makul bir tercih. Toplu taşıma, kişi başına düşen karbon miktarını 5 kat azaltır."},
+                {t: "Özel Arabayla", p:0, f:"Düşünmelisin... Özel araçlar havayı en çok kirleten ulaşım yoludur. Gelecek için alternatif bulmalısın."}
+            ]},
+            { q: "💡 Odadan çıkarken ışıkları kapatır mısın?", options: [
+                {t: "Evet, her zaman kapatırım.", p:100, f:"Mükemmel! Tasarruf edilen her watt, havaya salınan zehirli gazın azalması demektir."},
+                {t: "Bazen unutuyorum.", p:50, f:"Biraz daha dikkat! Unutulan her lamba, gelecekteki enerji kaynaklarımızı tüketiyor."},
+                {t: "Hayır, pek dikkat etmem.", p:0, f:"Dikkat! Enerji israfı iklim krizini hızlandırır. Küçük bir anahtar dokunuşu dünyayı değiştirir."}
+            ]},
+            { q: "♻️ Atıklarını ayırarak geri dönüşüme atar mısın?", options: [
+                {t: "Evet, mutlaka ayırırım.", p:100, f:"Süper! Bir ton kağıdı dönüştürerek 17 ağacı kurtardın. Ormanlar sana minnettar."},
+                {t: "Sadece bazılarını ayırırım.", p:50, f:"Fena değil. Ama cam ve plastik doğada binlerce yıl kalır, hepsini ayırmalısın."},
+                {t: "Hepsini genel çöpe atarım.", p:0, f:"Eyvah! Doğaya atılan her plastik 2050'deki çocukların suyunu kirletecek."}
+            ]},
+            { q: "🍎 Beslenmende ne tür gıdaları tercih edersin?", options: [
+                {t: "Yerel pazarı ve mevsim sebzelerini.", p:100, f:"Bilgece! Bergama pazarından alınan yerel ürünlerin nakliye karbonu yoktur."},
+                {t: "Karışık, bazen paketli ürünler.", p:50, f:"Dikkatli ol. Uzaklardan gelen gıdalar binlerce kilometre yol katedip karbon izi bırakır."},
+                {t: "Genellikle hazır ve paketli gıdalar.", p:0, f:"Düşünmelisin! Paketli gıdalar ambalaj atığı ve nakliye kirliliği demektir."}
+            ]}
+        ];
 
-        function check(qId, points, feedback) {
-            totalQuizXP += points;
-            document.getElementById('question-area').style.display = 'none';
-            document.getElementById('feedback-area').style.display = 'block';
-            document.getElementById('feedback-text').innerText = feedback;
+        let cur = 0, total = 0;
+        function show() {
+            document.getElementById('qNum').innerText = cur + 1;
+            document.getElementById('qText').innerText = questions[cur].q;
+            let html = "";
+            questions[cur].options.forEach((o, i) => html += `<button class="option" onclick="check(${i})">${o.t}</button>`);
+            document.getElementById('options').innerHTML = html;
+        }
+
+        function check(i) {
+            total += questions[cur].options[i].p;
+            document.getElementById('options').style.display = 'none';
+            document.getElementById('feedback').style.display = 'block';
+            document.getElementById('fText').innerText = questions[cur].options[i].f;
             
-            if(currentQ === 4) {
-                document.getElementById('next-btn').innerText = "🏁 Sonucu Gör ve Karneye Git";
+            if(cur === 3) {
+                document.querySelector('#feedback button').innerText = "🏁 Sonucu Gör ve Karneye Git";
             }
         }
 
-        function nextQuestion() {
-            document.getElementById('feedback-area').style.display = 'none';
-            document.getElementById('question-area').style.display = 'block';
-            document.getElementById('q' + currentQ).classList.remove('active');
-            
-            currentQ++;
-            if (currentQ <= 4) {
-                document.getElementById('q' + currentQ).classList.add('active');
-                document.getElementById('qNum').innerText = currentQ;
+        function next() {
+            cur++;
+            if(cur < questions.length) {
+                document.getElementById('feedback').style.display = 'none';
+                document.getElementById('options').style.display = 'block';
+                show();
             } else {
-                localStorage.setItem('quiz_xp', totalQuizXP);
-                window.location.href = 'karne.html'; // Final Sayfasına
+                localStorage.setItem('quiz_xp', total);
+                window.location.href = 'karne.html';
             }
         }
+        window.onload = show;
     </script>
 </body>
 </html>
