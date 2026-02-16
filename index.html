@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>"Pergamon"’un İzinde, Yapay Zekâ ile Bergama 2050: İklim Zaman Tüneli</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
     <style>
         :root { 
             --temp: #FF0000; --rain: #3498db; --btn: #2980b9; --dark: #2c3e50; 
@@ -82,6 +83,9 @@
 </div>
 
 <script>
+    // DataLabels Eklentisini Chart.js'e Kaydet
+    Chart.register(ChartDataLabels);
+
     function toggleAccordion(element) {
         element.parentElement.classList.toggle('active');
     }
@@ -108,7 +112,28 @@
                 options: { 
                     responsive: true, 
                     maintainAspectRatio: false,
-                    plugins: { legend: { position: 'top' } }
+                    layout: {
+                        padding: { top: 30 } // Yazıların grafiğin tavanına yapışmasını önler
+                    },
+                    plugins: { 
+                        legend: { position: 'top' },
+                        // Eklenti Ayarları (Sayıların Görünümü)
+                        datalabels: {
+                            // Çizgi grafiğinde çizginin rengi, çubuk grafikte beyaz yazı
+                            color: type === 'line' ? color : '#ffffff',
+                            // Çizgi grafiğinde noktanın üstüne, çubuk grafikte çubuğun içine (merkeze) hizala
+                            anchor: type === 'line' ? 'end' : 'center',
+                            align: type === 'line' ? 'top' : 'center',
+                            font: { 
+                                weight: 'bold', 
+                                size: 11 
+                            },
+                            formatter: function(value) {
+                                // 12.5 veya 450 gibi değerleri yazdırır
+                                return value; 
+                            }
+                        }
+                    }
                 }
             });
         };
