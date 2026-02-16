@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bergama 2050: İklim Simülatörü</title>
+    <title>Bergama 2050: İklim Karar Masası</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root { --dark: #2c3e50; --temp-red: #e74c3c; --rain-blue: #3498db; --btn: #2980b9; --green: #27ae60; }
@@ -30,7 +30,6 @@
         .nav-bar { display: flex; justify-content: center; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
         .nav-btn { padding: 10px 20px; background: var(--btn); color: white; text-decoration: none; border-radius: 50px; font-weight: bold; border:none; cursor:pointer; transition: 0.3s; }
         
-        /* Kilitli Düğme Tasarımı */
         .locked { background: #7f8c8d !important; cursor: not-allowed; opacity: 0.6; }
 
         .slider-group { margin-bottom: 20px; background: rgba(255, 255, 255, 0.7); padding: 15px; border-radius: 15px; }
@@ -40,7 +39,7 @@
         .stat-card { background: rgba(255,255,255,0.9); padding: 15px; border-radius: 15px; text-align: center; font-weight: bold; }
         .output-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
 
-        #mission-status { margin-top:15px; padding:15px; border-radius:12px; text-align:center; font-weight:bold; background: white; border: 2px solid var(--temp-red); }
+        #mission-status { margin-top:15px; padding:15px; border-radius:12px; text-align:left; font-size:0.95em; line-height:1.5; background: white; border: 2px solid var(--temp-red); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body>
@@ -54,15 +53,16 @@
             <div class="nav-bar">
                 <a href="index.html" class="nav-btn">🏠 Anasayfa</a>
                 <button onclick="toggleFullScreen()" class="nav-btn" style="background:var(--dark)">📺 Tam Ekran</button>
-                <a href="ayak-izi.html" id="karne-btn" class="nav-btn locked">🔒 Önce Bergama'yı Kurtar</a>
+                <a href="ayak-izi.html" id="karne-btn" class="nav-btn locked">🔒 2050'yi Kurtarmadan Geçemezsin</a>
             </div>
         </div>
 
         <div class="controls">
-            <div id="mission-status">⚠️ DURUM: Bergama kavruluyor!</div>
+            <h3 style="margin-top:0;">🛑 Gelecek Neslin Kaderini Belirle</h3>
+            <div id="mission-status">Lütfen sürgüleri hareket ettirerek kararlarını ver...</div>
             
             <div class="slider-group">
-                <label>⚡ Temiz Enerji Yatırımı: <span id="v1">20</span>%</label>
+                <label>⚡ Temiz Enerji: <span id="v1">20</span>%</label>
                 <input type="range" min="0" max="100" value="20" class="slider" id="s1">
             </div>
             <div class="slider-group">
@@ -76,7 +76,7 @@
         </div>
 
         <div class="results">
-            <div style="background:white; border-radius:15px; padding:10px;"><canvas id="simChart" style="height:250px;"></canvas></div>
+            <div style="background:white; border-radius:15px; padding:10px;"><canvas id="simChart" style="height:280px;"></canvas></div>
             <div class="output-grid">
                 <div class="stat-card" style="border-bottom:4px solid var(--temp-red);"><span>Bergama Isı</span><div id="bt">23.1°C</div></div>
                 <div class="stat-card" style="border-bottom:4px solid var(--rain-blue);"><span>Bergama Yağış</span><div id="br">340mm</div></div>
@@ -101,13 +101,13 @@
         const trees = parseInt(document.getElementById('s2').value);
         const water = parseInt(document.getElementById('s3').value);
 
-        // Önce Hesapla
+        // 1. Bilimsel Hesaplama (Baz: 1981-2024 NASA Verileri)
         let bt = 23.1 - (energy * 0.025) - (trees * 0.00000035);
         let trt = 16.8 - (energy * 0.015) - (trees * 0.0000001);
         let br = 340 + (water * 2.2) + (trees * 0.00003);
         let trr = 475 + (water * 1.5) + (trees * 0.000015);
 
-        // Sonra Kaydet ve Yazdır
+        // 2. Arayüzü Güncelle
         document.getElementById('v1').innerText = energy;
         document.getElementById('v2').innerText = trees.toLocaleString('tr-TR');
         document.getElementById('v3').innerText = water;
@@ -116,31 +116,37 @@
         document.getElementById('trt').innerText = trt.toFixed(1) + "°C";
         document.getElementById('trr').innerText = Math.round(trr) + "mm";
 
+        // 3. Verileri Sakla
         localStorage.setItem('sim_energy', energy);
         localStorage.setItem('sim_trees', trees);
         localStorage.setItem('sim_water', water);
         localStorage.setItem('sim_temp', bt.toFixed(1));
 
-        // Kilit Mekanizması
-        const btn = document.getElementById('karne-btn');
-        const status = document.getElementById('mission-status');
+        // 4. Dinamik ve Vurucu Mesajlar (52 Yaş Vizyonu)
+        const msgBox = document.getElementById('mission-status');
+        const karneBtn = document.getElementById('karne-btn');
+        
+        let eMsg = energy > 70 ? "✅ Temiz enerji kararın, torunlarının 2050'de maskesiz nefes almasını garantiliyor." : "❌ Fosil yakıt ısrarın, geleceğin çocuklarına zehirli bir gökyüzü borç bırakıyor!";
+        let tMsg = trees > 500000 ? "✅ Bu ağaçlar, 2050'de çocukların serinleyeceği en büyük miras olacak." : "❌ Ormanları yok sayarsan, gelecek nesil kavurucu sıcaklarda sığınacak gölge bulamayacak.";
+        let wMsg = water > 60 ? "✅ Suyu korudun! Bergama'nın çocukları 2050'de bereketi tadabilecek." : "❌ Su israfın devam ederse, 2050'de bu topraklarda tarım sadece bir anı olarak kalacak.";
 
-        if (bt > 22.5) {
-            btn.className = "nav-btn locked";
-            btn.innerText = "🔒 Durum Kritik (Düzelmeli)";
-            btn.onclick = (e) => e.preventDefault();
-            status.innerHTML = "🔴 Bergama kavruluyor! Acil önlem al.";
-            status.style.borderColor = "var(--temp-red)";
+        msgBox.innerHTML = `<b>2050 Projeksiyonu:</b><br>${eMsg}<br>${tMsg}<br>${wMsg}`;
+
+        // 5. Kilit Mekanizması (Bergama Isısı 22.2 Altına İnmeden Geçiş Yok)
+        if (bt <= 22.2) {
+            karneBtn.className = "nav-btn";
+            karneBtn.style.background = "var(--green)";
+            karneBtn.innerText = "🚀 GÖREV TAMAM: Şimdi Kendi Ayak İzini Ölç!";
+            karneBtn.onclick = null;
+            msgBox.style.borderColor = "var(--green)";
         } else {
-            btn.className = "nav-btn";
-            btn.style.background = "var(--green)";
-            btn.innerText = "🏆 Görevi Tamamladın! Karneni Al";
-            btn.onclick = null;
-            status.innerHTML = "🟢 Harika! Bergama nefes alıyor.";
-            status.style.borderColor = "var(--green)";
+            karneBtn.className = "nav-btn locked";
+            karneBtn.innerText = "🔒 Gelecek Tehlikede (Sürgüleri İyileştir)";
+            karneBtn.onclick = (e) => e.preventDefault();
+            msgBox.style.borderColor = "var(--temp-red)";
         }
 
-        // Grafik Güncelleme
+        // 6. Grafik Güncelleme
         const chartData = [bt.toFixed(1), trt.toFixed(1), (br/20).toFixed(1), (trr/20).toFixed(1)];
         if(!simChart) {
             const ctx = document.getElementById('simChart').getContext('2d');
