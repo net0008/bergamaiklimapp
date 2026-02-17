@@ -4,87 +4,265 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nihai Sonuç</title>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Playfair+Display:wght@700&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Poppins', sans-serif; background: #000; color: white; padding: 40px; text-align: center; margin: 0; }
-        .mc-font { font-family: 'Press Start 2P', cursive; color: #55FF55; font-size: 1.2em; line-height: 1.5; }
-        .adult-font { font-family: 'Playfair Display', serif; color: #f8f9fa; font-size: 2.2em; }
-        
-        .card { max-width: 700px; margin: auto; background: rgba(255,255,255,0.08); padding: 40px; border-radius: 20px; border: 4px solid #55FF55; box-shadow: 0 0 30px rgba(85,255,85,0.2); }
-        .xp-bar { width: 100%; height: 30px; background: #333; border: 3px solid #000; margin: 20px 0; overflow: hidden; }
-        .fill { height: 100%; background: #55FF55; width: 0%; transition: width 2s cubic-bezier(0.1, 0.5, 0.1, 1); }
-        
-        .btn { padding: 15px 30px; background: #55FF55; color: black; border: none; font-weight: bold; cursor: pointer; border-radius: 10px; font-size: 1.1em; transition: 0.3s; font-family: inherit; }
-        .btn:hover { transform: scale(1.05); }
-        
+        /* ORTAK DEĞİŞKENLER (Simülatör ile uyumlu) */
+        :root { 
+            --dark: #2c3e50; 
+            --btn: #2980b9; 
+            --green: #27ae60; 
+            --orange: #f39c12;
+            --danger: #e74c3c;
+        }
+
+        body { 
+            margin: 0; 
+            padding: 20px; 
+            text-align: center; 
+            transition: 0.5s; 
+            min-height: 100vh; 
+            background-size: cover; 
+            background-attachment: fixed; 
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* =========================================
+           ÇOCUK MODU (Minecraft Teması - KORUNDU)
+        ========================================= */
+        body.child-mode { 
+            font-family: 'Press Start 2P', cursive; 
+            background-image: url('imagery/bergama-bg.jpg'); 
+            color: #fff; 
+        }
+        body.child-mode .card { 
+            max-width: 700px; 
+            width: 90%;
+            background: rgba(0,0,0,0.85); 
+            padding: 30px; 
+            border: 6px solid #55FF55; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8); 
+        }
+        body.child-mode h1 { color: #55FF55; font-size: 1.2em; line-height: 1.5; margin-bottom: 20px;}
+        body.child-mode .level-box { color: #55FF55; font-size: 2.5em; margin: 15px 0; text-shadow: 4px 4px #000; }
+        body.child-mode .xp-bar { background: #333; border: 4px solid #000; height: 25px;}
+        body.child-mode .fill { background: #55FF55; }
+        body.child-mode .msg-box { background: #222; border: 4px solid #55FF55; color: white; font-size: 0.8em;}
+        body.child-mode .btn { background: #55FF55; color: #000; border: 4px solid #000; font-family: inherit; font-size: 0.8em;}
+        body.child-mode .ach { background: #333; border: 4px solid #000; font-size: 0.7em;}
+        body.child-mode .ach.unlocked { border-color: #55FF55; background: #1a4a1a; }
+        body.child-mode .danger-btn { background: #ff5555; color: #fff; border: 4px solid #000; }
+        body.child-mode .info-label { font-size: 0.7em; }
+        body.child-mode .xp-text-val { font-size: 1em; }
+
+
+        /* =========================================
+           YETİŞKİN MODU (Simülatör Tarzı - AYDINLIK)
+        ========================================= */
+        body.adult-mode { 
+            font-family: 'Segoe UI', sans-serif; 
+            background-image: url('imagery/bergama-bg.jpg'); 
+            color: var(--dark); 
+        }
+        body.adult-mode .card { 
+            max-width: 800px; 
+            width: 90%;
+            background: rgba(255, 255, 255, 0.92); 
+            padding: 40px; 
+            border-radius: 25px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
+            border: none;
+        }
+        body.adult-mode h1 { 
+            color: var(--dark); 
+            font-size: 2.5em; 
+            font-weight: 700; 
+            margin-bottom: 10px; 
+        }
+        body.adult-mode .level-box { 
+            color: var(--btn); 
+            font-size: 4em; 
+            font-weight: bold; 
+            margin: 10px 0; 
+            text-shadow: none;
+        }
+        body.adult-mode .xp-bar { 
+            background: #dfe6e9; 
+            border-radius: 20px; 
+            height: 30px;
+            border: none;
+        }
+        body.adult-mode .fill { 
+            background: var(--btn); 
+            border-radius: 20px; 
+        }
+        body.adult-mode .msg-box { 
+            background: white; 
+            border-left: 6px solid var(--orange); 
+            color: var(--dark); 
+            border-radius: 15px; 
+            font-size: 1.1em; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        body.adult-mode .btn { 
+            background: var(--btn); 
+            color: white; 
+            border-radius: 50px; 
+            font-family: inherit; 
+            border: none; 
+            font-size: 1em; 
+            font-weight: bold;
+        }
+        body.adult-mode .ach { 
+            background: white; 
+            border-radius: 15px; 
+            border: 1px solid #eee; 
+            color: #95a5a6; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+        }
+        body.adult-mode .ach.unlocked { 
+            border-color: var(--green); 
+            color: var(--dark); 
+            background: rgba(39, 174, 96, 0.1); 
+        }
+        body.adult-mode .danger-btn { 
+            background: var(--danger); 
+            color: white; 
+            border-radius: 50px; 
+            border: none; 
+        }
+        body.adult-mode .info-label { color: #7f8c8d; font-weight: bold;}
+        body.adult-mode .xp-text-val { font-size: 1.3em; color: var(--dark);}
+
+
+        /* ORTAK KODLAR */
+        .card { margin: auto; transition: 0.5s; }
+        .xp-bar { width: 100%; margin: 20px 0; overflow: hidden; position: relative; }
+        .fill { height: 100%; width: 0%; transition: width 2s cubic-bezier(0.1, 0.5, 0.1, 1); }
+        .msg-box { margin: 30px 0; line-height: 1.8; padding: 25px; text-align: left; }
+        .btn-group { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 30px;}
+        .btn { padding: 15px 30px; cursor: pointer; transition: 0.3s; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; }
+        .btn:hover { transform: translateY(-3px); filter: brightness(1.1); }
         .achievements { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 30px 0; }
-        .ach { background: rgba(0,0,0,0.5); padding: 15px; border-radius: 10px; border: 2px solid #333; opacity: 0.4; filter: grayscale(1); }
-        .ach.unlocked { opacity: 1; border-color: #55FF55; filter: grayscale(0); }
-        
-        @media print { .btn, .achievements { display: none; } .card { border-color: #000; color: #000; } }
+        .ach { padding: 20px; opacity: 0.5; filter: grayscale(1); transition: 0.5s; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px;}
+        .ach.unlocked { opacity: 1; filter: grayscale(0); }
+        .info-label { letter-spacing: 1px; text-transform: uppercase; display: block; margin-bottom: 5px;}
+
+        @media print { .btn-group, .achievements { display: none; } body { background: white !important; color: black !important; } .card { border: none !important; box-shadow: none !important; background: none !important; color: black !important; } }
     </style>
 </head>
-<body>
-    <div class="card" id="finalCard">
+<body id="karneBody">
+
+    <div class="card">
         <h1 id="title">SONUÇ BELGESİ</h1>
-        <div id="level" style="font-size: 4em; font-weight: bold; color: #55FF55;">0</div>
-        <p style="letter-spacing: 2px; margin-top: -10px;">SEVİYE / UYUM</p>
+        
+        <div style="margin-top: 30px;">
+            <span class="info-label">UYUM SEVİYESİ</span>
+            <div class="level-box"><span id="level">0</span><span style="font-size: 0.5em; opacity: 0.6;"> / 5</span></div>
+        </div>
         
         <div class="xp-bar"><div id="bar" class="fill"></div></div>
-        <p id="xpText" style="font-weight: bold;">0 / 1000 Puan</p>
         
-        <div id="msg" style="font-style: italic; margin: 30px 0; line-height: 1.8; font-size: 1.1em; background: rgba(255,255,255,0.1); padding: 20px; border-left: 5px solid #55FF55;"></div>
+        <div style="font-size: 1em; margin-bottom: 30px;">
+            <span class="info-label">TOPLAM PUAN</span>
+            <span id="xpText" class="xp-text-val" style="font-weight: bold;">0</span> <span style="opacity: 0.6;">/ 1000</span>
+        </div>
+        
+        <div id="msg" class="msg-box"></div>
         
         <div class="achievements">
             <div class="ach" id="a1">🌳 Orman Mirası</div>
             <div class="ach" id="a2">⚡ Temiz Enerji</div>
             <div class="ach" id="a3">♻️ Bilinçli Tüketici</div>
-            <div class="ach" id="a4">🏆 2050 Kahramanı</div>
+            <div class="ach" id="a4">🏆 2050 Lideri</div>
         </div>
 
-        <button class="btn" onclick="window.print()">🖨️ BELGEYİ YAZDIR</button>
-        <br><br>
-        <a href="index.html" style="color: #ccc; text-decoration: none;">🏠 Ana Veri Paneline Dön</a>
+        <div class="btn-group">
+            <button class="btn" onclick="window.print()" style="flex: 2;">🖨️ BELGEYİ YAZDIR</button>
+            <button class="btn danger-btn" onclick="resetAndGoHome()" style="flex: 1;">🗑️ ÇIKIŞ & SİL</button>
+        </div>
+        <p style="font-size: 0.8em; opacity: 0.6; margin-top: 25px;">*Verileriniz araştırma amacıyla (TÜBİTAK 4007) anonim olarak kaydedilmiştir.</p>
     </div>
 
     <script>
+        // GOOGLE SCRIPT WEB APP LİNKİNİ BURAYA YAPIŞTIR
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx54zln200T6Rut3VDUD13rIut1qrQkEh4FQ1h3yxLlDDUyVYxVD0zf5AbEf59ziecLAQ/exec";
+
         window.onload = function() {
             const mode = localStorage.getItem('user_mode') || 'child';
+            document.getElementById('karneBody').className = mode + '-mode';
+
             const energy = parseInt(localStorage.getItem('sim_energy')) || 0;
             const trees = parseInt(localStorage.getItem('sim_trees')) || 0;
             const quiz = parseInt(localStorage.getItem('quiz_xp')) || 0;
             
-            // Simülasyon (600) + Quiz (400) = 1000 Puan
             let total = Math.round((energy * 3) + (trees / 3333) + quiz);
             if(total > 1000) total = 1000;
 
             const title = document.getElementById('title');
             const msg = document.getElementById('msg');
-            const card = document.getElementById('finalCard');
 
             if(mode === 'child') {
-                title.className = "mc-font";
-                title.innerHTML = "KAHRAMANLIK<br>KARNESİ";
-                msg.innerText = total >= 700 ? "Sen bir Kahramansın! Bergama'nın 2050 geleceğini gaz maskelerinden kurtardın." : "Daha iyisini yapabilirsin. Unutma, gelecek senin ellerinde!";
+                title.innerHTML = "KAHRAMANLIK KARNESİ";
+                if (total >= 800) {
+                    msg.innerHTML = "<b>🌟 EFSANEVİ KAHRAMAN!</b><br><br>Mükemmel kararlar aldın! Bergama'nın 2050 geleceğini kurtardın.";
+                } else if (total >= 500) {
+                    msg.innerHTML = "<b>🛡️ CESUR SAVAŞÇI!</b><br><br>İyi bir iş çıkardın ama bazı konularda daha dikkatli olmalısın.";
+                } else {
+                    msg.innerHTML = "<b>⚠️ TEHLİKE ÇANLARI!</b><br><br>Kararların Bergama'yı zor duruma soktu. Alışkanlıklarını değiştirmelisin.";
+                }
             } else {
-                title.className = "adult-font";
                 title.innerText = "STRATEJİK GELECEK RAPORU";
-                card.style.borderColor = "#2c3e50";
-                document.getElementById('bar').style.background = "#2c3e50";
-                document.getElementById('level').style.color = "#2c3e50";
-                msg.innerText = total >= 700 ? "Onlara en sağlam evleri bıraktınız. Bu belge, o evlerin içinde nefes alacakları bir gökyüzünü de miras bıraktığınızın kanıtıdır." : "Bu tablo, çocuklarınızın 2050'de çok zor bir iklim ve ekonomi ile yaşayacağını gösteriyor. Değişim için hala vakit var.";
+                if (total >= 800) {
+                    msg.innerHTML = "<b>✅ SÜRDÜRÜLEBİLİR GELECEK VİZYONU</b><br><br>Onlara nefes alacakları yemyeşil bir gökyüzü bıraktınız. Tebrikler.";
+                } else if (total >= 500) {
+                    msg.innerHTML = "<b>⚠️ RİSKLİ YATIRIM TABLOSU</b><br><br>Ekolojik yatırımlarınız yetersiz. Çocuklarınız ekonomik krizlerle mücadele edebilir.";
+                } else {
+                    msg.innerHTML = "<b>❌ KRİTİK İFLAS SENARYOSU</b><br><br>Bu rapor, bıraktığınız mirasın 2050'nin kurak Bergama'sında işe yaramayacağını gösteriyor.";
+                }
             }
 
-            document.getElementById('level').innerText = Math.floor(total / 200);
-            document.getElementById('xpText').innerText = total + " PUAN";
+            let level = Math.ceil((total / 1000) * 5); 
+            if(level === 0) level = 1;
+
+            document.getElementById('level').innerText = level;
+            document.getElementById('xpText').innerText = total;
             setTimeout(() => document.getElementById('bar').style.width = (total / 10) + "%", 500);
 
-            // Başarımlar
             if(trees >= 500000) document.getElementById('a1').classList.add('unlocked');
             if(energy >= 70) document.getElementById('a2').classList.add('unlocked');
             if(quiz >= 300) document.getElementById('a3').classList.add('unlocked');
             if(total >= 800) document.getElementById('a4').classList.add('unlocked');
+
+            // --- GOOGLE SHEETS VERİ GÖNDERME İŞLEMİ ---
+            // Sadece bu cihazda, bu oturumda veri daha önce gönderilmediyse gönder
+            if(!localStorage.getItem('data_sent')) {
+                let payload = {
+                    mod: mode === 'adult' ? 'Yetişkin' : 'Çocuk',
+                    puan: total
+                };
+
+                fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                }).then(() => {
+                    // Başarıyla tetiklendiğinde bayrağı true yap ki sayfayı yenileyen tekrar veri yollamasın
+                    localStorage.setItem('data_sent', 'true');
+                    console.log("Anonim veri TÜBİTAK raporlaması için Sheets'e aktarıldı.");
+                }).catch(err => console.log("Veri gönderme hatası:", err));
+            }
         };
+
+        function resetAndGoHome() {
+            if(confirm("Tüm kayıtlar silinecek ve ana ekrana dönülecek. Emin misiniz?")) {
+                localStorage.clear(); // Bu işlem 'data_sent' bayrağını da siler, sonraki kullanıcı tertemiz başlar.
+                window.location.href = 'index.html';
+            }
+        }
     </script>
 </body>
 </html>

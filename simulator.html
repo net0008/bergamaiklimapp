@@ -6,63 +6,218 @@
     <title>Bergama & TR 2050: İklim Karar Masası</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        :root { --dark: #2c3e50; --temp-red: #e74c3c; --rain-blue: #3498db; --btn: #2980b9; --green: #27ae60; }
+        :root { 
+            --dark: #2c3e50; 
+            --temp-red: #e74c3c; 
+            --rain-blue: #3498db; 
+            --btn: #2980b9; 
+            --green: #27ae60; 
+        }
         
         body { 
-            font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; transition: 0.5s; background-size: cover; background-attachment: fixed; min-height: 100vh;
+            font-family: 'Segoe UI', sans-serif; 
+            margin: 0; 
+            padding: 20px; 
+            transition: 0.5s; 
+            background-size: cover; 
+            background-attachment: fixed; 
+            min-height: 100vh;
         }
         
         /* MOD ÖZELLİKLERİ */
         /* Yetişkin modunda da arka plan resmi aktif edildi, sadece renk filtresi daha şeffaf olacak */
-        body.adult-mode { background-image: url('imagery/bergama-bg.jpg'); color: var(--dark); }
-        body.child-mode { background-image: url('imagery/bergama-bg.jpg'); color: #fff; }
+        body.adult-mode { 
+            background-image: url('imagery/bergama-bg.jpg'); 
+            color: var(--dark); 
+        }
+        body.child-mode { 
+            background-image: url('imagery/bergama-bg.jpg'); 
+            color: #fff; 
+        }
 
         /* Sararıp Yeşillenme Efektinin Olduğu Katman */
         #bg-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0;
-            background-color: rgba(220, 100, 0, 0.4); transition: background-color 1.5s ease; pointer-events: none;
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            z-index: 0;
+            background-color: rgba(220, 100, 0, 0.4); 
+            transition: background-color 1.5s ease; 
+            pointer-events: none;
         }
 
         .main-wrapper {
-            position: relative; z-index: 1; border-radius: 25px; padding: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.3); max-width: 1100px; margin: auto; transition: 0.5s;
+            position: relative; 
+            z-index: 1; 
+            border-radius: 25px; 
+            padding: 30px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3); 
+            max-width: 1100px; 
+            margin: auto; 
+            transition: 0.5s;
         }
+        
         /* Yetişkin modunda panelin içi okunabilirlik için beyaz/şeffaf kalır */
-        body.adult-mode .main-wrapper { background: rgba(255, 255, 255, 0.92); }
-        body.child-mode .main-wrapper { background: rgba(0, 0, 0, 0.8); border: 2px solid #55FF55; }
+        body.adult-mode .main-wrapper { 
+            background: rgba(255, 255, 255, 0.92); 
+        }
+        body.child-mode .main-wrapper { 
+            background: rgba(0, 0, 0, 0.8); 
+            border: 2px solid #55FF55; 
+        }
 
-        .container { display: grid; grid-template-columns: 1fr 1.5fr; gap: 30px; }
+        .container { 
+            display: grid; 
+            grid-template-columns: 1fr 1.5fr; 
+            gap: 30px; 
+        }
         
-        .nav-bar { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; grid-column: span 2;}
-        .nav-btn { padding: 12px 25px; background: var(--btn); color: white; text-decoration: none; border-radius: 50px; font-weight: bold; border:none; cursor:pointer; transition: 0.3s; display:inline-block; }
+        .nav-bar { 
+            display: flex; 
+            justify-content: center; 
+            gap: 10px; 
+            margin-bottom: 20px; 
+            flex-wrap: wrap; 
+            grid-column: span 2;
+        }
         
-        .locked { background: #7f8c8d !important; cursor: not-allowed; opacity: 0.6; }
+        .nav-btn { 
+            padding: 12px 25px; 
+            background: var(--btn); 
+            color: white; 
+            text-decoration: none; 
+            border-radius: 50px; 
+            font-weight: bold; 
+            border:none; 
+            cursor:pointer; 
+            transition: 0.3s; 
+            display:inline-block; 
+        }
+        
+        /* Tam Kilit CSS'i */
+        .locked { 
+            background: #7f8c8d !important; 
+            cursor: not-allowed; 
+            opacity: 0.6; 
+            pointer-events: none; 
+        }
 
         #mission-status { 
-            margin-bottom: 25px; padding: 15px; border-radius: 12px; text-align: left; font-size: 0.95em; 
-            line-height: 1.5; border-left: 8px solid var(--temp-red); transition: 0.3s;
+            margin-bottom: 25px; 
+            padding: 15px; 
+            border-radius: 12px; 
+            text-align: left; 
+            font-size: 0.95em; 
+            line-height: 1.5; 
+            border-left: 8px solid var(--temp-red); 
+            transition: 0.3s;
         }
-        body.adult-mode #mission-status { background: white; color: var(--dark); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        body.child-mode #mission-status { background: #222; color: #55FF55; border-color: var(--temp-red); }
+        body.adult-mode #mission-status { 
+            background: white; 
+            color: var(--dark); 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+        }
+        body.child-mode #mission-status { 
+            background: #222; 
+            color: #55FF55; 
+            border-color: var(--temp-red); 
+        }
 
-        .slider-group { margin-bottom: 20px; padding: 15px; border-radius: 15px; transition: 0.3s; }
-        body.adult-mode .slider-group { background: rgba(255, 255, 255, 0.9); box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid #eee; }
-        body.child-mode .slider-group { background: #222; border: 1px solid #444; }
+        .slider-group { 
+            margin-bottom: 20px; 
+            padding: 15px; 
+            border-radius: 15px; 
+            transition: 0.3s; 
+        }
+        body.adult-mode .slider-group { 
+            background: rgba(255, 255, 255, 0.9); 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
+            border: 1px solid #eee; 
+        }
+        body.child-mode .slider-group { 
+            background: #222; 
+            border: 1px solid #444; 
+        }
 
-        .slider { width: 100%; cursor: pointer; -webkit-appearance: none; appearance: none; height: 10px; background: #dfe6e9; border-radius: 5px; outline: none;}
-        .slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 25px; height: 25px; background: var(--btn); border-radius: 50%; border: 3px solid white; }
+        .slider { 
+            width: 100%; 
+            cursor: pointer; 
+            -webkit-appearance: none; 
+            appearance: none; 
+            height: 10px; 
+            background: #dfe6e9; 
+            border-radius: 5px; 
+            outline: none;
+        }
+        .slider::-webkit-slider-thumb { 
+            -webkit-appearance: none; 
+            appearance: none; 
+            width: 25px; 
+            height: 25px; 
+            background: var(--btn); 
+            border-radius: 50%; 
+            border: 3px solid white; 
+        }
 
-        .slider-desc { margin: 8px 0 0; font-size: 0.8em; font-weight: normal; transition: 0.3s;}
+        .slider-desc { 
+            margin: 8px 0 0; 
+            font-size: 0.8em; 
+            font-weight: normal; 
+            transition: 0.3s;
+        }
         body.adult-mode .slider-desc { color: #7f8c8d; }
         body.child-mode .slider-desc { color: #aaa; }
 
-        .output-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
-        .stat-card { padding: 15px; border-radius: 15px; text-align: center; font-weight: bold; transition: 0.3s;}
-        body.adult-mode .stat-card { background: rgba(255,255,255,0.9); box-shadow: 0 4px 10px rgba(0,0,0,0.1); color: var(--dark);}
-        body.child-mode .stat-card { background: #333; color: white; border: 1px solid #555;}
+        .output-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 15px; 
+            margin-top: 20px; 
+        }
+        .stat-card { 
+            padding: 15px; 
+            border-radius: 15px; 
+            text-align: center; 
+            font-weight: bold; 
+            transition: 0.3s;
+        }
+        body.adult-mode .stat-card { 
+            background: rgba(255,255,255,0.9); 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+            color: var(--dark);
+        }
+        body.child-mode .stat-card { 
+            background: #333; 
+            color: white; 
+            border: 1px solid #555;
+        }
         
         /* Modal */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; backdrop-filter: blur(5px); }
-        .modal-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px; border-radius: 20px; max-width: 500px; width: 90%; color: black; }
+        .modal-overlay { 
+            display: none; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(0,0,0,0.8); 
+            z-index: 1000; 
+            backdrop-filter: blur(5px); 
+        }
+        .modal-content { 
+            position: absolute; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            background: white; 
+            padding: 30px; 
+            border-radius: 20px; 
+            max-width: 500px; 
+            width: 90%; 
+            color: black; 
+        }
 
     </style>
 </head>
@@ -115,7 +270,9 @@
         </div>
 
         <div class="results">
-            <div style="background:white; border-radius:15px; padding:10px;"><canvas id="simChart" style="height:280px;"></canvas></div>
+            <div style="background:white; border-radius:15px; padding:10px;">
+                <canvas id="simChart" style="height:280px;"></canvas>
+            </div>
             
             <div class="output-grid">
                 <div class="stat-card" style="border-bottom:5px solid var(--temp-red);">
@@ -182,7 +339,7 @@
         const trees = parseInt(document.getElementById('s2').value);
         const water = parseInt(document.getElementById('s3').value);
 
-        // Bilimsel Hesaplama
+        // Bilimsel Hesaplama Modeli
         let bt = 23.1 - (energy * 0.025) - (trees * 0.00000035);
         let trt = 16.8 - (energy * 0.015) - (trees * 0.0000001);
         let br = 340 + (water * 2.2) + (trees * 0.00003);
@@ -197,7 +354,7 @@
         document.getElementById('trt').innerText = trt.toFixed(1) + "°C";
         document.getElementById('trr').innerText = Math.round(trr) + " mm";
 
-        // --- SÜRGÜ ANLIK GERİ BİLDİRİMLERİ ---
+        // SÜRGÜ ANLIK GERİ BİLDİRİMLERİ
         const ef = document.getElementById('eFeedback');
         const tf = document.getElementById('tFeedback');
         const wf = document.getElementById('wFeedback');
@@ -222,29 +379,36 @@
             wf.style.color = water > 50 ? "#55FF55" : "#ff5555";
         }
 
-        // --- ANA MESAJ VE KİLİT SİSTEMİ ---
+        // ANA MESAJ VE KİLİT SİSTEMİ
         const msgBox = document.getElementById('mission-status');
         const btn = document.getElementById('karne-btn');
 
-        if (mode === 'adult') {
-            msgBox.innerHTML = bt > 22.2 
-                ? "<b>Analiz:</b> ❌ Bu konfor tercihi, 2050'de çocuğunuzun soluduğu havadan çalıyor! Sıcaklık hala çok yüksek." 
-                : "<b>Analiz:</b> ✅ Tebrikler! Bugünün fedakarlığı, çocuğunuzun 2050'deki huzuru olacak.";
-        } else {
-            msgBox.innerHTML = bt > 22.2 
-                ? "<b>Durum:</b> ⚠️ Eyvah! Bu gidişle 2050'de evden çıkarken gaz maskeni unutmamalısın!" 
-                : "<b>Durum:</b> 🛡️ Harika! Geleceğini maskelerden kurtardın Kahraman!";
-        }
-
         if (bt <= 22.2) {
-            btn.className = "nav-btn"; btn.style.background = "var(--green)"; btn.innerText = "➡️ Kişisel Teste Geç";
+            btn.className = "nav-btn"; 
+            btn.style.background = "var(--green)"; 
+            btn.innerText = "➡️ Karbon Ayak İzi Testi";
+            btn.onclick = null; // Kilit açıldı, link çalışır
             msgBox.style.borderColor = "var(--green)";
+            
+            if (mode === 'adult') {
+                msgBox.innerHTML = "<b>Analiz:</b> ✅ Tebrikler! Bugünün fedakarlığı, çocuğunuzun 2050'deki huzuru olacak.";
+            } else {
+                msgBox.innerHTML = "<b>Durum:</b> 🛡️ Harika! Geleceğini maskelerden kurtardın Kahraman!";
+            }
         } else {
-            btn.className = "nav-btn locked"; btn.innerText = "🔒 Geleceği Kurtarmadan Geçemezsin";
+            btn.className = "nav-btn locked"; 
+            btn.innerText = "🔒 Geleceği Kurtarmadan Geçemezsin";
+            btn.onclick = (e) => e.preventDefault(); // Kilitli, tıklama iptal
             msgBox.style.borderColor = "var(--temp-red)";
+            
+            if (mode === 'adult') {
+                msgBox.innerHTML = "<b>Analiz:</b> ❌ Bu konfor tercihi, 2050'de çocuğunuzun soluduğu havadan çalıyor! Sıcaklık hala çok yüksek.";
+            } else {
+                msgBox.innerHTML = "<b>Durum:</b> ⚠️ Eyvah! Bu gidişle 2050'de evden çıkarken gaz maskeni unutmamalısın!";
+            }
         }
 
-        // --- 4 VERİLİ GRAFİK GÜNCELLEME ---
+        // 4 VERİLİ GRAFİK GÜNCELLEME
         const chartData = [bt.toFixed(1), trt.toFixed(1), (br/20).toFixed(1), (trr/20).toFixed(1)];
         const realData = [bt.toFixed(1) + "°C", trt.toFixed(1) + "°C", Math.round(br) + " mm", Math.round(trr) + " mm"];
 
@@ -284,14 +448,9 @@
             simChart.update('none'); 
         }
 
-        // --- ORTAK ARKAPLAN EFEKTİ (Sararıp Yeşillenme) ---
-        // Artık hem çocuk hem de yetişkin modunda arka plan rengi sürgülere göre değişiyor.
-        // Puan 0'a yakınken kırmızı/turuncu (çölleşme), 1'e yakınken yeşil (canlanma) olur.
+        // ORTAK ARKAPLAN EFEKTİ (Sararıp Yeşillenme)
         let score = (energy/100 + water/100 + trees/1000000) / 3;
-        
-        // Yetişkin modunda beyaz kutunun arkasında daha hafif bir etki olması için opacity ayarı yapıldı.
         let opacity = mode === 'adult' ? 0.35 : 0.45; 
-        
         overlay.style.backgroundColor = `hsla(${20 + (score * 100)}, 70%, 45%, ${opacity})`;
 
         // Verileri Sakla
@@ -301,7 +460,6 @@
         localStorage.setItem('sim_temp', bt.toFixed(1));
     }
 
-    // Sürgüler hareket ettikçe update fonksiyonunu çalıştır
     ['s1', 's2', 's3'].forEach(id => document.getElementById(id).oninput = update);
     window.onload = update;
 </script>
